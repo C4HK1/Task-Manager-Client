@@ -5,9 +5,7 @@ import DefaultElements
 import DefaultElements.Fonts
 import AppFrontend.LoginPage
 
-Frame {
-    anchors.fill: parent
-
+DefaultFrame {
     GridLayout {
         id: form
         anchors.horizontalCenter: parent.horizontalCenter

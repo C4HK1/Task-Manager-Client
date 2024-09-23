@@ -5,6 +5,7 @@ qt_add_qml_module(DefaultElements
     QML_FILES
         DefaultButton.qml
         DefaultTextField.qml
+        DefaultFrame.qml
     RESOURCE_PREFIX /DefaultElements
 )
 

@@ -28,6 +28,7 @@ void MainApplication::loadPage(QString moduleName) {
     }
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile(moduleName));
+    qInfo() << component->errors();
     cur_page = qobject_cast<QQuickItem*>(component->create(engine->rootContext()));
     component->deleteLater();
 
@@ -50,10 +51,11 @@ void MainApplication::tryAuthenticate() {
 
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
-    this->m_loginingError = !success;
     if(success) {
         loadPage("MainWorkspace.qml");
+        this->m_loginingError = false;
     } else {
         loadPage("Authorization.qml");
+        this->m_loginingError = true;
     }
 }

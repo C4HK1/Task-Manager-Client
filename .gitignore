@@ -1,10 +1,6 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
-build/
-build/*.a
-CMakeFiles/
-CMakeCache.txt
 *~
 *.autosave
 *.a

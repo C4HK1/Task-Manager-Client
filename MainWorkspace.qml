@@ -1,15 +1,32 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import DefaultElements
+import DefaultElements.Fonts
+import MainWorkspaceElements
 
-Frame {
-    anchors.fill: parent
+DefaultFrame {
+    Rectangle {
+        id: sidebar_bg
+        anchors.left: parent.left
+        height: parent.height
+        width: 80
 
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 36
-        text: qsTr("Successful authentication")
-        color: "#FFFFFF"
+        color: "#303030"
+    }
+
+    Column {
+        anchors.fill: sidebar_bg
+
+        SidebarButton {
+            SidebarButton.name: "R"
+        }
+
+        SidebarButton {
+
+        }
+        SidebarButton {
+
+        }
     }
 }

@@ -5,9 +5,7 @@ import DefaultElements
 import DefaultElements.Fonts
 import AppFrontend.LoginPage
 
-Frame {
-    anchors.fill: parent
-
+DefaultFrame {
     GridLayout {
         id: form
         anchors.horizontalCenter: parent.horizontalCenter
@@ -20,7 +18,7 @@ Frame {
         DefaultTextField {
             id: login_field
             Layout.row: 1
-            Layout.fillWidth: true
+            Layout.fillWidth: trueverticalCenter
             placeholderText: qsTr("Login")
         }
 
