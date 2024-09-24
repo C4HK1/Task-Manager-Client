@@ -18,7 +18,7 @@ DefaultFrame {
         DefaultTextField {
             id: login_field
             Layout.row: 1
-            Layout.fillWidth: trueverticalCenter
+            Layout.fillWidth: true
             placeholderText: qsTr("Login")
         }
 
