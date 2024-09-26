@@ -48,7 +48,7 @@ DefaultFrame {
             text: qsTr("Don't have an account? <html><a href=\"#\">Sign up</a></html>")
             font: DefaultFont.defaultFont
             color: "#FFFFFF"
-            onLinkActivated: MainApplication.loadPage("Registration.qml");
+            onLinkActivated: MainApplication.switchToRegister()
         }
 
         Text {

@@ -14,6 +14,7 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QQuickWindow>
+#include "base_page.h"
 
 class NetworkManager;
 
@@ -23,8 +24,10 @@ class MainApplication : public QGuiApplication {
 public:
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
-    Q_INVOKABLE void loadPage(QString moduleName);
+    QQuickItem* loadQmlFrame(QString fileName);
     void tryAuthenticate();
+    void SetCurrentPage(BasePage *page);
+    Q_INVOKABLE void switchToRegister();
 
 signals:
 
@@ -35,7 +38,7 @@ private:
     NetworkManager *net_manager;
     QQmlEngine *engine;
     QQuickWindow *main_window = nullptr;
-    QQuickItem *cur_page = nullptr;
+    BasePage *cur_page = nullptr;
     bool m_loginingError = false;
 };
 

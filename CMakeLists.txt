@@ -19,12 +19,14 @@ qt_add_qml_module(appFrontend
         Authorization.qml
         MainWorkspace.qml
 	MainWindow.qml
+        Registration.qml
     SOURCES
-        network_manager.h
-        network_manager.cpp
-        main_application.cpp
-        main_application.h
-        QML_FILES Registration.qml
+        network_manager.h network_manager.cpp
+        main_application.h main_application.cpp
+        base_page.h base_page.cpp
+        authorization_page.h authorization_page.cpp
+        registration_page.h registration_page.cpp
+        main_page.h main_page.cpp
 )
 
 add_subdirectory(DefaultElements)

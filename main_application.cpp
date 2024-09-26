@@ -1,5 +1,8 @@
 #include "main_application.h"
 #include "network_manager.h"
+#include "authorization_page.h"
+#include "registration_page.h"
+#include "main_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
@@ -22,24 +25,29 @@ MainApplication::~MainApplication() {
     net_manager->deleteLater();
 }
 
-void MainApplication::loadPage(QString moduleName) {
-    if(cur_page != nullptr){
-        cur_page->deleteLater();
+void MainApplication::SetCurrentPage(BasePage *page) {
+    if(cur_page != nullptr) {
+        delete cur_page;
     }
 
+    cur_page = page;
+    page->SetContainer(main_window);
+}
+
+QQuickItem* MainApplication::loadQmlFrame(QString moduleName) {
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile(moduleName));
     qInfo() << component->errors();
-    cur_page = qobject_cast<QQuickItem*>(component->create(engine->rootContext()));
+    QQuickItem *new_frame = qobject_cast<QQuickItem*>(component->create(engine->rootContext()));
     component->deleteLater();
 
-    cur_page->setParentItem(main_window->contentItem());
+    return new_frame;
 }
 
 void MainApplication::tryAuthenticate() {
     QFile file("data/authentication_key.organizer");
 
     if(!file.exists()){
-        loadPage("Authorization.qml");
+        AuthorizationPage::loadPage(this);
         return;
     }
 
@@ -49,13 +57,17 @@ void MainApplication::tryAuthenticate() {
     net_manager->sendAuthenticationRequest(token);
 }
 
+void MainApplication::switchToRegister() {
+    RegistrationPage::loadPage(this);
+}
+
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {
-        loadPage("MainWorkspace.qml");
+        MainPage::loadPage(this);
         this->m_loginingError = false;
     } else {
-        loadPage("Authorization.qml");
+        AuthorizationPage::loadPage(this);
         this->m_loginingError = true;
     }
 }
