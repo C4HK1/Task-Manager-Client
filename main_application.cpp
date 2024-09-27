@@ -23,31 +23,22 @@ MainApplication::~MainApplication() {
     main_window->deleteLater();
     engine->deleteLater();
     net_manager->deleteLater();
+    cur_page->deleteLater();
 }
 
 void MainApplication::SetCurrentPage(BasePage *page) {
     if(cur_page != nullptr) {
-        delete cur_page;
+        cur_page->deleteLater();
     }
 
     cur_page = page;
-    page->SetContainer(main_window);
-}
-
-QQuickItem* MainApplication::loadQmlFrame(QString moduleName) {
-    QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile(moduleName));
-    qInfo() << component->errors();
-    QQuickItem *new_frame = qobject_cast<QQuickItem*>(component->create(engine->rootContext()));
-    component->deleteLater();
-
-    return new_frame;
 }
 
 void MainApplication::tryAuthenticate() {
     QFile file("data/authentication_key.organizer");
 
     if(!file.exists()){
-        AuthorizationPage::loadPage(this);
+        SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
         return;
     }
 
@@ -58,16 +49,16 @@ void MainApplication::tryAuthenticate() {
 }
 
 void MainApplication::switchToRegister() {
-    RegistrationPage::loadPage(this);
+    SetCurrentPage(new RegistrationPage(engine, main_window->contentItem()));
 }
 
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {
-        MainPage::loadPage(this);
+        SetCurrentPage(new MainPage(engine, main_window->contentItem()));
         this->m_loginingError = false;
     } else {
-        AuthorizationPage::loadPage(this);
+        SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
         this->m_loginingError = true;
     }
 }

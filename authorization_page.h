@@ -6,8 +6,7 @@
 class AuthorizationPage : public BasePage {
     Q_OBJECT
 public:
-    AuthorizationPage(MainApplication *app);
-    static void loadPage(MainApplication *app);
+    AuthorizationPage(QQmlEngine *engine, QQuickItem *container);
 };
 
 #endif // AUTHORIZATION_PAGE_H

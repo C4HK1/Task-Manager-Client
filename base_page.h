@@ -2,22 +2,26 @@
 #define BASE_PAGE_H
 
 #include <QQuickItem>
+#include <QQmlEngine>
 
 class MainApplication;
 
 class BasePage : public QObject {
     Q_OBJECT
 public:
-    BasePage(MainApplication *app, QString moduleName);
+    BasePage(QQmlEngine *engine, QQuickItem *container, QString moduleName);
+
+    QQuickItem* loadQmlFrame(QString moduleName);
+
     ~BasePage();
-    void SetContainer(QQuickWindow *window);
 
 signals:
 
 public slots:
 
 private:
-    MainApplication *app;
+    QQmlEngine *engine;
+    QQuickItem *container;
     QQuickItem *object;
 };
 

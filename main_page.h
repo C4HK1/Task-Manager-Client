@@ -6,8 +6,7 @@
 class MainPage : public BasePage {
     Q_OBJECT
 public:
-    MainPage(MainApplication *app);
-    static void loadPage(MainApplication *app);
+    MainPage(QQmlEngine *engine, QQuickItem *container);
 };
 
 #endif // MAIN_PAGE_H

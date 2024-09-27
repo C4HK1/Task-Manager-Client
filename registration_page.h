@@ -7,8 +7,7 @@ class RegistrationPage : public BasePage {
     Q_OBJECT
     QML_ELEMENT
 public:
-    RegistrationPage(MainApplication *app);
-    static void loadPage(MainApplication *app);
+    RegistrationPage(QQmlEngine *engine, QQuickItem *container);
 };
 
 #endif // REGISTRATION_PAGE_H
