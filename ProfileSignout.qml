@@ -17,12 +17,12 @@ DefaultFrame {
 
         DefaultButton {
             Layout.row: 3
-            text: qsTr("Delete Profile")
+            text: qsTr("Sign out")
             Layout.fillWidth: true
             Layout.preferredHeight: 33
 
             onClicked: {
-                NetworkManager.sendProfileDeletingRequest()
+                MainApplication.outFromAccount()
             }
         }
     }

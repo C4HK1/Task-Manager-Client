@@ -29,6 +29,7 @@ public:
     void SetCurrentPage(BasePage *page);
     Q_INVOKABLE void switchToRegister();
     Q_INVOKABLE void openDeletingPage();
+    Q_INVOKABLE void openSignoutPage();
 signals:
 
 public slots:

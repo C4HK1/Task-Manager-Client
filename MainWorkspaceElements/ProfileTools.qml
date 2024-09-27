@@ -44,7 +44,7 @@ Flickable {
             id: profile_signout
             font_size: 16
             onClickFunction: function() {
-                MainApplication.outFromAccount();
+                MainApplication.openSignoutPage();
             }
         }
 
