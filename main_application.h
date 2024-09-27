@@ -28,11 +28,12 @@ public:
     void tryAuthenticate();
     void SetCurrentPage(BasePage *page);
     Q_INVOKABLE void switchToRegister();
-
+    Q_INVOKABLE void openDeletingPage();
 signals:
 
 public slots:
     void handleAuthentication(bool success);
+    void outFromAccount();
 
 private:
     NetworkManager *net_manager;

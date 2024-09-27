@@ -5,6 +5,7 @@ qt_add_qml_module(MainWorkspaceElements
     QML_FILES
         SidebarButton.qml
         RoomWidget.qml
+        ProfileTools.qml
     RESOURCE_PREFIX /MainWorkspaceElements
 )
 

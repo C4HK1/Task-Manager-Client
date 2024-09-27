@@ -3,7 +3,7 @@
 
 const QString NetworkManager::host("http://localhost:8080");
 
-NetworkManager::NetworkManager(QObject *app) : QObject{app}, app(app) {}
+NetworkManager::NetworkManager(MainApplication *app) : QObject{app}, app(app) {}
 
 void NetworkManager::sendAuthorizationRequest(QString login, QString password)
 {
@@ -55,7 +55,6 @@ void NetworkManager::sendProfileCreationRequest(QString login, QString password)
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleProfileCreationResponse);
 }
 
-
 void NetworkManager::handleProfileCreationResponse() {
     QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
     QString response(m_reply->readAll());
@@ -82,6 +81,20 @@ void NetworkManager::handleProfileCreationResponse() {
         qInfo() << ex.what();
         return;
     }
+}
+
+void NetworkManager::sendProfileDeletingRequest()
+{
+    QFile file("data/authentication_key.organizer");
+
+    file.open(QIODevice::ReadOnly);
+    QByteArray token = file.readAll();
+    file.close();
+
+    QNetworkRequest request(host + "/ProfileDeleting");
+    request.setRawHeader(QByteArray("Authorization"), token);
+    QNetworkReply *m_reply = m_networkManager.get(request);
+    connect(m_reply, &QNetworkReply::finished, app, &MainApplication::outFromAccount);
 }
 
 void NetworkManager::sendAuthenticationRequest(QByteArray token) {

@@ -20,6 +20,7 @@ qt_add_qml_module(appFrontend
         MainWorkspace.qml
 	MainWindow.qml
         Registration.qml
+        ProfileDeleting.qml
     SOURCES
         network_manager.h network_manager.cpp
         main_application.h main_application.cpp
@@ -27,6 +28,7 @@ qt_add_qml_module(appFrontend
         authorization_page.h authorization_page.cpp
         registration_page.h registration_page.cpp
         main_page.h main_page.cpp
+        SOURCES profile_deleting_page.h profile_deleting_page.cpp
 )
 
 add_subdirectory(DefaultElements)

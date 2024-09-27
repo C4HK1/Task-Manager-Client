@@ -6,29 +6,114 @@ import DefaultElements.Fonts
 import MainWorkspaceElements
 
 DefaultFrame {
+    id: root
+
+    function createImageObject(str, root) {
+        var component = Qt.createComponent(str)
+        if (component.status === Component.Ready || component.status === Component.Error)
+        {
+            return finishCreation(component, root)
+        } else {
+            component.statusChanged.connect(finishCreation)
+        }
+    }
+    function finishCreation(component, root) {
+        if (component.status === Component.Ready) {
+            return component.createObject(root)
+        } else if (component.status === Component.Error) {
+            console.log("Error loading component:", component.errorString())
+        }
+    }
+
+    property var profile_tools;
+    property var tables;
+
     Rectangle {
+
+        property int slimToolBarWidth: 70
+        property int toolBarWidth: 160
+
         id: sidebar_bg
         anchors.left: parent.left
         anchors.top: topbar_bg.bottom
         anchors.bottom: parent.bottom
-        width: 70
+        width: slimToolBarWidth
+        z: 1
 
         color: "#303030"
+
+        Flickable {
+            id: tool_bar
+            anchors.fill: parent
+            z: 2
+
+            contentHeight: room_container.height
+            boundsBehavior: Flickable.StopAtBounds
+
+            ScrollBar.vertical: ScrollBar {
+                anchors.right: parent.right
+            }
+            GridLayout {
+                width: parent.width
+                columns: 1
+
+                SidebarButton {
+                    name: "R"
+                    font_size: 36
+                }
+
+                SidebarButton {
+                    name: "T"
+                    font_size: 36
+                }
+
+                Rectangle {
+                    anchors.left: parent.left
+                    width: parent.width
+
+                    SidebarButton {
+                        name: "PT"
+                        id: tool_bar_profile
+                        font_size: 36
+                        onClickFunction: function() {
+                            if (profile_tools === undefined) {
+                                profile_tools = root.createImageObject("MainWorkspaceElements/ProfileTools.qml", profile_tool_root)
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: profile_tool_root
+                        anchors.top: tool_bar_profile.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: sidebar_bg.bottom
+                    }
+                }
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: {
+                parent.width = parent.toolBarWidth
+            }
+        }
     }
 
-    Column {
-        anchors.fill: sidebar_bg
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        z: 0
 
-        SidebarButton {
-            name: "R"
-        }
-
-        SidebarButton {
-            name: "T"
-        }
-
-        SidebarButton {
-            name: "S"
+        onEntered: {
+            if (profile_tools !== undefined) {
+                profile_tools.destroy()
+                profile_tools = undefined
+            }
+            sidebar_bg.width = sidebar_bg.slimToolBarWidth
         }
     }
 
@@ -38,6 +123,7 @@ DefaultFrame {
         anchors.top: parent.top
         anchors.right: parent.right
         height: 30
+        z: -1
 
         color: "#303030"
     }
