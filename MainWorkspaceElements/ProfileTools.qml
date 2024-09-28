@@ -7,25 +7,26 @@ import AppFrontend.LoginPage
 
 Flickable {
     anchors.fill: parent
-
     leftMargin: 15
     rightMargin: 15
     topMargin: 15
     bottomMargin: 15
 
+    contentHeight: container.height
+    boundsBehavior: Flickable.StopAtBounds
     // ScrollBar.vertical: ScrollBar {
     //     anchors.right: parent.right
     // }
 
-    GridLayout {
+    ColumnLayout {
+        id: container
         width: parent.width
-        columns: 1
 
         SidebarButton {
             name: "Profile"
             id: profile_tools
             font_size: 16
-            onClickFunction: function() {
+            onClickFunction: function () {
                 console.log("Profile")
             }
         }
@@ -54,7 +55,7 @@ Flickable {
         }
 
         SidebarButton {
-            name: "Dlete Account"
+            name: "Delete Account"
             id: profile_deleting
             font_size: 16
 

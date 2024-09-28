@@ -20,7 +20,7 @@ class NetworkManager;
 
 class MainApplication : public QGuiApplication {
     Q_OBJECT
-    Q_PROPERTY(bool loginingError MEMBER m_loginingError)
+    Q_PROPERTY(bool loginingError MEMBER m_loginingError NOTIFY loginingErrorChanged)
 public:
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
@@ -29,6 +29,7 @@ public:
     void SetCurrentPage(BasePage *page);
     Q_INVOKABLE void switchToRegister();
 signals:
+    void loginingErrorChanged();
 
 public slots:
     void handleAuthentication(bool success);

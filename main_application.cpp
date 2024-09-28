@@ -61,6 +61,8 @@ void MainApplication::handleAuthentication(bool success) {
         SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
         this->m_loginingError = true;
     }
+
+    emit loginingErrorChanged();
 }
 
 void MainApplication::outFromAccount()

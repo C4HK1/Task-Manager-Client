@@ -9,7 +9,8 @@ Window {
     id: main_window
     width: 1080
     height: 720
-    minimumWidth: 250
+    minimumWidth: 600
+    minimumHeight: 400
     visible: true
     title: qsTr("Task Organizer")
 

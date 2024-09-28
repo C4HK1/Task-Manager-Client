@@ -26,10 +26,8 @@ DefaultFrame {
     }
 
     property var profile_tools;
-    property var tables;
 
     Rectangle {
-
         property int slimToolBarWidth: 70
         property int toolBarWidth: 160
 
@@ -47,13 +45,14 @@ DefaultFrame {
             anchors.fill: parent
             z: 2
 
-            contentHeight: room_container.height
+            contentHeight: sidebar_container.height
             boundsBehavior: Flickable.StopAtBounds
 
             ScrollBar.vertical: ScrollBar {
                 anchors.right: parent.right
             }
             GridLayout {
+                id: sidebar_container
                 width: parent.width
                 columns: 1
 
@@ -68,7 +67,6 @@ DefaultFrame {
                 }
 
                 Rectangle {
-                    anchors.left: parent.left
                     width: parent.width
 
                     SidebarButton {
@@ -87,7 +85,6 @@ DefaultFrame {
                         anchors.top: tool_bar_profile.bottom
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        anchors.bottom: sidebar_bg.bottom
                     }
                 }
             }
@@ -123,7 +120,7 @@ DefaultFrame {
         anchors.top: parent.top
         anchors.right: parent.right
         height: 30
-        z: -1
+        z: 1
 
         color: "#303030"
     }
