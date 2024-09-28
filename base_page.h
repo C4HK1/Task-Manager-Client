@@ -10,6 +10,7 @@ class BasePage : public QObject {
     Q_OBJECT
 public:
     BasePage(QQmlEngine *engine, QQuickItem *container, QString moduleName);
+    BasePage(QQmlEngine *engine, BasePage *container, QString moduleName);
 
     QQuickItem* loadQmlFrame(QString moduleName);
 

@@ -7,7 +7,7 @@ class ProfileDeletingPage : public BasePage {
     Q_OBJECT
     QML_ELEMENT
 public:
-    ProfileDeletingPage(QQmlEngine *engine, QQuickItem *container);
+    ProfileDeletingPage(QQmlEngine *engine, BasePage *container);
 };
 
 #endif // PROFILE_DELETING_PAGE_H

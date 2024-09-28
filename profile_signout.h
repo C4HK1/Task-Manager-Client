@@ -7,7 +7,7 @@ class ProfileSignout : public BasePage {
     Q_OBJECT
     QML_ELEMENT
 public:
-    ProfileSignout(QQmlEngine *engine, QQuickItem *container);
+    ProfileSignout(QQmlEngine *engine, BasePage *container);
 };
 
 #endif // PROFILE_SIGNOUT_H

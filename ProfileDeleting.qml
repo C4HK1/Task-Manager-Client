@@ -5,25 +5,53 @@ import DefaultElements
 import DefaultElements.Fonts
 import AppFrontend.LoginPage
 
-DefaultFrame {
-    GridLayout {
-        id: form
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        width: 200
+Frame {
+    id: profile_deleting_form
+    anchors.fill: parent
 
-        rows: 5
-        columns: 1
+    property var object;
 
-        DefaultButton {
-            Layout.row: 3
-            text: qsTr("Delete Profile")
-            Layout.fillWidth: true
-            Layout.preferredHeight: 33
+    Rectangle {
+        width: 500
+        height: 360
+        color: "#303030"
+        radius: 20
+        anchors.centerIn: parent
+        z: 3
 
-            onClicked: {
-                NetworkManager.sendProfileDeletingRequest()
+        property bool focused: true
+
+        GridLayout {
+            id: form
+            width: 200
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            z: 4
+
+            columns: 1
+
+            DefaultButton {
+                text: qsTr("Delete profile")
+                Layout.fillWidth: true
+                Layout.preferredHeight: 33
+
+                onClicked: {
+                    console.log("delete")
+                    NetworkManager.sendProfileDeletingRequest()
+                }
             }
+        }
+
+        MouseArea {
+            anchors.fill: parent;
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent;
+
+        onClicked: {
+            object.destroy();
         }
     }
 }

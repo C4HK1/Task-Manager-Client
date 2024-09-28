@@ -7,6 +7,13 @@ BasePage::BasePage(QQmlEngine *engine, QQuickItem *container, QString moduleName
     object->setParentItem(container);
 }
 
+BasePage::BasePage(QQmlEngine *engine, BasePage *container, QString moduleName) :
+    engine(engine), object(qobject_cast<QQuickItem*>(loadQmlFrame(moduleName)))
+{
+    object->setParentItem(container->object);
+}
+
+
 QQuickItem* BasePage::loadQmlFrame(QString moduleName) {
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile(moduleName));
     qInfo() << component->errors();

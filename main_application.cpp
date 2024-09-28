@@ -54,15 +54,6 @@ void MainApplication::switchToRegister() {
     SetCurrentPage(new RegistrationPage(engine, main_window->contentItem()));
 }
 
-void MainApplication::openDeletingPage() {
-    SetCurrentPage(new ProfileDeletingPage(engine, main_window->contentItem()));
-}
-
-void MainApplication::openSignoutPage() {
-    SetCurrentPage(new ProfileSignout(engine, main_window->contentItem()));
-}
-
-
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {

@@ -42,6 +42,7 @@ DefaultFrame {
                 error_field.visible = MainApplication.loginingError
             }
         }
+
         Text {
             Layout.row: 4
             Layout.topMargin: 50

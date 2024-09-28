@@ -10,10 +10,10 @@ void NetworkManager::sendAuthorizationRequest(QString login, QString password)
     QNetworkRequest request(host);
 
     QString jsonAuthInfo = QString("{\"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
+
     QNetworkReply *m_reply = m_networkManager.post(request, jsonAuthInfo.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleAuthorizationResponse);
-
-    /* DEBUG */ qInfo() << QString("http post request was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
+    /* DEBUG */ qInfo() << QString("http post requeast was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
 }
 
 void NetworkManager::handleAuthorizationResponse()
