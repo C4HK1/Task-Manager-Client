@@ -38,12 +38,12 @@ void NetworkManager::handleAuthorizationResponse()
             file.open(QIODevice::WriteOnly);
             file.write(token);
             file.close();
-
-            sendAuthenticationRequest(token);
         }
     } catch (std::exception &ex) {
         qInfo() << ex.what();
     }
+
+    sendAuthenticationRequest(token);
 }
 
 void NetworkManager::sendProfileCreationRequest(QString login, QString password)

@@ -50,7 +50,7 @@ Frame {
         anchors.fill: parent;
 
         onClicked: {
-            object.destroy();
+            profile_signout_form.destroy();
         }
     }
 }

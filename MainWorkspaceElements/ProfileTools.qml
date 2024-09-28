@@ -49,7 +49,6 @@ Flickable {
             onClickFunction: function() {
                 if (profile_signout_page === undefined) {
                     profile_signout_page = root.createImageObject("ProfileSignout.qml", root)
-                    profile_signout_page.object = profile_signout_page
                 }
             }
         }
@@ -64,7 +63,6 @@ Flickable {
             onClickFunction: function() {
                 if (profile_deleting_page === undefined) {
                     profile_deleting_page = root.createImageObject("ProfileDeleting.qml", root)
-                    profile_deleting_page.object = profile_deleting_page
                 }
             }
         }

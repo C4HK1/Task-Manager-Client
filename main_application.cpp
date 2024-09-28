@@ -3,8 +3,6 @@
 #include "authorization_page.h"
 #include "registration_page.h"
 #include "main_page.h"
-#include "profile_deleting_page.h"
-#include "profile_signout.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())

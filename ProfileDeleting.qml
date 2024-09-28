@@ -9,8 +9,6 @@ Frame {
     id: profile_deleting_form
     anchors.fill: parent
 
-    property var object;
-
     Rectangle {
         width: 500
         height: 360
@@ -51,7 +49,7 @@ Frame {
         anchors.fill: parent;
 
         onClicked: {
-            object.destroy();
+            profile_deleting_form.destroy()
         }
     }
 }

@@ -39,7 +39,7 @@ DefaultFrame {
 
             onClicked: {
                 NetworkManager.sendAuthorizationRequest(login_field.text, password_field.text)
-                error_field.visible = MainApplication.loginingError
+                // error_field.visible = MainApplication.loginingError
             }
         }
 
@@ -54,7 +54,7 @@ DefaultFrame {
 
         Text {
             id: error_field
-            visible: false
+            visible: MainApplication.loginingError
             Layout.row: 5
             Layout.fillWidth: true
             color: "red";
