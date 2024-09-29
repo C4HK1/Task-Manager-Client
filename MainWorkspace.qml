@@ -29,9 +29,10 @@ DefaultFrame {
     property var profile_tools;
 
     Rectangle {
-        id: sidebar_bg
         property int slimToolBarWidth: 70
         property int toolBarWidth: 160
+
+        id: sidebar_bg
 
         anchors.top: topbar_bg.bottom
         anchors.left: parent.left

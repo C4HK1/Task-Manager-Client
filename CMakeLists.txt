@@ -18,11 +18,10 @@ qt_add_qml_module(appFrontend
     QML_FILES
         Authorization.qml
         MainWorkspace.qml
-	MainWindow.qml
+	    MainWindow.qml
         Registration.qml
         Settings.qml
         Profile.qml
-
     SOURCES
         network_manager.h network_manager.cpp
         main_application.h main_application.cpp
