@@ -20,6 +20,9 @@ qt_add_qml_module(appFrontend
         MainWorkspace.qml
 	MainWindow.qml
         Registration.qml
+        Settings.qml
+        Profile.qml
+
     SOURCES
         network_manager.h network_manager.cpp
         main_application.h main_application.cpp
@@ -27,10 +30,13 @@ qt_add_qml_module(appFrontend
         authorization_page.h authorization_page.cpp
         registration_page.h registration_page.cpp
         main_page.h main_page.cpp
+        settings_page.h settings_page.cpp
+        profile_page.h profile_page.cpp
 )
 
 add_subdirectory(DefaultElements)
 add_subdirectory(MainWorkspaceElements)
+add_subdirectory(GeneralElements)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

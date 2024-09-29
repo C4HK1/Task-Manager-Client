@@ -3,8 +3,8 @@ qt_add_qml_module(MainWorkspaceElements
     URI "MainWorkspaceElements"
     VERSION 1.0
     QML_FILES
-        SidebarButton.qml
         RoomWidget.qml
+
     RESOURCE_PREFIX /MainWorkspaceElements
 )
 

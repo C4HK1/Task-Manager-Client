@@ -3,17 +3,17 @@
 
 const QString NetworkManager::host("http://localhost:8080");
 
-NetworkManager::NetworkManager(QObject *app) : QObject{app}, app(app) {}
+NetworkManager::NetworkManager(MainApplication *app) : QObject{app}, app(app) {}
 
 void NetworkManager::sendAuthorizationRequest(QString login, QString password)
 {
     QNetworkRequest request(host);
 
     QString jsonAuthInfo = QString("{\"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
+
     QNetworkReply *m_reply = m_networkManager.post(request, jsonAuthInfo.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleAuthorizationResponse);
-
-    /* DEBUG */ qInfo() << QString("http post request was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
+    /* DEBUG */ qInfo() << QString("http post requeast was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
 }
 
 void NetworkManager::handleAuthorizationResponse()
@@ -38,12 +38,12 @@ void NetworkManager::handleAuthorizationResponse()
             file.open(QIODevice::WriteOnly);
             file.write(token);
             file.close();
-
-            sendAuthenticationRequest(token);
         }
     } catch (std::exception &ex) {
         qInfo() << ex.what();
     }
+
+    sendAuthenticationRequest(token);
 }
 
 void NetworkManager::sendProfileCreationRequest(QString login, QString password)
@@ -54,7 +54,6 @@ void NetworkManager::sendProfileCreationRequest(QString login, QString password)
     QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleProfileCreationResponse);
 }
-
 
 void NetworkManager::handleProfileCreationResponse() {
     QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
@@ -82,6 +81,20 @@ void NetworkManager::handleProfileCreationResponse() {
         qInfo() << ex.what();
         return;
     }
+}
+
+void NetworkManager::sendProfileDeletingRequest()
+{
+    QFile file("data/authentication_key.organizer");
+
+    file.open(QIODevice::ReadOnly);
+    QByteArray token = file.readAll();
+    file.close();
+
+    QNetworkRequest request(host + "/ProfileDeleting");
+    request.setRawHeader(QByteArray("Authorization"), token);
+    QNetworkReply *m_reply = m_networkManager.get(request);
+    connect(m_reply, &QNetworkReply::finished, app, &MainApplication::outFromAccount);
 }
 
 void NetworkManager::sendAuthenticationRequest(QByteArray token) {

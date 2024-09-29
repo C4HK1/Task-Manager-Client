@@ -6,6 +6,7 @@ qt_add_qml_module(DefaultElements
         DefaultButton.qml
         DefaultTextField.qml
         DefaultFrame.qml
+        DefaultForm.qml
     RESOURCE_PREFIX /DefaultElements
 )
 

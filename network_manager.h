@@ -18,11 +18,12 @@ class NetworkManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit NetworkManager(QObject *app = nullptr);
+    explicit NetworkManager(MainApplication *app = nullptr);
 
     QNetworkRequest* createRequest(QString domain, QString header, QByteArray &data);
     Q_INVOKABLE void sendAuthorizationRequest(QString login, QString password);
     Q_INVOKABLE void sendProfileCreationRequest(QString login, QString password);
+    Q_INVOKABLE void sendProfileDeletingRequest();
     void sendAuthenticationRequest(QByteArray token);
 
 signals:
@@ -36,7 +37,7 @@ public slots:
 private:
     std::function<void(bool)> authenticationHandler;
     QNetworkAccessManager m_networkManager;
-    QObject *app;
+    MainApplication *app;
     QList<QNetworkReply*> m_replyList;
     static const QString host;
 };

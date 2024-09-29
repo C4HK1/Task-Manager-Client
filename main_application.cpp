@@ -3,6 +3,8 @@
 #include "authorization_page.h"
 #include "registration_page.h"
 #include "main_page.h"
+#include "settings_page.h"
+#include "profile_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
@@ -52,6 +54,14 @@ void MainApplication::switchToRegister() {
     SetCurrentPage(new RegistrationPage(engine, main_window->contentItem()));
 }
 
+void MainApplication::switchToSettings() {
+    SetCurrentPage(new SettingsPage(engine, main_window->contentItem()));
+}
+
+void MainApplication::switchToProfile() {
+    SetCurrentPage(new ProfilePage(engine, main_window->contentItem()));
+}
+
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {
@@ -61,4 +71,12 @@ void MainApplication::handleAuthentication(bool success) {
         SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
         this->m_loginingError = true;
     }
+
+    emit loginingErrorChanged();
+}
+
+void MainApplication::outFromAccount()
+{
+    std::remove("data/authentication_key.organizer");
+    SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
 }

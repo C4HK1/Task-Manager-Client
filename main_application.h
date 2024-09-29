@@ -2,6 +2,7 @@
 #define MAIN_APPLICATION_H
 
 #pragma once
+
 #include <nlohmann/json.hpp>
 #include <QDir>
 #include <QFile>
@@ -20,7 +21,7 @@ class NetworkManager;
 
 class MainApplication : public QGuiApplication {
     Q_OBJECT
-    Q_PROPERTY(bool loginingError MEMBER m_loginingError)
+    Q_PROPERTY(bool loginingError MEMBER m_loginingError NOTIFY loginingErrorChanged)
 public:
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
@@ -28,11 +29,14 @@ public:
     void tryAuthenticate();
     void SetCurrentPage(BasePage *page);
     Q_INVOKABLE void switchToRegister();
-
+    Q_INVOKABLE void switchToSettings();
+    Q_INVOKABLE void switchToProfile();
 signals:
+    void loginingErrorChanged();
 
 public slots:
     void handleAuthentication(bool success);
+    void outFromAccount();
 
 private:
     NetworkManager *net_manager;
