@@ -10,7 +10,8 @@ public:
     void setCurrentPage(BasePage *page);
     void switchToSettings();
     void switchToProfile();
-    void switchToRooms();
+    void switchToWidgetRooms();
+    void switchToListRooms();
 
 private:
     QQuickItem *workspace = nullptr;

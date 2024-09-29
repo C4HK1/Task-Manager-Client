@@ -52,10 +52,6 @@ void MainApplication::switchToRegister() {
     SetCurrentPage(new RegistrationPage(engine, main_window->contentItem()));
 }
 
-void MainApplication::switchToRooms() {
-    qobject_cast<MainPage*>(cur_page)->switchToRooms();
-}
-
 void MainApplication::switchToSettings() {
     qobject_cast<MainPage*>(cur_page)->switchToSettings();
 }
@@ -64,6 +60,13 @@ void MainApplication::switchToProfile() {
     qobject_cast<MainPage*>(cur_page)->switchToProfile();
 }
 
+void MainApplication::switchToWidgetRooms() {
+    qobject_cast<MainPage*>(cur_page)->switchToWidgetRooms();
+}
+
+void MainApplication::switchToListRooms() {
+    qobject_cast<MainPage*>(cur_page)->switchToListRooms();
+}
 
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;

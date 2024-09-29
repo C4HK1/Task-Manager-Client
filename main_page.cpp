@@ -1,12 +1,13 @@
 #include "main_page.h"
 #include "profile_page.h"
-#include "rooms_page.h"
+#include "widget_rooms_page.h"
+#include "list_rooms_page.h"
 #include "settings_page.h"
 
 MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
 {
-    switchToRooms();
+    switchToWidgetRooms();
 }
 
 void MainPage::setCurrentPage(BasePage *page) {
@@ -17,8 +18,12 @@ void MainPage::setCurrentPage(BasePage *page) {
     cur_page = page;
 }
 
-void MainPage::switchToRooms() {
-    setCurrentPage(new RoomsPage(engine, workspace));
+void MainPage::switchToWidgetRooms() {
+    setCurrentPage(new WidgetRoomsPage(engine, workspace));
+}
+
+void MainPage::switchToListRooms() {
+    setCurrentPage(new ListRoomsPage(engine, workspace));
 }
 
 void MainPage::switchToSettings() {

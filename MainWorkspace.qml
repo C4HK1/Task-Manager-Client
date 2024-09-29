@@ -28,6 +28,7 @@ DefaultFrame {
     }
 
     property var profile_tools;
+    property bool widgetRoomsView: true
 
     Rectangle {
         property int slimToolBarWidth: 70
@@ -64,7 +65,13 @@ DefaultFrame {
                     name: "R"
                     font_size: 36
 
-                    onClickFunction: function() { MainApplication.switchToRooms() }
+                    onClickFunction: function() {
+                        if(widgetRoomsView){
+                            MainApplication.switchToWidgetRooms()
+                        } else {
+                            MainApplication.switchToListRooms()
+                        }
+                    }
                 }
 
                 SidebarButton {
@@ -128,6 +135,30 @@ DefaultFrame {
         z: -1
 
         color: "#303030"
+
+        TopbarRoomsViewButton {
+            id: widget_view_button
+            name: "W"
+            anchors.top: parent.top
+            anchors.right: parent.right
+
+            onClickFunction: function() {
+                widgetRoomsView = true
+                MainApplication.switchToWidgetRooms()
+            }
+        }
+
+        TopbarRoomsViewButton {
+            id: list_view_button
+            name: "L"
+            anchors.top: parent.top
+            anchors.right: widget_view_button.left
+
+            onClickFunction: function() {
+                widgetRoomsView = false
+                MainApplication.switchToListRooms()
+            }
+        }
     }
 
     Frame {
