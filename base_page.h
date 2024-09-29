@@ -20,7 +20,7 @@ signals:
 
 public slots:
 
-private:
+protected:
     QQmlEngine *engine;
     QQuickItem *container;
     QQuickItem *object;

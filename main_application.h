@@ -31,6 +31,8 @@ public:
     Q_INVOKABLE void switchToRegister();
     Q_INVOKABLE void switchToSettings();
     Q_INVOKABLE void switchToProfile();
+    Q_INVOKABLE void switchToRooms();
+
 signals:
     void loginingErrorChanged();
 

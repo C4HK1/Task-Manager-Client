@@ -6,7 +6,6 @@
 class ProfilePage : public BasePage
 {
     Q_OBJECT
-    QML_ELEMENT
 public:
     explicit ProfilePage(QQmlEngine *engine, QQuickItem *container);
 

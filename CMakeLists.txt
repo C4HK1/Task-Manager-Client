@@ -18,10 +18,11 @@ qt_add_qml_module(appFrontend
     QML_FILES
         Authorization.qml
         MainWorkspace.qml
-	    MainWindow.qml
+        MainWindow.qml
         Registration.qml
         Settings.qml
         Profile.qml
+        Rooms.qml
     SOURCES
         network_manager.h network_manager.cpp
         main_application.h main_application.cpp
@@ -31,6 +32,7 @@ qt_add_qml_module(appFrontend
         main_page.h main_page.cpp
         settings_page.h settings_page.cpp
         profile_page.h profile_page.cpp
+        rooms_page.h rooms_page.cpp
 )
 
 add_subdirectory(DefaultElements)

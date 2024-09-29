@@ -5,6 +5,7 @@ import DefaultElements
 import DefaultElements.Fonts
 import MainWorkspaceElements
 import GeneralElements
+import AppFrontend.LoginPage
 
 DefaultFrame {
     id: root
@@ -53,6 +54,7 @@ DefaultFrame {
             ScrollBar.vertical: ScrollBar {
                 anchors.right: parent.right
             }
+
             GridLayout {
                 id: sidebar_container
                 width: parent.width
@@ -61,6 +63,8 @@ DefaultFrame {
                 SidebarButton {
                     name: "R"
                     font_size: 36
+
+                    onClickFunction: function() { MainApplication.switchToRooms() }
                 }
 
                 SidebarButton {
@@ -93,7 +97,7 @@ DefaultFrame {
         }
 
         MouseArea {
-            anchors.fill: parent
+            anchors.fill: sidebar_bg
             hoverEnabled: true
 
             onEntered: {
@@ -103,11 +107,10 @@ DefaultFrame {
     }
 
     MouseArea {
-        anchors.fill: parent
+        anchors.fill: sidebar_bg
         hoverEnabled: true
-        z: 0
 
-        onEntered: {
+        onExited: {
             if (profile_tools !== undefined) {
                 profile_tools.destroy()
                 profile_tools = undefined
@@ -115,67 +118,24 @@ DefaultFrame {
             sidebar_bg.width = sidebar_bg.slimToolBarWidth
         }
     }
+
     Rectangle {
         id: topbar_bg
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
         height: 30
-        z: 1
+        z: -1
 
         color: "#303030"
     }
 
-    Flickable {
+    Frame {
+        objectName: qsTr("workspace")
         anchors.left: sidebar_bg.right
         anchors.top: topbar_bg.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-
-        leftMargin: 10
-        rightMargin: 10
-        topMargin: 10
-        bottomMargin: 10
-
-        contentHeight: room_container.height
-        boundsBehavior: Flickable.StopAtBounds
-
-        ScrollBar.vertical: ScrollBar {
-            anchors.right: parent.right
-        }
-
-        GridLayout {
-            id: room_container
-            width: parent.width
-
-            flow: GridLayout.LeftToRight
-
-            columns: {
-                for (var i = 1; i < 50; ++i) {
-                    if (250 * i + 20 * (i + 1) > parent.width) {
-                        i
-                        break
-                    }
-                }
-            }
-
-            RoomWidget {
-                room_name: "Qt Task Organizer"
-                owner_name: "C4HK1, gerarte04"
-            }
-            RoomWidget {
-                room_name: "ML engineering"
-                owner_name: "Elon Musk"
-            }
-            RoomWidget {
-                room_name: "My Project"
-                owner_name: "Lil Cheecha"
-            }
-            RoomWidget {}
-            RoomWidget {}
-            RoomWidget {}
-            RoomWidget {}
-            RoomWidget {}
-        }
+        padding: 0
     }
 }

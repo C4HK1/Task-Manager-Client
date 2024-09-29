@@ -3,8 +3,6 @@
 #include "authorization_page.h"
 #include "registration_page.h"
 #include "main_page.h"
-#include "settings_page.h"
-#include "profile_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
@@ -54,13 +52,18 @@ void MainApplication::switchToRegister() {
     SetCurrentPage(new RegistrationPage(engine, main_window->contentItem()));
 }
 
+void MainApplication::switchToRooms() {
+    qobject_cast<MainPage*>(cur_page)->switchToRooms();
+}
+
 void MainApplication::switchToSettings() {
-    SetCurrentPage(new SettingsPage(engine, main_window->contentItem()));
+    qobject_cast<MainPage*>(cur_page)->switchToSettings();
 }
 
 void MainApplication::switchToProfile() {
-    SetCurrentPage(new ProfilePage(engine, main_window->contentItem()));
+    qobject_cast<MainPage*>(cur_page)->switchToProfile();
 }
+
 
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
