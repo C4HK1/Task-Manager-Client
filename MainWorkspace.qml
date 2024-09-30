@@ -113,19 +113,6 @@ DefaultFrame {
         }
     }
 
-    MouseArea {
-        anchors.fill: sidebar_bg
-        hoverEnabled: true
-
-        onExited: {
-            if (profile_tools !== undefined) {
-                profile_tools.destroy()
-                profile_tools = undefined
-            }
-            sidebar_bg.width = sidebar_bg.slimToolBarWidth
-        }
-    }
-
     Rectangle {
         id: topbar_bg
         anchors.left: parent.left
@@ -141,6 +128,7 @@ DefaultFrame {
             name: "W"
             anchors.top: parent.top
             anchors.right: parent.right
+            z: 1
 
             onClickFunction: function() {
                 widgetRoomsView = true
@@ -153,10 +141,25 @@ DefaultFrame {
             name: "L"
             anchors.top: parent.top
             anchors.right: widget_view_button.left
+            z: 1
 
             onClickFunction: function() {
                 widgetRoomsView = false
                 MainApplication.switchToListRooms()
+            }
+        }
+
+        MouseArea {
+            z: 0
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: {
+                if (profile_tools !== undefined) {
+                    profile_tools.destroy()
+                    profile_tools = undefined
+                }
+                sidebar_bg.width = sidebar_bg.slimToolBarWidth
             }
         }
     }
@@ -168,5 +171,18 @@ DefaultFrame {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         padding: 0
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: {
+                if (profile_tools !== undefined) {
+                    profile_tools.destroy()
+                    profile_tools = undefined
+                }
+                sidebar_bg.width = sidebar_bg.slimToolBarWidth
+            }
+        }
     }
 }
