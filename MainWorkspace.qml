@@ -166,10 +166,10 @@ DefaultFrame {
 
     Frame {
         objectName: qsTr("workspace")
-        anchors.left: sidebar_bg.right
         anchors.top: topbar_bg.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        width: parent.width - sidebar_bg.slimToolBarWidth
         padding: 0
 
         MouseArea {
