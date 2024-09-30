@@ -31,6 +31,33 @@ DefaultFrame {
     property bool widgetRoomsView: true
 
     Rectangle {
+        id: mask
+        anchors.left: sidebar_bg.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.top: topbar_bg.bottom
+        z: 3
+
+        color: "black"
+        opacity: 0.5
+        visible: false
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: {
+                if (profile_tools !== undefined) {
+                    profile_tools.destroy()
+                    profile_tools = undefined
+                }
+                sidebar_bg.width = sidebar_bg.slimToolBarWidth
+                parent.visible = false
+            }
+        }
+    }
+
+    Rectangle {
         property int slimToolBarWidth: 70
         property int toolBarWidth: 160
 
@@ -109,6 +136,7 @@ DefaultFrame {
 
             onEntered: {
                 parent.width = parent.toolBarWidth
+                mask.visible = true
             }
         }
     }
@@ -171,18 +199,5 @@ DefaultFrame {
         anchors.bottom: parent.bottom
         width: parent.width - sidebar_bg.slimToolBarWidth
         padding: 0
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: {
-                if (profile_tools !== undefined) {
-                    profile_tools.destroy()
-                    profile_tools = undefined
-                }
-                sidebar_bg.width = sidebar_bg.slimToolBarWidth
-            }
-        }
     }
 }

@@ -31,6 +31,7 @@ Rectangle {
         onEntered: {
             color = "#404040"
             sidebar_bg.width = sidebar_bg.toolBarWidth
+            mask.visible = true
         }
 
         onExited: {
