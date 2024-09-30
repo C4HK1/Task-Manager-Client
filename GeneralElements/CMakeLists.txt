@@ -6,6 +6,7 @@ qt_add_qml_module(GeneralElements
         SidebarButton.qml
         ProfileTools.qml
         TopbarRoomsViewButton.qml
+        Tasks.qml
 
     RESOURCE_PREFIX /GeneralElements
 )

@@ -26,8 +26,39 @@ DefaultFrame {
             console.log("Error loading component:", component.errorString())
         }
     }
+    function hideToolbar() {
+        tool_bar_profile.name = "PS"
+        tool_bar_tasks.name = "TS"
+        t.name = "XZ"
+
+        if (profile_tools !== undefined) {
+            profile_tools.destroy()
+            profile_tools = undefined
+        }
+        if (tasks_list !== undefined) {
+            tasks_list.destroy()
+            tasks_list = undefined
+        }
+
+        tool_bar_profile.anchors.bottom = undefined
+        tool_bar_tasks.anchors.bottom = undefined
+        tool_bar_tasks.anchors.top = t.bottom
+        tool_bar_profile.anchors.top = tool_bar_tasks.bottom
+
+        sidebar_bg.width = sidebar_bg.slimToolBarWidth
+
+        mask.visible = false
+    }
+    function openToolbar() {
+        sidebar_bg.width = sidebar_bg.toolBarWidth
+        tool_bar_profile.name = "Profile settings"
+        tool_bar_tasks.name = "Tasks"
+        t.name = "XZ che eto"
+        mask.visible = true
+    }
 
     property var profile_tools;
+    property var tasks_list;
     property bool widgetRoomsView: true
 
     Rectangle {
@@ -47,12 +78,7 @@ DefaultFrame {
             hoverEnabled: true
 
             onEntered: {
-                if (profile_tools !== undefined) {
-                    profile_tools.destroy()
-                    profile_tools = undefined
-                }
-                sidebar_bg.width = sidebar_bg.slimToolBarWidth
-                parent.visible = false
+                root.hideToolbar()
             }
         }
     }
@@ -71,72 +97,90 @@ DefaultFrame {
 
         color: "#303030"
 
-        Flickable {
-            id: tool_bar
+        Rectangle {
             anchors.fill: parent
+            color: parent.color
+            id: sidebar_container
             z: 2
 
-            contentHeight: sidebar_container.height
-            boundsBehavior: Flickable.StopAtBounds
+            SidebarButton {
+                width: parent.width
+                id: t
+                name: "XZ"
+                font_size: 22
 
-            ScrollBar.vertical: ScrollBar {
-                anchors.right: parent.right
+                onClickFunction: function() {
+                    if(!widgetRoomsView){
+                        MainApplication.switchToWidgetRooms()
+                    } else {
+                        MainApplication.switchToListRooms()
+                    }
+
+                    widgetRoomsView = !widgetRoomsView
+                }
             }
 
-            GridLayout {
-                id: sidebar_container
+
+            SidebarButton {
                 width: parent.width
-                columns: 1
+                anchors.top: t.bottom
 
-                SidebarButton {
-                    name: "R"
-                    font_size: 36
+                name: "TS"
+                id: tool_bar_tasks
+                font_size: 22
 
-                    onClickFunction: function() {
-                        if(widgetRoomsView){
-                            MainApplication.switchToWidgetRooms()
-                        } else {
-                            MainApplication.switchToListRooms()
+                onClickFunction: function() {
+                    if (tasks_list === undefined) {
+                        if (profile_tools !== undefined) {
+                            profile_tools.destroy()
+                            profile_tools = undefined
                         }
+
+                        tool_bar_profile.anchors.top = undefined
+                        tool_bar_profile.anchors.bottom = parent.bottom
+
+                        tasks_list = root.createImageObject("GeneralElements/Tasks.qml", sidebar_container)
+                        tasks_list.anchors.top = tool_bar_tasks.bottom
+                        tasks_list.width = parent.width
+                        tasks_list.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
                     }
                 }
+            }
 
-                SidebarButton {
-                    name: "T"
-                    font_size: 36
-                }
+            SidebarButton {
+                width: parent.width
+                anchors.top: tool_bar_tasks.bottom
 
-                Rectangle {
-                    width: parent.width
+                name: "PS"
 
-                    SidebarButton {
-                        name: "PT"
-                        id: tool_bar_profile
-                        font_size: 36
-                        onClickFunction: function() {
-                            if (profile_tools === undefined) {
-                                profile_tools = root.createImageObject("GeneralElements/ProfileTools.qml", profile_tool_root)
-                            }
+                id: tool_bar_profile
+                font_size: 22
+                onClickFunction: function() {
+                    if (profile_tools === undefined) {
+                        if (tasks_list !== undefined) {
+                            tasks_list.destroy()
+                            tasks_list = undefined
                         }
-                    }
 
-                    Rectangle {
-                        id: profile_tool_root
-                        anchors.top: tool_bar_profile.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                        tool_bar_profile.anchors.bottom = undefined
+                        tool_bar_profile.anchors.top = tool_bar_tasks.bottom
+
+                        profile_tools = root.createImageObject("GeneralElements/ProfileTools.qml", sidebar_container)
+                        profile_tools.anchors.top = tool_bar_profile.bottom
+                        profile_tools.width = parent.width
+                        profile_tools.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
                     }
                 }
             }
         }
+
 
         MouseArea {
             anchors.fill: sidebar_bg
             hoverEnabled: true
 
             onEntered: {
-                parent.width = parent.toolBarWidth
-                mask.visible = true
+                root.openToolbar()
             }
         }
     }
@@ -183,11 +227,7 @@ DefaultFrame {
             hoverEnabled: true
 
             onEntered: {
-                if (profile_tools !== undefined) {
-                    profile_tools.destroy()
-                    profile_tools = undefined
-                }
-                sidebar_bg.width = sidebar_bg.slimToolBarWidth
+                root.hideToolbar()
             }
         }
     }

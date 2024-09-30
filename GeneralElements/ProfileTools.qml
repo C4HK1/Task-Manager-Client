@@ -6,7 +6,6 @@ import DefaultElements.Fonts
 import AppFrontend.LoginPage
 
 Flickable {
-    anchors.fill: parent
     leftMargin: 15
     rightMargin: 15
     topMargin: 15
@@ -14,9 +13,6 @@ Flickable {
 
     contentHeight: container.height
     boundsBehavior: Flickable.StopAtBounds
-    // ScrollBar.vertical: ScrollBar {
-    //     anchors.right: parent.right
-    // }
 
     ColumnLayout {
         id: container
