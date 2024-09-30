@@ -3,10 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend.LoginPage
+import AppFrontend
 
 Flickable {
-    anchors.fill: parent
+    z: 2
     leftMargin: 15
     rightMargin: 15
     topMargin: 15
@@ -14,9 +14,6 @@ Flickable {
 
     contentHeight: container.height
     boundsBehavior: Flickable.StopAtBounds
-    // ScrollBar.vertical: ScrollBar {
-    //     anchors.right: parent.right
-    // }
 
     ColumnLayout {
         id: container
@@ -24,10 +21,10 @@ Flickable {
 
         SidebarButton {
             name: "Profile"
-            id: profile_tools
+            id: profile
             font_size: 16
             onClickFunction: function () {
-                console.log("Profile")
+                MainApplication.switchToProfile()
             }
         }
 
@@ -36,7 +33,7 @@ Flickable {
             id: settings
             font_size: 16
             onClickFunction: function() {
-                console.log("Settings")
+                MainApplication.switchToSettings()
             }
         }
 
@@ -49,7 +46,7 @@ Flickable {
 
             onClickFunction: function() {
                 if (profile_signout_page === undefined) {
-                    profile_signout_page = root.createImageObject("ProfileSignout.qml", root)
+                    profile_signout_page = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"button_text": qsTr("Sign Out"), "option": function() {MainApplication.outFromAccount()}})
                 }
             }
         }
@@ -63,7 +60,7 @@ Flickable {
 
             onClickFunction: function() {
                 if (profile_deleting_page === undefined) {
-                    profile_deleting_page = root.createImageObject("ProfileDeleting.qml", root)
+                    profile_deleting_page = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"button_text": qsTr("Delete profile"), "option": function() {NetworkManager.sendProfileDeletingRequest()}})
                 }
             }
         }

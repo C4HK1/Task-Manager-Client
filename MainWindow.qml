@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend.LoginPage
+import AppFrontend
 
 Window {
     id: main_window

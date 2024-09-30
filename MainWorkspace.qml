@@ -4,8 +4,7 @@ import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
 import MainWorkspaceElements
-import GeneralElements
-import AppFrontend.LoginPage
+import AppFrontend
 
 DefaultFrame {
     id: root
@@ -97,79 +96,68 @@ DefaultFrame {
 
         color: "#303030"
 
-        Rectangle {
-            anchors.fill: parent
-            color: parent.color
-            id: sidebar_container
-            z: 2
+        SidebarButton {
+            width: parent.width
+            id: t
+            name: "XZ"
+            font_size: 22
 
-            SidebarButton {
-                width: parent.width
-                id: t
-                name: "XZ"
-                font_size: 22
-
-                onClickFunction: function() {
-                    if(!widgetRoomsView){
-                        MainApplication.switchToWidgetRooms()
-                    } else {
-                        MainApplication.switchToListRooms()
-                    }
-
-                    widgetRoomsView = !widgetRoomsView
+            onClickFunction: function() {
+                if(widgetRoomsView){
+                    MainApplication.switchToWidgetRooms()
+                } else {
+                    MainApplication.switchToListRooms()
                 }
             }
+        }
 
 
-            SidebarButton {
-                width: parent.width
-                anchors.top: t.bottom
+        SidebarButton {
+            width: parent.width
+            anchors.top: t.bottom
+            name: "TS"
+            id: tool_bar_tasks
+            font_size: 22
 
-                name: "TS"
-                id: tool_bar_tasks
-                font_size: 22
-
-                onClickFunction: function() {
-                    if (tasks_list === undefined) {
-                        if (profile_tools !== undefined) {
-                            profile_tools.destroy()
-                            profile_tools = undefined
-                        }
-
-                        tool_bar_profile.anchors.top = undefined
-                        tool_bar_profile.anchors.bottom = parent.bottom
-
-                        tasks_list = root.createImageObject("GeneralElements/Tasks.qml", sidebar_container)
-                        tasks_list.anchors.top = tool_bar_tasks.bottom
-                        tasks_list.width = parent.width
-                        tasks_list.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
+            onClickFunction: function() {
+                if (tasks_list === undefined) {
+                    if (profile_tools !== undefined) {
+                        profile_tools.destroy()
+                        profile_tools = undefined
                     }
+
+                    tool_bar_profile.anchors.top = undefined
+                    tool_bar_profile.anchors.bottom = parent.bottom
+
+                    tasks_list = root.createImageObject("MainWorkspaceElements/Tasks.qml", sidebar_bg)
+                    tasks_list.anchors.top = tool_bar_tasks.bottom
+                    tasks_list.width = parent.width
+                    tasks_list.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
                 }
             }
+        }
 
-            SidebarButton {
-                width: parent.width
-                anchors.top: tool_bar_tasks.bottom
+        SidebarButton {
+            width: parent.width
+            anchors.top: tool_bar_tasks.bottom
+            name: "PS"
+            id: tool_bar_profile
+            font_size: 22
 
-                name: "PS"
-
-                id: tool_bar_profile
-                font_size: 22
-                onClickFunction: function() {
-                    if (profile_tools === undefined) {
-                        if (tasks_list !== undefined) {
-                            tasks_list.destroy()
-                            tasks_list = undefined
-                        }
-
-                        tool_bar_profile.anchors.bottom = undefined
-                        tool_bar_profile.anchors.top = tool_bar_tasks.bottom
-
-                        profile_tools = root.createImageObject("GeneralElements/ProfileTools.qml", sidebar_container)
-                        profile_tools.anchors.top = tool_bar_profile.bottom
-                        profile_tools.width = parent.width
-                        profile_tools.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
+            onClickFunction: function() {
+                if (profile_tools === undefined) {
+                    if (tasks_list !== undefined) {
+                        tasks_list.destroy()
+                        tasks_list = undefined
                     }
+
+                    tool_bar_profile.anchors.bottom = undefined
+                    tool_bar_profile.anchors.top = tool_bar_tasks.bottom
+
+                    profile_tools = root.createImageObject("MainWorkspaceElements/ProfileTools.qml", sidebar_bg)
+                    profile_tools.anchors.top = tool_bar_profile.bottom
+                    profile_tools.width = parent.width
+                    profile_tools.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
                 }
             }
         }
@@ -232,12 +220,13 @@ DefaultFrame {
         }
     }
 
-    Frame {
+    Rectangle {
+        color: "transparent"
         objectName: qsTr("workspace")
         anchors.top: topbar_bg.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         width: parent.width - sidebar_bg.slimToolBarWidth
-        padding: 0
+        border.width: 0
     }
 }

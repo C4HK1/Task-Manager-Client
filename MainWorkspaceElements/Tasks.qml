@@ -3,9 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend.LoginPage
+import AppFrontend
 
 Flickable {
+    z: 2
     leftMargin: 15
     rightMargin: 15
     topMargin: 15

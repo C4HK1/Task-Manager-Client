@@ -3,6 +3,7 @@ import QtQuick.Controls
 import DefaultElements.Fonts
 
 Rectangle {
+    z: 21
     width: parent.width
     height: 70
     color: sidebar_bg.color

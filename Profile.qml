@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
 import MainWorkspaceElements
-import GeneralElements
 
 DefaultFrame {
     Text {

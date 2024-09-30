@@ -9,8 +9,8 @@ MainApplication::MainApplication(int argc, char **argv) :
 {
     QObject::connect(net_manager, &NetworkManager::authorizationResponseAccept, this, &MainApplication::handleAuthentication);
 
-    qmlRegisterSingletonInstance("AppFrontend.LoginPage", 1, 0, "NetworkManager", net_manager);
-    qmlRegisterSingletonInstance("AppFrontend.LoginPage", 1, 0, "MainApplication", this);
+    qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", net_manager);
+    qmlRegisterSingletonInstance("AppFrontend", 1, 0, "MainApplication", this);
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("MainWindow.qml"));
     main_window = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));

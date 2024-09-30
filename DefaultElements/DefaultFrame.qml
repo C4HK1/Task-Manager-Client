@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
-Frame {
+Rectangle {
+    color: "transparent"
     anchors.fill: parent
-    padding: 0
+    border.width: 0
 }
