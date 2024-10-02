@@ -122,3 +122,7 @@ void NetworkManager::handleAuthenticationResponse() {
         return;
     }
 }
+
+void NetworkManager::sendRoomCreationRequest(QString roomName) {
+    qInfo() << "\"" + roomName + "\" creation request";
+}

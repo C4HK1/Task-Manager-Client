@@ -3,6 +3,7 @@
 #include "widget_rooms_page.h"
 #include "list_rooms_page.h"
 #include "settings_page.h"
+#include "room_creation_page.h"
 
 MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
@@ -32,4 +33,8 @@ void MainPage::switchToSettings() {
 
 void MainPage::switchToProfile() {
     setCurrentPage(new ProfilePage(engine, workspace));
+}
+
+void MainPage::switchToRoomCreation() {
+    setCurrentPage(new RoomCreationPage(engine, workspace));
 }

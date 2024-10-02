@@ -68,6 +68,10 @@ void MainApplication::switchToListRooms() {
     qobject_cast<MainPage*>(cur_page)->switchToListRooms();
 }
 
+void MainApplication::switchToRoomCreation() {
+    qobject_cast<MainPage*>(cur_page)->switchToRoomCreation();
+}
+
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {

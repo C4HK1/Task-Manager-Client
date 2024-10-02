@@ -9,8 +9,7 @@ qt_add_qml_module(MainWorkspaceElements
         ProfileTools.qml
         TopbarRoomsViewButton.qml
         Tasks.qml
+        RoomCreationButton.qml
 
     RESOURCE_PREFIX /MainWorkspaceElements
 )
-
-

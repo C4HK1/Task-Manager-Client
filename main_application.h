@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE void switchToProfile();
     Q_INVOKABLE void switchToWidgetRooms();
     Q_INVOKABLE void switchToListRooms();
+    Q_INVOKABLE void switchToRoomCreation();
 
 signals:
     void loginingErrorChanged();

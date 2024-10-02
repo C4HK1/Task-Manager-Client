@@ -24,6 +24,7 @@ public:
     Q_INVOKABLE void sendAuthorizationRequest(QString login, QString password);
     Q_INVOKABLE void sendProfileCreationRequest(QString login, QString password);
     Q_INVOKABLE void sendProfileDeletingRequest();
+    Q_INVOKABLE void sendRoomCreationRequest(QString roomName);
     void sendAuthenticationRequest(QByteArray token);
 
 signals:

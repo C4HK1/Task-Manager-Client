@@ -24,6 +24,7 @@ qt_add_qml_module(appFrontend
         Profile.qml
         WidgetRooms.qml
         ListRooms.qml
+        RoomCreation.qml
     SOURCES
         network_manager.h network_manager.cpp
         main_application.h main_application.cpp
@@ -36,6 +37,7 @@ qt_add_qml_module(appFrontend
         rooms_page.h rooms_page.cpp
         widget_rooms_page.h widget_rooms_page.cpp
         list_rooms_page.h list_rooms_page.cpp
+        room_creation_page.h room_creation_page.cpp
 )
 
 add_subdirectory(DefaultElements)

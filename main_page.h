@@ -12,6 +12,7 @@ public:
     void switchToProfile();
     void switchToWidgetRooms();
     void switchToListRooms();
+    void switchToRoomCreation();
 
 private:
     QQuickItem *workspace = nullptr;
