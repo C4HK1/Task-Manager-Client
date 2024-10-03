@@ -7,13 +7,13 @@ NetworkManager::NetworkManager(MainApplication *app) : QObject{app}, app(app) {}
 
 void NetworkManager::sendAuthorizationRequest(QString login, QString password)
 {
-    QNetworkRequest request(host);
+    QNetworkRequest request(host + "/ProfileLogining");
 
     QString jsonAuthInfo = QString("{\"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
 
-    QNetworkReply *m_reply = m_networkManager.post(request, jsonAuthInfo.toUtf8());
+    QNetworkReply *m_reply = m_networkManager.get(request, jsonAuthInfo.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleAuthorizationResponse);
-    /* DEBUG */ qInfo() << QString("http post requeast was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
+    /* DEBUG */ qInfo() << QString("http get requeast was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
 }
 
 void NetworkManager::handleAuthorizationResponse()
@@ -93,7 +93,7 @@ void NetworkManager::sendProfileDeletingRequest()
 
     QNetworkRequest request(host + "/ProfileDeleting");
     request.setRawHeader(QByteArray("Authorization"), token);
-    QNetworkReply *m_reply = m_networkManager.get(request);
+    QNetworkReply *m_reply = m_networkManager.deleteResource(request);
     connect(m_reply, &QNetworkReply::finished, app, &MainApplication::outFromAccount);
 }
 
