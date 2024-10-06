@@ -3,8 +3,14 @@
 
 #include "base_page.h"
 
+struct TaskInfo {
+    QString task_name, owner_name, owner_id;
+};
+
 struct RoomInfo {
-    QString room_name, owner_name;
+    QString room_name, owner_name, owner_id;
+
+    QList<TaskInfo*> tasks;
 };
 
 class RoomsPage : public BasePage

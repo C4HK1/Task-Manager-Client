@@ -12,6 +12,8 @@
 #include <QPair>
 #include <QUrlQuery>
 
+#include "rooms_page.h"
+
 class MainApplication;
 
 class NetworkManager : public QObject
@@ -21,19 +23,41 @@ public:
     explicit NetworkManager(MainApplication *app = nullptr);
 
     QNetworkRequest* createRequest(QString domain, QString header, QByteArray &data);
-    Q_INVOKABLE void sendAuthorizationRequest(QString login, QString password);
+
     Q_INVOKABLE void sendProfileCreationRequest(QString login, QString password);
-    Q_INVOKABLE void sendProfileDeletingRequest();
     Q_INVOKABLE void sendRoomCreationRequest(QString roomName);
+    Q_INVOKABLE void sendTaskCretionRequest(QString &taskName, RoomInfo &room);
+
+    Q_INVOKABLE void sendProfileDeletingRequest();
+    Q_INVOKABLE void sendRoomDeletingRequest(RoomInfo &room);
+    Q_INVOKABLE void sendTaskDeletingRequest(RoomInfo &room, TaskInfo &task);
+
+    Q_INVOKABLE void sendGettingUserRoomsRequest();
+    Q_INVOKABLE void sendGettingUserTasksRequest();
+    Q_INVOKABLE void sendGettingRoomTasksRequest(RoomInfo &room);
+    Q_INVOKABLE void sendGettingRoomUsersRequest(RoomInfo &room);
+
+    Q_INVOKABLE void sendAuthorizationRequest(QString login, QString password);
     void sendAuthenticationRequest(QByteArray token);
 
 signals:
     void authorizationResponseAccept(bool success);
 
 public slots:
-    void handleAuthorizationResponse();
     void handleProfileCreationResponse();
+    void handleRoomCreationResponse();
+    void handleTaskCreationResponse();
+
+    void handleRoomDeletingResponse();
+    void handleTaskDeletingResponse();
+
+    void handleGettingUserRoomsResponse();
+    void handleGettingUserTasksResponse();
+    void handleGettingRoomTasksResponse();
+    void handleGettingRoomUsersResponse();
+
     void handleAuthenticationResponse();
+    void handleAuthorizationResponse();
 
 private:
     std::function<void(bool)> authenticationHandler;
@@ -41,6 +65,7 @@ private:
     MainApplication *app;
     QList<QNetworkReply*> m_replyList;
     static const QString host;
+    QByteArray token;
 };
 
 #endif // NETWORK_MANAGER_H

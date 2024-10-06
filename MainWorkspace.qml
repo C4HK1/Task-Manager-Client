@@ -66,7 +66,7 @@ DefaultFrame {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.top: topbar_bg.bottom
-        z: 3
+        z: 1
 
         color: "black"
         opacity: 0.5

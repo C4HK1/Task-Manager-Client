@@ -8,6 +8,7 @@ import AppFrontend
 Frame {
     id: form
     anchors.fill: parent
+    z: 2
 
     property alias button_text: button.text
     property var option;
@@ -18,7 +19,6 @@ Frame {
         color: "#303030"
         radius: 20
         anchors.centerIn: parent
-        z: 3
 
         property bool focused: true
 

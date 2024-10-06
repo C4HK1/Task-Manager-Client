@@ -38,6 +38,7 @@ qt_add_qml_module(appFrontend
         widget_rooms_page.h widget_rooms_page.cpp
         list_rooms_page.h list_rooms_page.cpp
         room_creation_page.h room_creation_page.cpp
+        SOURCES
 )
 
 add_subdirectory(DefaultElements)
