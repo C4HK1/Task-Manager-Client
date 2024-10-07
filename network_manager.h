@@ -20,11 +20,13 @@ class NetworkManager : public QObject
 {
     Q_OBJECT
 public:
+    QByteArray token;
+
     explicit NetworkManager(MainApplication *app = nullptr);
 
     QNetworkRequest* createRequest(QString domain, QString header, QByteArray &data);
 
-    Q_INVOKABLE void sendProfileCreationRequest(QString login, QString password);
+    Q_INVOKABLE void sendProfileCreationRequest(QString name, QString login, QString password);
     Q_INVOKABLE void sendRoomCreationRequest(QString roomName);
     Q_INVOKABLE void sendTaskCretionRequest(QString &taskName, RoomInfo &room);
 
@@ -38,7 +40,7 @@ public:
     Q_INVOKABLE void sendGettingRoomUsersRequest(RoomInfo &room);
 
     Q_INVOKABLE void sendAuthorizationRequest(QString login, QString password);
-    void sendAuthenticationRequest(QByteArray token);
+    void sendAuthenticationRequest();
 
 signals:
     void authorizationResponseAccept(bool success);
@@ -65,7 +67,6 @@ private:
     MainApplication *app;
     QList<QNetworkReply*> m_replyList;
     static const QString host;
-    QByteArray token;
 };
 
 #endif // NETWORK_MANAGER_H

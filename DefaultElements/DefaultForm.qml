@@ -19,6 +19,7 @@ Frame {
         color: "#303030"
         radius: 20
         anchors.centerIn: parent
+        z: 3
 
         property bool focused: true
 
@@ -26,7 +27,6 @@ Frame {
             width: 200
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            z: 4
 
             columns: 1
 
@@ -40,14 +40,10 @@ Frame {
                 }
             }
         }
-
-        MouseArea {
-            anchors.fill: parent;
-        }
     }
 
     MouseArea {
-        anchors.fill: parent;
+        anchors.fill: parent
 
         onClicked: {
             form.destroy()

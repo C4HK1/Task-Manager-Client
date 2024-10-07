@@ -27,32 +27,28 @@ void NetworkManager::handleAuthorizationResponse()
         QDir().mkdir("data");
     }
 
-    QByteArray token;
-
     try{
         nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-        token = QByteArray(QString(nlohmann::to_string(jsonInfo["JWT"]).c_str()).replace("\"", "").toUtf8());
+        this->token = QByteArray(QString(nlohmann::to_string(jsonInfo["JWT"]).c_str()).replace("\"", "").toUtf8());
 
-        if(token.size() > 0){
+        if(this->token.size() > 0){
             QFile file("data/authentication_key.organizer");
             file.open(QIODevice::WriteOnly);
-            file.write(token);
+            file.write(this->token);
             file.close();
-
-            this->token = token;
         }
     } catch (std::exception &ex) {
         qInfo() << ex.what();
     }
 
-    sendAuthenticationRequest(token);
+    sendAuthenticationRequest();
 }
 
-void NetworkManager::sendProfileCreationRequest(QString login, QString password)
+void NetworkManager::sendProfileCreationRequest(QString name, QString login, QString password)
 {
     QNetworkRequest request(host + "/ProfileCreation");
 
-    QString jsonProfileCreationBody = QString("{\"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
+    QString jsonProfileCreationBody = QString("{\"name\": \"") + name + QString("\", \"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
     QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleProfileCreationResponse);
 }
@@ -69,17 +65,15 @@ void NetworkManager::handleProfileCreationResponse() {
 
     try{
         nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-        auto token = QByteArray(QString(nlohmann::to_string(jsonInfo["JWT"]).c_str()).replace("\"", "").toUtf8());
+        this->token  = QByteArray(QString(nlohmann::to_string(jsonInfo["JWT"]).c_str()).replace("\"", "").toUtf8());
 
-        if (token.size() > 0) {
+        if (this->token.size() > 0) {
             QFile file("data/authentication_key.organizer");
             file.open(QIODevice::WriteOnly);
-            file.write(token);
+            file.write(this->token);
             file.close();
 
-            this->token = token;
-
-            sendAuthenticationRequest(token);
+            sendAuthenticationRequest();
         }
     } catch (std::exception &ex) {
         qInfo() << ex.what();
@@ -95,9 +89,9 @@ void NetworkManager::sendProfileDeletingRequest()
     connect(m_reply, &QNetworkReply::finished, app, &MainApplication::outFromAccount);
 }
 
-void NetworkManager::sendAuthenticationRequest(QByteArray token) {
+void NetworkManager::sendAuthenticationRequest() {
     QNetworkRequest request(host);
-    request.setRawHeader(QByteArray("Authorization"), token);
+    request.setRawHeader(QByteArray("Authorization"), this->token);
     QNetworkReply *m_reply = m_networkManager.get(request);
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleAuthenticationResponse);
 }

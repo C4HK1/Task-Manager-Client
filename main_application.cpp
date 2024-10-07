@@ -45,7 +45,8 @@ void MainApplication::tryAuthenticate() {
     file.open(QIODevice::ReadOnly);
     QByteArray token = file.readAll();
     file.close();
-    net_manager->sendAuthenticationRequest(token);
+    net_manager->token = token;
+    net_manager->sendAuthenticationRequest();
 }
 
 void MainApplication::switchToRegister() {
