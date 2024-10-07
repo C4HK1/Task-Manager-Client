@@ -12,7 +12,7 @@ MainApplication::MainApplication(int argc, char **argv) :
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", net_manager);
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "MainApplication", this);
 
-    QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("MainWindow.qml"));
+    QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWindow.qml"));
     main_window = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 

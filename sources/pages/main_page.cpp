@@ -6,7 +6,7 @@
 #include "room_creation_page.h"
 
 MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
-    BasePage(engine, container, "MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
+    BasePage(engine, container, "qml/MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
 {
     switchToWidgetRooms();
 }

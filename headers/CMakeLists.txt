@@ -1,0 +1,2 @@
+target_include_directories(MainApplication PUBLIC pages)
+add_subdirectory(pages)

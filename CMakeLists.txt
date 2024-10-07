@@ -11,9 +11,14 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appFrontend
     sources/main.cpp
+    headers/pages/CMakeLists.txt
+    headers/pages/main_page_contents/CMakeLists.txt
 )
 
 add_subdirectory(sources)
+add_subdirectory(headers)
+add_subdirectory(qml)
+
 target_link_libraries(appFrontend
     PRIVATE Qt6::Quick
     MainApplication

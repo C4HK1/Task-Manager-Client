@@ -1,0 +1,2 @@
+target_include_directories(MainApplication PUBLIC main_page_contents)
+target_include_directories(Pages PUBLIC main_page_contents)
