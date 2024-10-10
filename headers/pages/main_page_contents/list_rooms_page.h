@@ -7,7 +7,10 @@ class ListRoomsPage : public RoomsPage {
     Q_OBJECT
 public:
     ListRoomsPage(QQmlEngine *engine, QQuickItem *container);
-    void AddRoom(RoomInfo *ri) override;
+    void createRoomItem(RoomInfo *ri) override;
+
+private:
+    QQuickItem *list_container;
 };
 
 #endif // LIST_ROOMS_PAGE_H

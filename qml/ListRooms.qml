@@ -42,6 +42,7 @@ DefaultFrame {
     }
 
     Flickable {
+        objectName: qsTr("flickable")
         anchors.top: info_top_bar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
@@ -57,29 +58,12 @@ DefaultFrame {
 
         GridLayout {
             id: room_container
+            objectName: qsTr("list_container")
             width: parent.width
             rowSpacing: -2
 
             flow: GridLayout.LeftToRight
             columns: 1
-
-            RoomListItem {
-                room_name: "Qt Task Organizer"
-                owner_name: "C4HK1, gerarte04"
-            }
-            RoomListItem {
-                room_name: "ML engineering"
-                owner_name: "Elon Musk"
-            }
-            RoomListItem {
-                room_name: "My Project"
-                owner_name: "Lil Cheecha"
-            }
-            RoomListItem {}
-            RoomListItem {}
-            RoomListItem {}
-            RoomListItem {}
-            RoomListItem {}
         }
     }
 

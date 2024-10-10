@@ -16,6 +16,7 @@ Rectangle {
 
     Text {
         id: room_name
+        objectName: qsTr("room_name")
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.leftMargin: 15
@@ -31,6 +32,7 @@ Rectangle {
 
     Text {
         id: owner_name
+        objectName: qsTr("owner_name")
         anchors.left: parent.left
         anchors.top: room_name.bottom
         anchors.leftMargin: 15
