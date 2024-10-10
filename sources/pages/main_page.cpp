@@ -1,12 +1,20 @@
 #include "main_page.h"
 #include "main_page_contents.h"
 
-MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
-    BasePage(engine, container, "qml/MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
+MainPage::MainPage(QQmlEngine *engine, QQuickItem *container, NetworkManager *net_manager) :
+    BasePage(engine, container, "qml/MainWorkspace.qml"),
+    workspace(object->findChild<QQuickItem*>("workspace")),
+    net_manager(net_manager)
 {
-    rooms.append(new RoomInfo{QString("asdf"), QString("qwerty")});
-    rooms.append(new RoomInfo{QString("Hamster Combat"), QString("Pavel Durov")});
-    rooms.append(new RoomInfo{QString("zhopa"), QString("hui")});
+    connect(net_manager, &NetworkManager::gotRooms, this, &MainPage::initializeRooms);
+
+    net_manager->sendGettingUserRoomsRequest();
+}
+
+void MainPage::initializeRooms(QList<RoomInfo*> rooms_info) {
+    for (auto &ri : rooms_info) {
+        rooms.append(ri);
+    }
 
     switchPage<WidgetRoomsPage>();
 }
@@ -19,19 +27,19 @@ void MainPage::setCurrentPage(BasePage *page){
     cur_page = page;
 }
 
-template <typename PageType> requires IsRoomsPage<PageType>
-void MainPage::switchPage() {
+template <typename PageType, typename ...Args> requires IsRoomsPage<PageType>
+void MainPage::switchPage(Args... args) {
     RoomsPage *page;
-    setCurrentPage(page = new PageType(engine, workspace));
+    setCurrentPage(page = new PageType(engine, workspace, args...));
 
     for(auto &r : rooms){
         page->createRoomItem(r);
     }
 }
 
-template <typename PageType> requires (IsPage<PageType> && !IsRoomsPage<PageType>)
-void MainPage::switchPage() {
-    setCurrentPage(new PageType(engine, workspace));
+template <typename PageType, typename ...Args> requires (IsPage<PageType> && !IsRoomsPage<PageType>)
+void MainPage::switchPage(Args... args) {
+    setCurrentPage(new PageType(engine, workspace, args...));
 }
 
 template void MainPage::switchPage<ListRoomsPage>();

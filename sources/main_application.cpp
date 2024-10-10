@@ -3,6 +3,7 @@
 #include "authorization_page.h"
 #include "registration_page.h"
 #include "main_page_contents.h"
+#include "main_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
@@ -49,9 +50,9 @@ void MainApplication::tryAuthenticate() {
     net_manager->sendAuthenticationRequest();
 }
 
-template <typename PageType> requires IsPage<PageType>
-void MainApplication::switchPage(){
-    SetCurrentPage(new PageType(engine, main_window->contentItem()));
+template <typename PageType, typename ...Args> requires IsPage<PageType>
+void MainApplication::switchPage(Args... args){
+    SetCurrentPage(new PageType(engine, main_window->contentItem(), args...));
 }
 
 void MainApplication::switchToRegister() {
@@ -81,7 +82,7 @@ void MainApplication::switchToRoomCreation() {
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {
-        switchPage<MainPage>();
+        switchPage<MainPage>(net_manager);
         this->m_loginingError = false;
     } else {
         switchPage<AuthorizationPage>();

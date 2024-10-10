@@ -12,7 +12,7 @@
 #include <QPair>
 #include <QUrlQuery>
 
-#include "main_page.h"
+#include "content_structures.h"
 
 class MainApplication;
 
@@ -44,6 +44,8 @@ public:
 
 signals:
     void authorizationResponseAccept(bool success);
+    void gotRooms(QList<RoomInfo*> rooms_info);
+    void roomCreated(RoomInfo*);
 
 public slots:
     void handleProfileCreationResponse();
