@@ -2,7 +2,7 @@
 #define ROOMS_PAGE_H
 
 #include "base_page.h"
-#include "main_page.h"
+#include "content_structures.h"
 
 class RoomsPage : public BasePage
 {
@@ -18,5 +18,8 @@ protected:
     QList<QQuickItem*> rooms_items;
     QQmlComponent *item_component;
 };
+
+template <typename T>
+concept IsRoomsPage = std::is_base_of<RoomsPage, T>::value;
 
 #endif // SETTINGS_PAGE_H

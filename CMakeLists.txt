@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(Frontend VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
@@ -11,6 +12,8 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appFrontend
     sources/main.cpp
+    headers/pages/main_page_contents/main_page_contents.h
+    headers/pages/main_page_contents/content_structures.h
 )
 
 add_subdirectory(sources)

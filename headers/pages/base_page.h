@@ -26,4 +26,7 @@ protected:
     QQuickItem *object;
 };
 
+template <typename T>
+concept IsPage = std::is_base_of<BasePage, T>::value;
+
 #endif // BASE_PAGE_H
