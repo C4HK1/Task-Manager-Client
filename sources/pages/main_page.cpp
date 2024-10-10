@@ -1,9 +1,5 @@
 #include "main_page.h"
-#include "profile_page.h"
-#include "widget_rooms_page.h"
-#include "list_rooms_page.h"
-#include "settings_page.h"
-#include "room_creation_page.h"
+#include "main_page_contents.h"
 
 MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "qml/MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
@@ -12,10 +8,10 @@ MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
     rooms.append(new RoomInfo{QString("Hamster Combat"), QString("Pavel Durov")});
     rooms.append(new RoomInfo{QString("zhopa"), QString("hui")});
 
-    switchToWidgetRooms();
+    switchPage<WidgetRoomsPage>();
 }
 
-void MainPage::setCurrentPage(BasePage *page) {
+void MainPage::setCurrentPage(BasePage *page){
     if (cur_page != nullptr) {
         cur_page->deleteLater();
     }
@@ -23,32 +19,22 @@ void MainPage::setCurrentPage(BasePage *page) {
     cur_page = page;
 }
 
-void MainPage::switchToWidgetRooms() {
-    WidgetRoomsPage *widget_page;
-    setCurrentPage(widget_page = new WidgetRoomsPage(engine, workspace));
+template <typename PageType> requires IsRoomsPage<PageType>
+void MainPage::switchPage() {
+    RoomsPage *page;
+    setCurrentPage(page = new PageType(engine, workspace));
 
     for(auto &r : rooms){
-        widget_page->createRoomItem(r);
+        page->createRoomItem(r);
     }
 }
 
-void MainPage::switchToListRooms() {
-    ListRoomsPage *list_page;
-    setCurrentPage(list_page = new ListRoomsPage(engine, workspace));
-
-    for(auto &r : rooms){
-        list_page->createRoomItem(r);
-    }
+template <typename PageType> requires (IsPage<PageType> && !IsRoomsPage<PageType>)
+void MainPage::switchPage() {
+    setCurrentPage(new PageType(engine, workspace));
 }
 
-void MainPage::switchToSettings() {
-    setCurrentPage(new SettingsPage(engine, workspace));
-}
-
-void MainPage::switchToProfile() {
-    setCurrentPage(new ProfilePage(engine, workspace));
-}
-
-void MainPage::switchToRoomCreation() {
-    setCurrentPage(new RoomCreationPage(engine, workspace));
-}
+template void MainPage::switchPage<ListRoomsPage>();
+template void MainPage::switchPage<SettingsPage>();
+template void MainPage::switchPage<RoomCreationPage>();
+template void MainPage::switchPage<ProfilePage>();

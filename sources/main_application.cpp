@@ -2,7 +2,7 @@
 #include "network_manager.h"
 #include "authorization_page.h"
 #include "registration_page.h"
-#include "main_page.h"
+#include "main_page_contents.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
@@ -38,7 +38,7 @@ void MainApplication::tryAuthenticate() {
     QFile file("data/authentication_key.organizer");
 
     if(!file.exists()){
-        SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
+        switchPage<AuthorizationPage>();
         return;
     }
 
@@ -49,37 +49,42 @@ void MainApplication::tryAuthenticate() {
     net_manager->sendAuthenticationRequest();
 }
 
+template <typename PageType> requires IsPage<PageType>
+void MainApplication::switchPage(){
+    SetCurrentPage(new PageType(engine, main_window->contentItem()));
+}
+
 void MainApplication::switchToRegister() {
-    SetCurrentPage(new RegistrationPage(engine, main_window->contentItem()));
+    switchPage<RegistrationPage>();
 }
 
 void MainApplication::switchToSettings() {
-    qobject_cast<MainPage*>(cur_page)->switchToSettings();
+    qobject_cast<MainPage*>(cur_page)->switchPage<SettingsPage>();
 }
 
 void MainApplication::switchToProfile() {
-    qobject_cast<MainPage*>(cur_page)->switchToProfile();
+    qobject_cast<MainPage*>(cur_page)->switchPage<ProfilePage>();
 }
 
 void MainApplication::switchToWidgetRooms() {
-    qobject_cast<MainPage*>(cur_page)->switchToWidgetRooms();
+    qobject_cast<MainPage*>(cur_page)->switchPage<WidgetRoomsPage>();
 }
 
 void MainApplication::switchToListRooms() {
-    qobject_cast<MainPage*>(cur_page)->switchToListRooms();
+    qobject_cast<MainPage*>(cur_page)->switchPage<ListRoomsPage>();
 }
 
 void MainApplication::switchToRoomCreation() {
-    qobject_cast<MainPage*>(cur_page)->switchToRoomCreation();
+    qobject_cast<MainPage*>(cur_page)->switchPage<RoomCreationPage>();
 }
 
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {
-        SetCurrentPage(new MainPage(engine, main_window->contentItem()));
+        switchPage<MainPage>();
         this->m_loginingError = false;
     } else {
-        SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
+        switchPage<AuthorizationPage>();
         this->m_loginingError = true;
     }
 
@@ -89,5 +94,5 @@ void MainApplication::handleAuthentication(bool success) {
 void MainApplication::outFromAccount()
 {
     std::remove("data/authentication_key.organizer");
-    SetCurrentPage(new AuthorizationPage(engine, main_window->contentItem()));
+    switchPage<AuthorizationPage>();
 }

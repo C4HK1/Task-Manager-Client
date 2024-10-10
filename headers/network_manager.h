@@ -12,7 +12,7 @@
 #include <QPair>
 #include <QUrlQuery>
 
-#include "rooms_page.h"
+#include "main_page.h"
 
 class MainApplication;
 

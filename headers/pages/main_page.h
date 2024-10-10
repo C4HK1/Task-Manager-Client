@@ -2,35 +2,25 @@
 #define MAIN_PAGE_H
 
 #include "base_page.h"
-
-struct TaskInfo {
-    QString task_name, owner_name, owner_id;
-};
-
-struct RoomInfo {
-    QString room_name, owner_name, owner_id;
-    QList<TaskInfo*> tasks;
-
-    QQuickItem *room_item = nullptr;
-
-    ~RoomInfo() { if(room_item != nullptr) room_item->deleteLater(); }
-};
+#include "rooms_page.h"
+#include "content_structures.h"
 
 class MainPage : public BasePage {
     Q_OBJECT
 public:
     MainPage(QQmlEngine *engine, QQuickItem *container);
     void setCurrentPage(BasePage *page);
-    void switchToSettings();
-    void switchToProfile();
-    void switchToWidgetRooms();
-    void switchToListRooms();
-    void switchToRoomCreation();
+    template <typename PageType> requires (IsPage<PageType> && !IsRoomsPage<PageType>)
+    void switchPage();
+    template <typename PageType> requires IsRoomsPage<PageType>
+    void switchPage();
 
 private:
     QQuickItem *workspace = nullptr;
     BasePage *cur_page = nullptr;
     QList<RoomInfo*> rooms;
 };
+
+// extern template void MainPage::switchPage<ListRoomsPage>();
 
 #endif // MAIN_PAGE_H
