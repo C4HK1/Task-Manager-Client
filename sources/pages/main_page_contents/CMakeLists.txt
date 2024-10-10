@@ -14,7 +14,6 @@ target_link_libraries(MainPageContents Qt6::Quick)
 target_sources(MainPageContents PRIVATE
     ${HEADER_MPC_DIR}/list_rooms_page.h list_rooms_page.cpp
     ${HEADER_MPC_DIR}/profile_page.h profile_page.cpp
-    ${HEADER_MPC_DIR}/room.h room.cpp
     ${HEADER_MPC_DIR}/room_creation_page.h room_creation_page.cpp
     ${HEADER_MPC_DIR}/rooms_page.h rooms_page.cpp
     ${HEADER_MPC_DIR}/settings_page.h settings_page.cpp

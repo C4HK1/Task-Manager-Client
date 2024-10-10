@@ -7,7 +7,10 @@ class WidgetRoomsPage : public RoomsPage {
     Q_OBJECT
 public:
     WidgetRoomsPage(QQmlEngine *engine, QQuickItem *container);
-    void AddRoom(RoomInfo *ri) override;
+    void createRoomItem(RoomInfo *ri) override;
+
+private:
+    QQuickItem *widget_container;
 };
 
 #endif // WIDGET_ROOMS_PAGE_H

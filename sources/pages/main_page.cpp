@@ -8,6 +8,10 @@
 MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "qml/MainWorkspace.qml"), workspace(object->findChild<QQuickItem*>("workspace"))
 {
+    rooms.append(new RoomInfo{QString("asdf"), QString("qwerty")});
+    rooms.append(new RoomInfo{QString("Hamster Combat"), QString("Pavel Durov")});
+    rooms.append(new RoomInfo{QString("zhopa"), QString("hui")});
+
     switchToWidgetRooms();
 }
 
@@ -20,11 +24,21 @@ void MainPage::setCurrentPage(BasePage *page) {
 }
 
 void MainPage::switchToWidgetRooms() {
-    setCurrentPage(new WidgetRoomsPage(engine, workspace));
+    WidgetRoomsPage *widget_page;
+    setCurrentPage(widget_page = new WidgetRoomsPage(engine, workspace));
+
+    for(auto &r : rooms){
+        widget_page->createRoomItem(r);
+    }
 }
 
 void MainPage::switchToListRooms() {
-    setCurrentPage(new ListRoomsPage(engine, workspace));
+    ListRoomsPage *list_page;
+    setCurrentPage(list_page = new ListRoomsPage(engine, workspace));
+
+    for(auto &r : rooms){
+        list_page->createRoomItem(r);
+    }
 }
 
 void MainPage::switchToSettings() {
