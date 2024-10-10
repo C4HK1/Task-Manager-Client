@@ -28,8 +28,8 @@ public:
     QQuickItem* loadQmlFrame(QString fileName);
     void tryAuthenticate();
     void SetCurrentPage(BasePage *page);
-    template <typename T> requires IsPage<T>
-    void switchPage();
+    template <typename T, typename ...Args> requires IsPage<T>
+    void switchPage(Args...);
     Q_INVOKABLE void switchToRegister();
     Q_INVOKABLE void switchToSettings();
     Q_INVOKABLE void switchToProfile();

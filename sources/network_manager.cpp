@@ -189,7 +189,7 @@ void NetworkManager::handleTaskDeletingResponse() {
 }
 
 void NetworkManager::sendGettingUserRoomsRequest() {
-    QNetworkRequest request(host + "/GetUserRooms");
+    QNetworkRequest request(host + "/GetProfileRooms");
     request.setRawHeader(QByteArray("Authorization"), this->token);
 
     QNetworkReply *m_reply = m_networkManager.get(request);
@@ -201,10 +201,21 @@ void NetworkManager::handleGettingUserRoomsResponse() {
     QString response(m_reply->readAll());
     m_reply->deleteLater();
     /* DEBUG */ qInfo() << QString("server response: ") + response;
+
+    QList<RoomInfo*> rooms_info;
+    nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
+
+
+    for (auto &r : jsonInfo["items"]) {
+        auto get = [&jsonInfo, &r](std::string id) { return QString(nlohmann::to_string(r[id]).c_str()).replace("\"", ""); };
+        rooms_info.append(new RoomInfo{ get("label"), get("creator_name"), get("creator_id") });
+    }
+
+    emit gotRooms(rooms_info);
 }
 
 void NetworkManager::sendGettingUserTasksRequest() {
-    QNetworkRequest request(host + "/GetUserTasks");
+    QNetworkRequest request(host + "/GetProfileTasks");
     request.setRawHeader(QByteArray("Authorization"), this->token);
 
     QNetworkReply *m_reply = m_networkManager.get(request);
