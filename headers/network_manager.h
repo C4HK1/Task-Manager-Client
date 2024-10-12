@@ -45,7 +45,8 @@ public:
 signals:
     void authorizationResponseAccept(bool success);
     void gotRooms(QList<RoomInfo*> rooms_info);
-    void roomCreated(RoomInfo*);
+    void gotTasks(QList<TaskInfo*> tasks_info);
+    void roomCreationFailed();
 
 public slots:
     void handleProfileCreationResponse();

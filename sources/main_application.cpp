@@ -76,7 +76,11 @@ void MainApplication::switchToListRooms() {
 }
 
 void MainApplication::switchToRoomCreation() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<RoomCreationPage>();
+    qobject_cast<MainPage*>(cur_page)->switchPage<RoomCreationPage>(net_manager);
+}
+
+void MainApplication::switchToRoom(RoomInfo *room) {
+    qobject_cast<MainPage*>(cur_page)->switchPage<RoomPage>(room, net_manager);
 }
 
 void MainApplication::handleAuthentication(bool success) {

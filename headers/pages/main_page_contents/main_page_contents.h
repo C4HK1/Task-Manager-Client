@@ -5,6 +5,7 @@
 #include "profile_page.h"
 #include "room_creation_page.h"
 #include "rooms_page.h"
+#include "room_page.h"
 #include "settings_page.h"
 #include "widget_rooms_page.h"
 

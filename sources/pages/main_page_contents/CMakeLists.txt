@@ -18,4 +18,5 @@ target_sources(MainPageContents PRIVATE
     ${HEADER_MPC_DIR}/rooms_page.h rooms_page.cpp
     ${HEADER_MPC_DIR}/settings_page.h settings_page.cpp
     ${HEADER_MPC_DIR}/widget_rooms_page.h widget_rooms_page.cpp
+    ${HEADER_MPC_DIR}/room_page.h room_page.cpp
 )

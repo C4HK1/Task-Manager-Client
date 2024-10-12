@@ -15,7 +15,9 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QQuickWindow>
+
 #include "base_page.h"
+#include "content_structures.h"
 
 class NetworkManager;
 
@@ -36,6 +38,7 @@ public:
     Q_INVOKABLE void switchToWidgetRooms();
     Q_INVOKABLE void switchToListRooms();
     Q_INVOKABLE void switchToRoomCreation();
+    Q_INVOKABLE void switchToRoom(RoomInfo *room);
 
 signals:
     void loginingErrorChanged();
