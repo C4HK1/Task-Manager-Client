@@ -28,7 +28,7 @@ public:
 
     Q_INVOKABLE void sendProfileCreationRequest(QString name, QString login, QString password);
     Q_INVOKABLE void sendRoomCreationRequest(QString roomName);
-    Q_INVOKABLE void sendTaskCretionRequest(QString &taskName, RoomInfo &room);
+    Q_INVOKABLE void sendTaskCreationRequest(QString taskName, QString room_name, QString owner_id);
 
     Q_INVOKABLE void sendProfileDeletingRequest();
     Q_INVOKABLE void sendRoomDeletingRequest(RoomInfo &room);
@@ -47,6 +47,7 @@ signals:
     void gotRooms(QList<RoomInfo*> rooms_info);
     void gotTasks(QList<TaskInfo*> tasks_info);
     void roomCreationFailed();
+    void gotTask(bool status);
 
 public slots:
     void handleProfileCreationResponse();

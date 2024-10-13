@@ -146,20 +146,20 @@ void NetworkManager::handleRoomCreationResponse() {
         roomInfo->room_name = std::string(room.at("label")).c_str();
         roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
         roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
+        qInfo() << roomInfo->room_name << roomInfo->owner_name << roomInfo->owner_id;
 
         app->switchToRoom(roomInfo);
-
-        this->sendGettingRoomTasksRequest(*roomInfo);
     } else {
         emit this->roomCreationFailed();
     }
 }
 
-void NetworkManager::sendTaskCretionRequest(QString &taskName, RoomInfo &room) {
+void NetworkManager::sendTaskCreationRequest(QString taskName, QString room_name, QString owner_id) {
     QNetworkRequest request(host + "/TaskCreation");
     request.setRawHeader(QByteArray("Authorization"), this->token);
 
-    QString jsonProfileCreationBody = QString("{\"room label\": \"") + room.room_name + QString("\", \"room creator id\": \"") + room.owner_id + QString("\", \"task label\": \"") + taskName + QString("\"}");
+    qInfo() << room_name << owner_id;
+    QString jsonProfileCreationBody = QString("{\"room label\": \"") + room_name + QString("\", \"room creator id\": \"") + owner_id + QString("\", \"task label\": \"") + taskName + QString("\"}");
 
     QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleTaskCreationResponse);
@@ -172,6 +172,18 @@ void NetworkManager::handleTaskCreationResponse() {
     QString response(m_reply->readAll());
     m_reply->deleteLater();
     /* DEBUG */ qInfo() << QString("server response: ") + response;
+
+    try{
+        nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
+        QString status(nlohmann::to_string(jsonInfo["task creation info"]).c_str());
+
+        bool result = status == "\"true\"";
+
+        emit this->gotTask(result);
+    } catch (std::exception &ex) {
+        qInfo() << ex.what();
+        return;
+    }
 }
 
 void NetworkManager::sendRoomDeletingRequest(RoomInfo &room) {

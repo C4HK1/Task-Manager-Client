@@ -11,6 +11,7 @@ public:
     ~RoomPage();
 public slots:
     void loadTasks(QList<TaskInfo *> task);
+    void loadTask(bool status);
 private:
     NetworkManager *net_manager;
     RoomInfo *room;
