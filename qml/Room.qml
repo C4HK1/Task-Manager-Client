@@ -27,7 +27,7 @@ DefaultFrame {
         }
     }
 
-    Task {
+    TaskCreationButton {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 10
