@@ -14,6 +14,8 @@ public slots:
 private:
     NetworkManager *net_manager;
     RoomInfo *room;
+    QQmlComponent *task_component;
+    QQuickItem *tasks_container;
 };
 
 #endif // ROOM__PAGE_H
