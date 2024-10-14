@@ -7,7 +7,7 @@ RoomCreationPage::RoomCreationPage(QQmlEngine *engine, QQuickItem *container, Ne
 }
 
 void RoomCreationPage::loadFailInfo() {
-    qInfo() << "Creation failed";
+    QMetaObject::invokeMethod(object, "roomCreationFailed");
 }
 
 RoomCreationPage::~RoomCreationPage() {}

@@ -48,7 +48,8 @@ signals:
     void gotRooms(QList<RoomInfo*> rooms_info);
     void gotTasks(QList<TaskInfo*> tasks_info);
     void roomCreationFailed();
-    void gotTask(bool status);
+    void gotTask(TaskInfo *task);
+    void taskCreationFailed();
 
 public slots:
     void handleProfileCreationResponse();

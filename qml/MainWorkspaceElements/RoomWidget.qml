@@ -61,7 +61,6 @@ Rectangle {
         }
 
         onClicked: {
-            console.log(owner_id)
             NetworkManager.sendRoomGettingRequest(owner_id, room_name.text)
         }
     }

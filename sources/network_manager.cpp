@@ -146,7 +146,6 @@ void NetworkManager::handleRoomCreationResponse() {
         roomInfo->room_name = std::string(room.at("label")).c_str();
         roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
         roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
-        qInfo() << roomInfo->room_name << roomInfo->owner_name << roomInfo->owner_id;
 
         app->switchToRoom(roomInfo);
     } else {
@@ -166,7 +165,6 @@ void NetworkManager::sendRoomGettingRequest(QString creatorID, QString label) {
     qInfo() << "\"" + label + "\" room creation request";
 }
 
-
 void NetworkManager::handleRoomGettingResponse() {
     QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
     std::string response(m_reply->readAll());
@@ -181,7 +179,6 @@ void NetworkManager::handleRoomGettingResponse() {
     roomInfo->room_name = std::string(room.at("label")).c_str();
     roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
     roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
-    qInfo() << roomInfo->room_name << roomInfo->owner_name << roomInfo->owner_id;
 
     app->switchToRoom(roomInfo);
 }
@@ -190,9 +187,7 @@ void NetworkManager::sendTaskCreationRequest(QString taskName, QString room_name
     QNetworkRequest request(host + "/TaskCreation");
     request.setRawHeader(QByteArray("Authorization"), this->token);
 
-    qInfo() << room_name << owner_id;
     QString jsonProfileCreationBody = QString("{\"room label\": \"") + room_name + QString("\", \"room creator id\": \"") + owner_id + QString("\", \"task label\": \"") + taskName + QString("\"}");
-
     QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleTaskCreationResponse);
 
@@ -201,20 +196,28 @@ void NetworkManager::sendTaskCreationRequest(QString taskName, QString room_name
 
 void NetworkManager::handleTaskCreationResponse() {
     QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
+    std::string response(m_reply->readAll());
     m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
+    /* DEBUG */ qInfo() << "server response: " + response;
 
-    try{
-        nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-        QString status(nlohmann::to_string(jsonInfo["task creation info"]).c_str());
 
-        bool result = status == "\"true\"";
 
-        emit this->gotTask(result);
-    } catch (std::exception &ex) {
-        qInfo() << ex.what();
-        return;
+    nlohmann::json data = nlohmann::json::parse(response);
+    bool status;
+    std::istringstream(std::string(data.at("task creation info"))) >> std::boolalpha >> status;
+
+    if (status) {
+        nlohmann::json task = data.at("task");
+        TaskInfo *taskInfo = new TaskInfo();
+
+        taskInfo->task_name = std::string(task.at("label")).c_str();
+        taskInfo->owner_name = std::string(task.at("creator_name")).c_str();
+        taskInfo->owner_id = std::string(task.at("creator_id")).c_str();
+        taskInfo->room_id = std::string(task.at("room_id")).c_str();
+
+        emit this->gotTask(taskInfo);
+    } else {
+        emit this->taskCreationFailed();
     }
 }
 
@@ -301,7 +304,7 @@ void NetworkManager::sendGettingRoomTasksRequest(RoomInfo &room) {
     QString jsonProfileCreationBody = QString("{\"room label\": \"") + room.room_name + QString("\", \"room creator id\": \"") + room.owner_id + QString("\"}");
 
     QNetworkReply *m_reply = m_networkManager.get(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleGettingUserTasksResponse);
+    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleGettingRoomTasksResponse);
 }
 
 void NetworkManager::handleGettingRoomTasksResponse() {
@@ -313,10 +316,9 @@ void NetworkManager::handleGettingRoomTasksResponse() {
     QList<TaskInfo*> tasks_info;
     nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
 
-
     for (auto &r : jsonInfo["items"]) {
         auto get = [&jsonInfo, &r](std::string id) { return QString(nlohmann::to_string(r[id]).c_str()).replace("\"", ""); };
-        tasks_info.append(new TaskInfo{ get("label"), get("creator_name"), get("creator_id") });
+        tasks_info.append(new TaskInfo{ get("label"), get("creator_name"), get("creator_id"), get("room_id") });
     }
 
     emit this->gotTasks(tasks_info);

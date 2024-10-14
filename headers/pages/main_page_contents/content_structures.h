@@ -4,7 +4,7 @@
 #include <QQuickItem>
 
 struct TaskInfo {
-    QString task_name, owner_name, owner_id;
+    QString task_name, owner_name, owner_id, room_id;
 };
 
 struct RoomInfo {

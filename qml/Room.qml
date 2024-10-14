@@ -5,83 +5,75 @@ import DefaultElements
 import MainWorkspaceElements
 
 DefaultFrame {
+    function taskCreated() {
+        taskCreationWindow.destroy()
+    }
+
+    function taskCreationFailed() {
+        console.log("task creation failed")
+    }
+
     id: room
+    anchors.fill: parent
 
     property alias room_name: room_name.text
     property alias owner_name: owner_name.text
     property int owner_id
     property var taskCreationWindow
 
-    function handleTaskCreation(status) {
-        if (status) {
-            taskCreationWindow.destroy()
-        } else {
-            console.log("creation failed")
-        }
+    Text {
+        id: room_name
+        objectName: qsTr("room_name")
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.leftMargin: 15
+        anchors.topMargin: 15
+        color: "#FFFFFF"
+        font.pixelSize: 18
+        font.bold: true
+        width: parent.width - anchors.leftMargin * 2
+        wrapMode: Text.WordWrap
+        maximumLineCount: 2
+        elide: Text.ElideRight
     }
 
-    Rectangle {
-        id: room_info
-        anchors.top: parent.top
+    Text {
+        id: owner_name
+        objectName: qsTr("owner_name")
         anchors.left: parent.left
-        anchors.right: parent.right
-
-        Text {
-            id: room_name
-            objectName: qsTr("room_name")
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.leftMargin: 15
-            anchors.topMargin: 15
-            color: "#FFFFFF"
-            font.pixelSize: 18
-            font.bold: true
-            width: parent.width - anchors.leftMargin * 2
-            wrapMode: Text.WordWrap
-            maximumLineCount: 2
-            elide: Text.ElideRight
-        }
-
-        Text {
-            id: owner_name
-            objectName: qsTr("owner_name")
-            anchors.left: parent.left
-            anchors.top: room_name.bottom
-            anchors.leftMargin: 15
-            anchors.topMargin: 10
-            anchors.margins: 15
-            color: "#FFFFFF"
-            font.pixelSize: 16
-            width: parent.width - anchors.leftMargin * 2
-            wrapMode: Text.WordWrap
-            maximumLineCount: 2
-            elide: Text.ElideRight
-        }
+        anchors.top: room_name.bottom
+        anchors.leftMargin: 15
+        anchors.topMargin: 10
+        anchors.margins: 15
+        color: "#FFFFFF"
+        font.pixelSize: 16
+        width: parent.width - anchors.leftMargin * 2
+        wrapMode: Text.WordWrap
+        maximumLineCount: 2
+        elide: Text.ElideRight
     }
 
     Flickable {
         objectName: qsTr("flickable")
-        anchors.top: room_info.bottom
-        anchors.bottom: parent.bottom
+        anchors.top: owner_name.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
-        leftMargin: 10
-        rightMargin: 10
-        topMargin: 10
-        bottomMargin: 10
-
-        contentHeight: room_container.height
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.horizontal: ScrollBar {
             anchors.bottom: parent.bottom
         }
 
-        ColumnLayout {
+        GridLayout {
             objectName: qsTr("tasks_container")
             id: room_container
-            width: 100
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            rows: 1
         }
     }
 

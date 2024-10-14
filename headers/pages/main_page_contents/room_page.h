@@ -11,10 +11,12 @@ public:
     ~RoomPage();
 public slots:
     void loadTasks(QList<TaskInfo *> task);
-    void loadTask(bool status);
+    void loadTask(TaskInfo *task);
+    void taskCreationFailed();
 private:
     NetworkManager *net_manager;
     RoomInfo *room;
+    QList<TaskInfo *> tasks;
     QQmlComponent *task_component;
     QQuickItem *tasks_container;
 };
