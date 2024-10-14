@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import AppFrontend
 
 Rectangle {
     Layout.margins: 10
@@ -13,6 +14,7 @@ Rectangle {
 
     property alias room_name: room_name.text
     property alias owner_name: owner_name.text
+    property string owner_id
 
     Text {
         id: room_name
@@ -56,6 +58,11 @@ Rectangle {
 
         onExited: {
             parent.color = "#404040"
+        }
+
+        onClicked: {
+            console.log(owner_id)
+            NetworkManager.sendRoomGettingRequest(owner_id, room_name.text)
         }
     }
 }

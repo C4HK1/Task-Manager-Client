@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE void sendRoomDeletingRequest(RoomInfo &room);
     Q_INVOKABLE void sendTaskDeletingRequest(RoomInfo &room, TaskInfo &task);
 
+    Q_INVOKABLE void sendRoomGettingRequest(QString creatorID, QString label);
     Q_INVOKABLE void sendGettingUserRoomsRequest();
     Q_INVOKABLE void sendGettingUserTasksRequest();
     Q_INVOKABLE void sendGettingRoomTasksRequest(RoomInfo &room);
@@ -57,6 +58,7 @@ public slots:
     void handleRoomDeletingResponse();
     void handleTaskDeletingResponse();
 
+    void handleRoomGettingResponse();
     void handleGettingUserRoomsResponse();
     void handleGettingUserTasksResponse();
     void handleGettingRoomTasksResponse();

@@ -154,6 +154,38 @@ void NetworkManager::handleRoomCreationResponse() {
     }
 }
 
+void NetworkManager::sendRoomGettingRequest(QString creatorID, QString label) {
+    QNetworkRequest request(host + "/GetRoomInfo");
+    request.setRawHeader(QByteArray("Authorization"), this->token);
+
+    QString jsonProfileCreationBody = QString("{\"room creator id\": \"") + creatorID + QString("\", \"label\": \"") + label + QString("\"}");
+
+    QNetworkReply *m_reply = m_networkManager.get(request, jsonProfileCreationBody.toUtf8());
+    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleRoomGettingResponse);
+
+    qInfo() << "\"" + label + "\" room creation request";
+}
+
+
+void NetworkManager::handleRoomGettingResponse() {
+    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    std::string response(m_reply->readAll());
+    m_reply->deleteLater();
+    /* DEBUG */ qInfo() << "server response: " + response;
+
+    nlohmann::json data = nlohmann::json::parse(response);
+
+    nlohmann::json room = data.at("room");
+    RoomInfo *roomInfo = new RoomInfo();
+
+    roomInfo->room_name = std::string(room.at("label")).c_str();
+    roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
+    roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
+    qInfo() << roomInfo->room_name << roomInfo->owner_name << roomInfo->owner_id;
+
+    app->switchToRoom(roomInfo);
+}
+
 void NetworkManager::sendTaskCreationRequest(QString taskName, QString room_name, QString owner_id) {
     QNetworkRequest request(host + "/TaskCreation");
     request.setRawHeader(QByteArray("Authorization"), this->token);
