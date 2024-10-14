@@ -6,14 +6,18 @@ MainPage::MainPage(QQmlEngine *engine, QQuickItem *container, NetworkManager *ne
     workspace(object->findChild<QQuickItem*>("workspace")),
     net_manager(net_manager)
 {
-    connect(net_manager, &NetworkManager::gotRooms, this, &MainPage::initializeRooms);
+    connect(net_manager, &NetworkManager::gotRooms, this, &MainPage::initializeContents);
 
     net_manager->sendGettingUserRoomsRequest();
 }
 
-void MainPage::initializeRooms(QList<RoomInfo*> rooms_info) {
+void MainPage::initializeContents(QList<RoomInfo*> rooms_info) {
     for (auto &ri : rooms_info) {
         rooms.append(ri);
+
+        for(auto &ti : ri->tasks) {
+            tasks.append(ti);
+        }
     }
 
     switchPage<WidgetRoomsPage>();
@@ -37,7 +41,19 @@ void MainPage::switchPage(Args... args) {
     }
 }
 
-template <typename PageType, typename ...Args> requires (IsPage<PageType> && !IsRoomsPage<PageType>)
+template <typename PageType, typename ...Args> requires IsTasksPage<PageType>
+void MainPage::switchPage(Args... args) {
+    TasksPage *page;
+    setCurrentPage(page = new PageType(engine, workspace, args...));
+
+    for(auto &t : tasks){
+        page->createTaskItem(t);
+    }
+
+    page->sortBy();
+}
+
+template <typename PageType, typename ...Args> requires (IsPage<PageType> && !IsRoomsPage<PageType> && !IsTasksPage<PageType>)
 void MainPage::switchPage(Args... args) {
     setCurrentPage(new PageType(engine, workspace, args...));
 }
@@ -47,3 +63,4 @@ template void MainPage::switchPage<SettingsPage>();
 template void MainPage::switchPage<RoomCreationPage>(NetworkManager *);
 template void MainPage::switchPage<RoomPage>(RoomInfo *, NetworkManager *);
 template void MainPage::switchPage<ProfilePage>();
+template void MainPage::switchPage<TasksPage>();

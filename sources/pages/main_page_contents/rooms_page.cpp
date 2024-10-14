@@ -4,5 +4,9 @@ RoomsPage::RoomsPage(QQmlEngine *engine, QQuickItem *container, QString moduleNa
     : BasePage(engine, container, moduleName), item_component(new QQmlComponent(engine, QUrl::fromLocalFile(itemName))) {}
 
 RoomsPage::~RoomsPage(){
+    for(auto &item : rooms_items) {
+        item->deleteLater();
+    }
+
     item_component->deleteLater();
 }

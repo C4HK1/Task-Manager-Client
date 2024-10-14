@@ -3,8 +3,15 @@
 
 #include <QQuickItem>
 
+struct RoomInfo;
+
 struct TaskInfo {
     QString task_name, owner_name, owner_id, room_id;
+    RoomInfo *parent;
+
+    QQuickItem *task_item;
+
+    ~TaskInfo() { if(task_item != nullptr) task_item->deleteLater(); }
 };
 
 struct RoomInfo {

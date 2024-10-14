@@ -12,8 +12,6 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appFrontend
     sources/main.cpp
-    headers/pages/main_page_contents/main_page_contents.h
-    headers/pages/main_page_contents/content_structures.h
 )
 
 add_subdirectory(sources)

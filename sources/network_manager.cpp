@@ -275,8 +275,14 @@ void NetworkManager::handleGettingUserRoomsResponse() {
 
 
     for (auto &r : jsonInfo["items"]) {
-        auto get = [&jsonInfo, &r](std::string id) { return QString(nlohmann::to_string(r[id]).c_str()).replace("\"", ""); };
-        rooms_info.append(new RoomInfo{ get("label"), get("creator_name"), get("creator_id") });
+        auto get = [&r](std::string id) { return QString(nlohmann::to_string(r[id]).c_str()).replace("\"", ""); };
+        RoomInfo *new_room = new RoomInfo{ get("label"), get("creator_name"), get("creator_id") };
+        rooms_info.append(new_room);
+
+        for(auto &t : r["tasks"]) {
+            auto tget = [&t](std::string id) { return QString(nlohmann::to_string(t[id]).c_str()).replace("\"", ""); };
+            new_room->tasks.append(new TaskInfo{ tget("label"), tget("creator_name"), QString(), tget("room_id"), new_room });
+        }
     }
 
     emit gotRooms(rooms_info);

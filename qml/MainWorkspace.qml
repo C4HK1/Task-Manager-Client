@@ -133,6 +133,8 @@ DefaultFrame {
                     tasks_list.anchors.top = tool_bar_tasks.bottom
                     tasks_list.width = parent.width
                     tasks_list.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
+
+                    MainApplication.switchToTasks()
                 }
             }
         }

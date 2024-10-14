@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void switchToListRooms();
     Q_INVOKABLE void switchToRoomCreation();
     Q_INVOKABLE void switchToRoom(RoomInfo *room);
+    Q_INVOKABLE void switchToTasks();
 
 signals:
     void loginingErrorChanged();

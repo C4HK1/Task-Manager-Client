@@ -83,6 +83,10 @@ void MainApplication::switchToRoom(RoomInfo *room) {
     qobject_cast<MainPage*>(cur_page)->switchPage<RoomPage>(room, net_manager);
 }
 
+void MainApplication::switchToTasks() {
+    qobject_cast<MainPage*>(cur_page)->switchPage<TasksPage>();
+}
+
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {

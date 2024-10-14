@@ -12,4 +12,5 @@ qt_add_qml_module(MainWorkspaceElements
         RoomCreationButton.qml
 
     RESOURCE_PREFIX /MainWorkspaceElements
+    QML_FILES TaskListItem.qml
 )
