@@ -5,6 +5,10 @@ import DefaultElements
 import AppFrontend
 
 Flickable {
+    function roomCreationFailed() {
+        console.log("room creation failed")
+    }
+
     anchors.fill: parent
     anchors.topMargin: 40
     anchors.leftMargin: 40

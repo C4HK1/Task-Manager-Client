@@ -1,20 +1,25 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import AppFrontend
+import DefaultElements
+import MainWorkspaceElements
 
-Rectangle {
-    Layout.margins: 10
-    Layout.fillWidth: true
-    Layout.maximumWidth: 270
-    height: 170
-    radius: 20
+DefaultFrame {
+    function taskCreated() {
+        taskCreationWindow.destroy()
+    }
 
-    color: "#404040"
+    function taskCreationFailed() {
+        console.log("task creation failed")
+    }
+
+    id: room
+    anchors.fill: parent
 
     property alias room_name: room_name.text
     property alias owner_name: owner_name.text
-    property string owner_id
+    property int owner_id
+    property var taskCreationWindow
 
     Text {
         id: room_name
@@ -48,20 +53,33 @@ Rectangle {
         elide: Text.ElideRight
     }
 
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
+    Flickable {
+        objectName: qsTr("flickable")
+        anchors.top: owner_name.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
-        onEntered: {
-            parent.color = "#505050"
+        boundsBehavior: Flickable.StopAtBounds
+
+        ScrollBar.horizontal: ScrollBar {
+            anchors.bottom: parent.bottom
         }
 
-        onExited: {
-            parent.color = "#404040"
-        }
+        GridLayout {
+            objectName: qsTr("tasks_container")
+            id: room_container
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        onClicked: {
-            NetworkManager.sendRoomGettingRequest(owner_id, room_name.text)
+            rows: 1
         }
+    }
+
+    TaskCreationButton {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 10
     }
 }

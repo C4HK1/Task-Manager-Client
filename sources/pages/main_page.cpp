@@ -44,5 +44,6 @@ void MainPage::switchPage(Args... args) {
 
 template void MainPage::switchPage<ListRoomsPage>();
 template void MainPage::switchPage<SettingsPage>();
-template void MainPage::switchPage<RoomCreationPage>();
+template void MainPage::switchPage<RoomCreationPage>(NetworkManager *);
+template void MainPage::switchPage<RoomPage>(RoomInfo *, NetworkManager *);
 template void MainPage::switchPage<ProfilePage>();

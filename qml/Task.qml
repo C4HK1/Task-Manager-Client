@@ -1,24 +1,21 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import AppFrontend
+import DefaultElements
+import MainWorkspaceElements
 
 Rectangle {
-    Layout.margins: 10
-    Layout.fillWidth: true
-    Layout.maximumWidth: 270
-    height: 170
-    radius: 20
-
+    Layout.fillHeight: true
+    Layout.preferredWidth: 200
     color: "#404040"
 
-    property alias room_name: room_name.text
-    property alias owner_name: owner_name.text
-    property string owner_id
+    // task_name, owner_name, owner_id;
+    property alias task_name: task_name.text;
+    property alias owner_name: owner_name.text;
+    property string owner_id;
 
     Text {
-        id: room_name
-        objectName: qsTr("room_name")
+        id: task_name
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.leftMargin: 15
@@ -34,9 +31,8 @@ Rectangle {
 
     Text {
         id: owner_name
-        objectName: qsTr("owner_name")
         anchors.left: parent.left
-        anchors.top: room_name.bottom
+        anchors.top: task_name.bottom
         anchors.leftMargin: 15
         anchors.topMargin: 10
         anchors.margins: 15
@@ -61,7 +57,7 @@ Rectangle {
         }
 
         onClicked: {
-            NetworkManager.sendRoomGettingRequest(owner_id, room_name.text)
+            console.log("task editing..")
         }
     }
 }
