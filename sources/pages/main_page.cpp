@@ -48,6 +48,7 @@ void MainPage::switchPage(Args... args) {
 
     for(auto &t : tasks){
         page->createTaskItem(t);
+        connect(t->task_item, SIGNAL(openRoom(QString)), this, SLOT(switchToRoom(QString)));
     }
 
     page->sortBy();
@@ -56,6 +57,15 @@ void MainPage::switchPage(Args... args) {
 template <typename PageType, typename ...Args> requires (IsPage<PageType> && !IsRoomsPage<PageType> && !IsTasksPage<PageType>)
 void MainPage::switchPage(Args... args) {
     setCurrentPage(new PageType(engine, workspace, args...));
+}
+
+void MainPage::switchToRoom(QString id) {
+    for (auto &ti : tasks) {    // REIMPLEMENTATION REQUIRED
+        if (ti->room_id == id) {
+            switchPage<RoomPage>(ti->parent, net_manager);
+            break;
+        }
+    }
 }
 
 template void MainPage::switchPage<ListRoomsPage>();

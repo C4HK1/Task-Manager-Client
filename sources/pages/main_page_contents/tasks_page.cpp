@@ -10,6 +10,7 @@ void TasksPage::createTaskItem(TaskInfo *ti){
     auto item = qobject_cast<QQuickItem*>(item_component->create(engine->rootContext()));
     item->findChild<QQuickItem*>("task_name")->setProperty("text", ti->task_name);
     item->findChild<QQuickItem*>("room_name")->setProperty("text", ti->parent->room_name);
+    item->setProperty("room_id", ti->room_id);
 
     ti->task_item = item;
     item->setParentItem(list_container);

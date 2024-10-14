@@ -1,6 +1,7 @@
 #ifndef MAIN_PAGE_H
 #define MAIN_PAGE_H
 
+#include <QSignalMapper>
 #include "base_page.h"
 #include "rooms_page.h"
 #include "tasks_page.h"
@@ -20,6 +21,9 @@ public:
     void switchPage(Args...);
     template <typename PageType, typename ...Args> requires IsTasksPage<PageType>
     void switchPage(Args...);
+
+public slots:
+    void switchToRoom(QString id);
 
 private:
     QQuickItem *workspace = nullptr;

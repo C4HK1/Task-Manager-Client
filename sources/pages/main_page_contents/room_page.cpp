@@ -50,9 +50,9 @@ void RoomPage::taskCreationFailed() {
 }
 
 RoomPage::~RoomPage() {
-    delete room;
+    // delete room;
 
-    for (auto task : tasks) {
-        delete task;
-    }
+    // for (auto task : tasks) {
+    //     delete task;
+    // }
 }

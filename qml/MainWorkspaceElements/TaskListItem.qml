@@ -15,6 +15,10 @@ Rectangle {
     property alias task_name: task_name.text
     property alias room_name: room_name.text
 
+    property string room_id
+
+    signal openRoom(string s)
+
     Text {
         id: task_name
         objectName: qsTr("task_name")
@@ -43,6 +47,8 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+
+        onClicked: openRoom(room_id)
 
         onEntered: {
             parent.border.color = "#404040"
