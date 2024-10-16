@@ -51,7 +51,7 @@ void MainPage::switchPage(Args... args) {
         connect(t->task_item, SIGNAL(openRoom(QString)), this, SLOT(switchToRoom(QString)));
     }
 
-    page->sortBy();
+    page->sortBy("task_name", true);
 }
 
 template <typename PageType, typename ...Args> requires (IsPage<PageType> && !IsRoomsPage<PageType> && !IsTasksPage<PageType>)

@@ -10,13 +10,13 @@ class TasksPage : public BasePage
 public:
     TasksPage(QQmlEngine *engine, QQuickItem *container);
     void createTaskItem(TaskInfo *ti);
-    void sortBy(bool ascending = true);
     ~TasksPage();
 
-signals:
+public slots:
+    void sortBy(QString by, bool ascending = true);
 
 protected:
-    QList<QQuickItem*> tasks_items;
+    QList<TaskInfo*> tasks_infos;
     QQmlComponent *item_component;
     QQuickItem *list_container;
 };

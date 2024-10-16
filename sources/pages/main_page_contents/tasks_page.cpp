@@ -4,7 +4,9 @@ TasksPage::TasksPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "qml/Tasks.qml"),
     item_component(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/TaskListItem.qml"))),
     list_container(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("list_container"))
-{}
+{
+    connect(object, SIGNAL(sortBy(QString,bool)), this, SLOT(sortBy(QString,bool)));
+}
 
 void TasksPage::createTaskItem(TaskInfo *ti){
     auto item = qobject_cast<QQuickItem*>(item_component->create(engine->rootContext()));
@@ -14,27 +16,28 @@ void TasksPage::createTaskItem(TaskInfo *ti){
 
     ti->task_item = item;
     item->setParentItem(list_container);
-    tasks_items.append(item);
+    tasks_infos.append(ti);
 }
 
-void TasksPage::sortBy(bool ascending) {
-    for (auto &ti : tasks_items) {
-        ti->setParentItem(nullptr);
+void TasksPage::sortBy(QString by, bool ascending) {
+    for (auto &ti : tasks_infos) {
+        ti->task_item->setParentItem(nullptr);
     }
 
-    std::sort(tasks_items.begin(), tasks_items.end(),
-              [&ascending](QQuickItem *t1, QQuickItem *t2) {
-        return (t1->findChild<QQuickItem*>("task_name")->property("text").toString() < t2->findChild<QQuickItem*>("task_name")->property("text").toString()) ^ !ascending;
-    });
+    auto get_str = [&by](TaskInfo *ti) { return (ti->property(by.toStdString().c_str())).toString().toLower().trimmed(); };
 
-    for(auto &ti : tasks_items) {
-        ti->setParentItem(list_container);
+    std::sort(tasks_infos.begin(), tasks_infos.end(),
+        [&ascending, &by, &get_str](TaskInfo *t1, TaskInfo *t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
+
+    for(auto &ti : tasks_infos) {
+        ti->task_item->setParentItem(list_container);
     }
 }
 
 TasksPage::~TasksPage(){
-    for(auto &item : tasks_items) {
-        item->deleteLater();
+    for(auto &ti : tasks_infos) {
+        ti->task_item->deleteLater();
+        ti->task_item = nullptr;
     }
 
     item_component->deleteLater();
