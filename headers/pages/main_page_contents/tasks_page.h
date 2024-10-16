@@ -1,6 +1,7 @@
 #ifndef TASKS_PAGE_H
 #define TASKS_PAGE_H
 
+#include <QQmlContext>
 #include "base_page.h"
 #include "content_structures.h"
 
@@ -14,6 +15,7 @@ public:
     ~TasksPage();
 
 signals:
+    void addTask(TaskInfo ti);
 
 protected:
     QList<QQuickItem*> tasks_items;

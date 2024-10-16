@@ -47,7 +47,7 @@ void MainPage::switchPage(Args... args) {
     setCurrentPage(page = new PageType(engine, workspace, args...));
 
     for(auto &t : tasks){
-        page->createTaskItem(t);
+        emit page->addTask(*t);
         connect(t->task_item, SIGNAL(openRoom(QString)), this, SLOT(switchToRoom(QString)));
     }
 

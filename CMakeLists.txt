@@ -19,7 +19,7 @@ add_subdirectory(headers)
 add_subdirectory(qml)
 
 target_link_libraries(appFrontend
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::QmlMeta
     MainApplication
 )
 

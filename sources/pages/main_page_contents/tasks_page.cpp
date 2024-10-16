@@ -2,9 +2,10 @@
 
 TasksPage::TasksPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "qml/Tasks.qml"),
-    item_component(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/TaskListItem.qml"))),
-    list_container(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("list_container"))
-{}
+    item_component(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/TaskListItem.qml")))
+{
+    connect(this, SIGNAL(addTask(TaskInfo)), object, SLOT(addTask(TaskInfo)));
+}
 
 void TasksPage::createTaskItem(TaskInfo *ti){
     auto item = qobject_cast<QQuickItem*>(item_component->create(engine->rootContext()));

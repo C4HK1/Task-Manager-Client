@@ -4,6 +4,7 @@
 #include "registration_page.h"
 #include "main_page_contents.h"
 #include "main_page.h"
+#include "content_structures.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
@@ -12,6 +13,11 @@ MainApplication::MainApplication(int argc, char **argv) :
 
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", net_manager);
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "MainApplication", this);
+
+    qmlRegisterType<RoomInfo>("AppFrontend", 1, 0, "RoomInfo");
+    qmlRegisterType<TaskInfo>("AppFrontend", 1, 0, "TaskInfo");
+    qRegisterMetaType<RoomInfo>();
+    qRegisterMetaType<TaskInfo>();
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWindow.qml"));
     main_window = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));

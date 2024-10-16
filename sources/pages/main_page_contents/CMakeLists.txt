@@ -21,4 +21,5 @@ target_sources(MainPageContents PRIVATE
     ${HEADER_MPC_DIR}/widget_rooms_page.h widget_rooms_page.cpp
     ${HEADER_MPC_DIR}/room_page.h room_page.cpp
     ${HEADER_MPC_DIR}/tasks_page.h tasks_page.cpp
+    ${HEADER_MPC_DIR}/content_structures.h
 )

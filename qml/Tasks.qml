@@ -6,6 +6,13 @@ import MainWorkspaceElements
 import AppFrontend
 
 DefaultFrame {
+    signal openRoom(TaskInfo ti)
+    signal addTask(TaskInfo ti)
+
+    function onAddTask(TaskInfo) {
+        task_repeater.model.append(ti)
+    }
+
     Rectangle {
         id: info_top_bar
         anchors.top: parent.top
@@ -15,34 +22,27 @@ DefaultFrame {
         anchors.leftMargin: 3
         height: 30
 
-        color: "#303030"
+        color: "#202020"
 
-        Text {
-            id: task_name
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 17
-            color: "white"
-            font.pixelSize: 16
-            font.bold: true
-            width: 200
-            text: qsTr("Task name")
-        }
+        GridLayout {
+            anchors.fill: parent
+            columnSpacing: 10
 
-        Text {
-            anchors.left: task_name.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 13
-            color: "white"
-            font.pixelSize: 16
-            font.bold: true
-            width: 150
-            text: qsTr("Room name")
+            Repeater {
+                model: [{text: qsTr("Task name")}, {text: qsTr("Room name")}]
+
+                Text {
+                    Layout.fillHeight: true
+                    color: "white"
+                    font.pixelSize: 16
+                    font.bold: true
+                    text: modelData.text
+                }
+            }
         }
     }
 
     Flickable {
-        objectName: qsTr("flickable")
         anchors.top: info_top_bar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
@@ -64,6 +64,48 @@ DefaultFrame {
 
             flow: GridLayout.LeftToRight
             columns: 1
+
+            Repeater {
+                id: task_repeater
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.leftMargin: -1
+                    Layout.rightMargin: -1
+                    height: 50
+
+                    color: "#242424"
+                    border.width: 2
+                    border.color: "#303030"
+
+                    Text {
+                        Layout.fillHeight: true
+                        color: "white"
+                        font.pixelSize: 16
+                        font.bold: true
+                        text: modelData.task_name
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onClicked: openRoom(parent.modelData)
+
+                        onEntered: {
+                            parent.border.color = "#404040"
+                            parent.border.width = 5
+                            parent.z = 2
+                        }
+
+                        onExited: {
+                            parent.border.color = "#303030"
+                            parent.border.width = 2
+                            parent.z = 0
+                        }
+                    }
+                }
+            }
         }
     }
 }
