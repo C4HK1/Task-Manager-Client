@@ -11,9 +11,8 @@ class BasePage : public QObject {
 public:
     BasePage(QQmlEngine *engine, QQuickItem *container, QString moduleName);
     BasePage(QQmlEngine *engine, BasePage *container, QString moduleName);
-
     QQuickItem* loadQmlFrame(QString moduleName);
-
+    QQuickItem* getObject();
     ~BasePage();
 
 signals:

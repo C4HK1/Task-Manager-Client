@@ -16,6 +16,10 @@ QQuickItem* BasePage::loadQmlFrame(QString moduleName) {
     return new_frame;
 }
 
+QQuickItem* BasePage::getObject() {
+    return object;
+}
+
 BasePage::~BasePage() {
     object->deleteLater();
 }

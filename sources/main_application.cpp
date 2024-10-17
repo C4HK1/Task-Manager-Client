@@ -59,34 +59,6 @@ void MainApplication::switchToRegister() {
     switchPage<RegistrationPage>();
 }
 
-void MainApplication::switchToSettings() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<SettingsPage>();
-}
-
-void MainApplication::switchToProfile() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<ProfilePage>();
-}
-
-void MainApplication::switchToWidgetRooms() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<WidgetRoomsPage>();
-}
-
-void MainApplication::switchToListRooms() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<ListRoomsPage>();
-}
-
-void MainApplication::switchToRoomCreation() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<RoomCreationPage>(net_manager);
-}
-
-void MainApplication::switchToRoom(RoomInfo *room) {
-    qobject_cast<MainPage*>(cur_page)->switchPage<RoomPage>(room, net_manager);
-}
-
-void MainApplication::switchToTasks() {
-    qobject_cast<MainPage*>(cur_page)->switchPage<TasksPage>();
-}
-
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {

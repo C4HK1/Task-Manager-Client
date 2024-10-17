@@ -1,13 +1,21 @@
 #include "main_page.h"
-#include "main_page_contents.h"
 
 MainPage::MainPage(QQmlEngine *engine, QQuickItem *container, NetworkManager *net_manager) :
     BasePage(engine, container, "qml/MainWorkspace.qml"),
     workspace(object->findChild<QQuickItem*>("workspace")),
     net_manager(net_manager)
 {
-    connect(net_manager, &NetworkManager::gotRooms, this, &MainPage::initializeContents);
+    static QList<std::string> switch_slots {
+        "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
+        "switchToProfile()", "switchToTasks()"
+    };
 
+    for (std::string &ss: switch_slots) {
+        connect(object, ("2" + ss).c_str(), this, ("1" + ss).c_str());
+    }
+
+    connect(net_manager, &NetworkManager::gotRooms, this, &MainPage::initializeContents);
+    connect(net_manager, &NetworkManager::gotRoom, this, &MainPage::switchToRoom);
     net_manager->sendGettingUserRoomsRequest();
 }
 
@@ -36,6 +44,8 @@ void MainPage::switchPage(Args... args) {
     RoomsPage *page;
     setCurrentPage(page = new PageType(engine, workspace, args...));
 
+    connect(page->getObject(), SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));
+
     for(auto &r : rooms){
         page->createRoomItem(r);
     }
@@ -48,7 +58,7 @@ void MainPage::switchPage(Args... args) {
 
     for(auto &t : tasks){
         page->createTaskItem(t);
-        connect(t->task_item, SIGNAL(openRoom(QString)), this, SLOT(switchToRoom(QString)));
+        connect(t->task_item, SIGNAL(openRoom(QString)), this, SLOT(openRoom(QString)));
     }
 
     page->sortBy("task_name", true);
@@ -59,7 +69,11 @@ void MainPage::switchPage(Args... args) {
     setCurrentPage(new PageType(engine, workspace, args...));
 }
 
-void MainPage::switchToRoom(QString id) {
+void MainPage::switchToRoom(RoomInfo *ri) {
+    switchPage<RoomPage>(ri, net_manager);
+}
+
+void MainPage::openRoom(QString id) {
     for (auto &ti : tasks) {    // REIMPLEMENTATION REQUIRED
         if (ti->room_id == id) {
             switchPage<RoomPage>(ti->parent, net_manager);
@@ -68,9 +82,9 @@ void MainPage::switchToRoom(QString id) {
     }
 }
 
-template void MainPage::switchPage<ListRoomsPage>();
-template void MainPage::switchPage<SettingsPage>();
-template void MainPage::switchPage<RoomCreationPage>(NetworkManager *);
-template void MainPage::switchPage<RoomPage>(RoomInfo *, NetworkManager *);
-template void MainPage::switchPage<ProfilePage>();
-template void MainPage::switchPage<TasksPage>();
+void MainPage::switchToWidgetRooms() { switchPage<WidgetRoomsPage>(); }
+void MainPage::switchToListRooms() { switchPage<ListRoomsPage>(); }
+void MainPage::switchToSettings() { switchPage<SettingsPage>(); }
+void MainPage::switchToRoomCreation() { switchPage<RoomCreationPage>(net_manager); }
+void MainPage::switchToProfile() { switchPage<ProfilePage>(); }
+void MainPage::switchToTasks() { switchPage<TasksPage>(); }

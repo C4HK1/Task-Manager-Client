@@ -3,8 +3,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import MainWorkspaceElements
+import AppFrontend
 
 DefaultFrame {
+    signal switchToRoomCreation()
+
     Flickable {
         objectName: qsTr("flickable")
         anchors.fill: parent

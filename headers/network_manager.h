@@ -51,6 +51,7 @@ signals:
     void roomCreationFailed();
     void gotTask(TaskInfo *task);
     void taskCreationFailed();
+    void gotRoom(RoomInfo* ri);
 
 public slots:
     void handleProfileCreationResponse();

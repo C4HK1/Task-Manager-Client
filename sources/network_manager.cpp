@@ -147,7 +147,7 @@ void NetworkManager::handleRoomCreationResponse() {
         roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
         roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
 
-        app->switchToRoom(roomInfo);
+        emit gotRoom(roomInfo);
     } else {
         emit this->roomCreationFailed();
     }
@@ -162,7 +162,7 @@ void NetworkManager::sendRoomGettingRequest(QString creatorID, QString label) {
     QNetworkReply *m_reply = m_networkManager.get(request, jsonProfileCreationBody.toUtf8());
     connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleRoomGettingResponse);
 
-    qInfo() << "\"" + label + "\" room creation request";
+    qInfo() << "\"" + label + "\" room getting request";
 }
 
 void NetworkManager::handleRoomGettingResponse() {
@@ -180,7 +180,7 @@ void NetworkManager::handleRoomGettingResponse() {
     roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
     roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
 
-    app->switchToRoom(roomInfo);
+    emit gotRoom(roomInfo);
 }
 
 void NetworkManager::sendTaskCreationRequest(QString taskName, QString room_name, QString owner_id) {

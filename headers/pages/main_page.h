@@ -7,6 +7,7 @@
 #include "tasks_page.h"
 #include "content_structures.h"
 #include "network_manager.h"
+#include "main_page_contents.h"
 
 class MainPage : public BasePage {
     Q_OBJECT
@@ -23,7 +24,14 @@ public:
     void switchPage(Args...);
 
 public slots:
-    void switchToRoom(QString id);
+    void switchToRoom(RoomInfo *ri);
+    void openRoom(QString id);
+    void switchToWidgetRooms();
+    void switchToListRooms();
+    void switchToSettings();
+    void switchToRoomCreation();
+    void switchToProfile();
+    void switchToTasks();
 
 private:
     QQuickItem *workspace = nullptr;

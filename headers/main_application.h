@@ -1,8 +1,6 @@
 #ifndef MAIN_APPLICATION_H
 #define MAIN_APPLICATION_H
 
-#pragma once
-
 #include <nlohmann/json.hpp>
 #include <QDir>
 #include <QFile>
@@ -33,13 +31,6 @@ public:
     template <typename T, typename ...Args> requires IsPage<T>
     void switchPage(Args...);
     Q_INVOKABLE void switchToRegister();
-    Q_INVOKABLE void switchToSettings();
-    Q_INVOKABLE void switchToProfile();
-    Q_INVOKABLE void switchToWidgetRooms();
-    Q_INVOKABLE void switchToListRooms();
-    Q_INVOKABLE void switchToRoomCreation();
-    Q_INVOKABLE void switchToRoom(RoomInfo *room);
-    Q_INVOKABLE void switchToTasks();
 
 signals:
     void loginingErrorChanged();

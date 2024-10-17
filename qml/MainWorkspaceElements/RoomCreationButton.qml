@@ -9,7 +9,7 @@ Rectangle {
     border.width: 1
     border.color: "#202020"
 
-    property var onClickFunction: function() { MainApplication.switchToRoomCreation(); }
+    property var onClickFunction: function() { switchToRoomCreation(); }
 
     id: id
 

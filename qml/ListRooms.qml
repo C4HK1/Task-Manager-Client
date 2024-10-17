@@ -6,6 +6,8 @@ import MainWorkspaceElements
 import AppFrontend
 
 DefaultFrame {
+    signal switchToRoomCreation()
+
     Rectangle {
         id: info_top_bar
         anchors.top: parent.top

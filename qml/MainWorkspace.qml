@@ -9,6 +9,12 @@ import AppFrontend
 DefaultFrame {
     id: root
 
+    signal switchToWidgetRooms()
+    signal switchToListRooms()
+    signal switchToTasks()
+    signal switchToProfile()
+    signal switchToSettings()
+
     function createImageObject(str, root, params) {
         var component = Qt.createComponent(str)
         if (component.status === Component.Ready || component.status === Component.Error)
@@ -104,9 +110,9 @@ DefaultFrame {
 
             onClickFunction: function() {
                 if(widgetRoomsView){
-                    MainApplication.switchToWidgetRooms()
+                    switchToWidgetRooms()
                 } else {
-                    MainApplication.switchToListRooms()
+                    switchToListRooms()
                 }
             }
         }
@@ -134,7 +140,7 @@ DefaultFrame {
                     tasks_list.width = parent.width
                     tasks_list.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
 
-                    MainApplication.switchToTasks()
+                    switchToTasks()
                 }
             }
         }
@@ -194,7 +200,7 @@ DefaultFrame {
 
             onClickFunction: function() {
                 widgetRoomsView = true
-                MainApplication.switchToWidgetRooms()
+                switchToWidgetRooms()
             }
         }
 
@@ -207,7 +213,7 @@ DefaultFrame {
 
             onClickFunction: function() {
                 widgetRoomsView = false
-                MainApplication.switchToListRooms()
+                switchToListRooms()
             }
         }
 
