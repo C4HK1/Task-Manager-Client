@@ -1,9 +1,8 @@
 #include "main_page.h"
 
-MainPage::MainPage(QQmlEngine *engine, QQuickItem *container, NetworkManager *net_manager) :
+MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
     BasePage(engine, container, "qml/MainWorkspace.qml"),
-    workspace(object->findChild<QQuickItem*>("workspace")),
-    net_manager(net_manager)
+    workspace(object->findChild<QQuickItem*>("workspace"))
 {
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
@@ -70,13 +69,13 @@ void MainPage::switchPage(Args... args) {
 }
 
 void MainPage::switchToRoom(RoomInfo *ri) {
-    switchPage<RoomPage>(ri, net_manager);
+    switchPage<RoomPage>(ri);
 }
 
 void MainPage::openRoom(QString id) {
     for (auto &ti : tasks) {    // REIMPLEMENTATION REQUIRED
         if (ti->room_id == id) {
-            switchPage<RoomPage>(ti->parent, net_manager);
+            switchPage<RoomPage>(ti->parent);
             break;
         }
     }
@@ -85,6 +84,6 @@ void MainPage::openRoom(QString id) {
 void MainPage::switchToWidgetRooms() { switchPage<WidgetRoomsPage>(); }
 void MainPage::switchToListRooms() { switchPage<ListRoomsPage>(); }
 void MainPage::switchToSettings() { switchPage<SettingsPage>(); }
-void MainPage::switchToRoomCreation() { switchPage<RoomCreationPage>(net_manager); }
+void MainPage::switchToRoomCreation() { switchPage<RoomCreationPage>(); }
 void MainPage::switchToProfile() { switchPage<ProfilePage>(); }
 void MainPage::switchToTasks() { switchPage<TasksPage>(); }

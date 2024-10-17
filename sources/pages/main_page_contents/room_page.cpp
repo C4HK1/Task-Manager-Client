@@ -2,10 +2,9 @@
 
 #include "room_page.h"
 
-RoomPage::RoomPage(QQmlEngine *engine, QQuickItem *container, RoomInfo *room, NetworkManager *net_manager) :
+RoomPage::RoomPage(QQmlEngine *engine, QQuickItem *container, RoomInfo *room) :
     BasePage(engine, container, "qml/Room.qml"),
     task_component(new QQmlComponent(engine, "qml/Task.qml")),
-    net_manager(net_manager),
     room(room),
     tasks_container(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("tasks_container"))
 {

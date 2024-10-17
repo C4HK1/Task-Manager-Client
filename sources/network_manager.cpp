@@ -3,7 +3,10 @@
 
 const QString NetworkManager::host("http://localhost:8080");
 
-NetworkManager::NetworkManager(MainApplication *app) : QObject{app}, app(app) {}
+NetworkManager* NetworkManager::getInstance() {
+    static NetworkManager net_manager;
+    return &net_manager;
+}
 
 void NetworkManager::sendAuthorizationRequest(QString login, QString password)
 {
@@ -86,7 +89,7 @@ void NetworkManager::sendProfileDeletingRequest()
     QNetworkRequest request(host + "/ProfileDeleting");
     request.setRawHeader(QByteArray("Authorization"), this->token);
     QNetworkReply *m_reply = m_networkManager.deleteResource(request);
-    connect(m_reply, &QNetworkReply::finished, app, &MainApplication::outFromAccount);
+    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::profileDeleted);
 }
 
 void NetworkManager::sendAuthenticationRequest() {

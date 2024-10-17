@@ -14,16 +14,13 @@
 
 #include "content_structures.h"
 
-class MainApplication;
-
 class NetworkManager : public QObject
 {
     Q_OBJECT
 public:
+    static NetworkManager* getInstance();
+
     QByteArray token;
-
-    explicit NetworkManager(MainApplication *app = nullptr);
-
     QNetworkRequest* createRequest(QString domain, QString header, QByteArray &data);
 
     Q_INVOKABLE void sendProfileCreationRequest(QString name, QString login, QString password);
@@ -52,6 +49,7 @@ signals:
     void gotTask(TaskInfo *task);
     void taskCreationFailed();
     void gotRoom(RoomInfo* ri);
+    void profileDeleted();
 
 public slots:
     void handleProfileCreationResponse();
@@ -71,9 +69,12 @@ public slots:
     void handleAuthorizationResponse();
 
 private:
+    NetworkManager() {}
+    NetworkManager(const NetworkManager&) = delete;
+    NetworkManager& operator=(const NetworkManager&) = delete;
+
     std::function<void(bool)> authenticationHandler;
     QNetworkAccessManager m_networkManager;
-    MainApplication *app;
     QList<QNetworkReply*> m_replyList;
     static const QString host;
 };

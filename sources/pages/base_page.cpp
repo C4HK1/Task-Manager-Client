@@ -2,7 +2,8 @@
 #include <main_application.h>
 
 BasePage::BasePage(QQmlEngine *engine, QQuickItem *container, QString moduleName) :
-    engine(engine), object(qobject_cast<QQuickItem*>(loadQmlFrame(moduleName)))
+    engine(engine), object(qobject_cast<QQuickItem*>(loadQmlFrame(moduleName))),
+    net_manager(NetworkManager::getInstance())
 {
     object->setParentItem(container);
 }

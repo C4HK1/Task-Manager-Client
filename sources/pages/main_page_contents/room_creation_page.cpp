@@ -2,9 +2,8 @@
 
 #include "room_creation_page.h"
 
-RoomCreationPage::RoomCreationPage(QQmlEngine *engine, QQuickItem *container, NetworkManager *net_manager) :
-    BasePage(engine, container, "qml/RoomCreation.qml"),
-    net_manager(net_manager)
+RoomCreationPage::RoomCreationPage(QQmlEngine *engine, QQuickItem *container) :
+    BasePage(engine, container, "qml/RoomCreation.qml")
 {
     connect(net_manager, &NetworkManager::roomCreationFailed, this, &RoomCreationPage::loadFailInfo);
 }

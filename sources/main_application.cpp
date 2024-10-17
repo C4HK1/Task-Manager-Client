@@ -6,9 +6,10 @@
 #include "main_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
-    QGuiApplication(argc, argv), net_manager(new NetworkManager(this)), engine(new QQmlEngine())
+    QGuiApplication(argc, argv), net_manager(NetworkManager::getInstance()), engine(new QQmlEngine())
 {
-    QObject::connect(net_manager, &NetworkManager::authorizationResponseAccept, this, &MainApplication::handleAuthentication);
+    connect(net_manager, &NetworkManager::authorizationResponseAccept, this, &MainApplication::handleAuthentication);
+    connect(net_manager, &NetworkManager::profileDeleted, this, &MainApplication::outFromAccount);
 
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", net_manager);
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "MainApplication", this);
@@ -23,7 +24,6 @@ MainApplication::MainApplication(int argc, char **argv) :
 MainApplication::~MainApplication() {
     main_window->deleteLater();
     engine->deleteLater();
-    net_manager->deleteLater();
     cur_page->deleteLater();
 }
 
@@ -62,7 +62,7 @@ void MainApplication::switchToRegister() {
 void MainApplication::handleAuthentication(bool success) {
     qInfo() << "authentication status: " << success;
     if(success) {
-        switchPage<MainPage>(net_manager);
+        switchPage<MainPage>();
         this->m_loginingError = false;
     } else {
         switchPage<AuthorizationPage>();

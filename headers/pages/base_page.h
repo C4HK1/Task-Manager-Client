@@ -3,6 +3,7 @@
 
 #include <QQuickItem>
 #include <QQmlEngine>
+#include "network_manager.h"
 
 class MainApplication;
 
@@ -23,6 +24,7 @@ protected:
     QQmlEngine *engine;
     QQuickItem *container;
     QQuickItem *object;
+    NetworkManager *net_manager;
 };
 
 template <typename T>
