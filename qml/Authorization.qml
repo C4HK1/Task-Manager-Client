@@ -16,14 +16,14 @@ DefaultFrame {
         columns: 1
 
         DefaultTextField {
-            id: login_field
+            id: loginField
             Layout.row: 1
             Layout.fillWidth: true
             placeholderText: qsTr("Login")
         }
 
         DefaultTextField {
-            id: password_field
+            id: passwordField
             Layout.row: 2
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
@@ -38,8 +38,8 @@ DefaultFrame {
             Layout.preferredHeight: 33
 
             onClicked: {
-                NetworkManager.sendAuthorizationRequest(login_field.text, password_field.text)
-                // error_field.visible = MainApplication.loginingError
+                NetworkManager.sendLogginRequest(loginField.text, passwordField.text)
+                // errorField.visible = MainApplication.loginingError
             }
         }
 
@@ -53,7 +53,7 @@ DefaultFrame {
         }
 
         Text {
-            id: error_field
+            id: errorField
             visible: MainApplication.loginingError
             Layout.row: 5
             Layout.fillWidth: true

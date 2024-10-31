@@ -12,25 +12,25 @@ DefaultFrame {
         anchors.verticalCenter: parent.verticalCenter
         width: 200
 
-        rows: 5
+        rows: 7
         columns: 1
 
         DefaultTextField {
-            id: name_field
+            id: nameField
             Layout.row: 1
             Layout.fillWidth: true
             placeholderText: qsTr("Name")
         }
 
         DefaultTextField {
-            id: login_field
+            id: loginField
             Layout.row: 2
             Layout.fillWidth: true
             placeholderText: qsTr("Login")
         }
 
         DefaultTextField {
-            id: password_field
+            id: passwordField
             Layout.row: 3
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
@@ -38,22 +38,41 @@ DefaultFrame {
             passwordCharacter: qsTr("*")
         }
 
-        DefaultButton {
+        DefaultTextField {
+            id: emailField
             Layout.row: 4
+            Layout.fillWidth: true
+            placeholderText: qsTr("Email")
+        }
+
+        DefaultTextField {
+            id: phoneField
+            Layout.row: 5
+            Layout.fillWidth: true
+            placeholderText: qsTr("Phone")
+        }
+
+        DefaultButton {
+            Layout.row: 6
             text: qsTr("Sign up")
             Layout.fillWidth: true
             Layout.preferredHeight: 33
 
             onClicked: {
-                NetworkManager.sendProfileCreationRequest(name_field.text, login_field.text, password_field.text)
-                error_field.visible = MainApplication.loginingError
+                NetworkManager.sendCreateProfileRequest(nameField.text,
+                                                        loginField.text,
+                                                        passwordField.text,
+                                                        emailField.text,
+                                                        phoneField.text)
+
+                errorField.visible = MainApplication.loginingError
             }
         }
 
         Text {
-            id: error_field
+            id: errorField
             visible: false
-            Layout.row: 5
+            Layout.row: 7
             Layout.fillWidth: true
             color: "red";
             text: qsTr("Пользовтель с данным логином уже существует!")

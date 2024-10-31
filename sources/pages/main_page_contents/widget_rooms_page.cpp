@@ -1,17 +1,17 @@
 #include "widget_rooms_page.h"
 
-WidgetRoomsPage::WidgetRoomsPage(QQmlEngine *engine, QQuickItem *container) :
-    RoomsPage(engine, container, "qml/WidgetRooms.qml", "qml/MainWorkspaceElements/RoomWidget.qml"),
-    widget_container(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("widget_container"))
-{}
+WidgetRoomsPage::WidgetRoomsPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage) :
+    RoomsPage(engine, container, "qml/WidgetRooms.qml", "qml/MainWorkspaceElements/RoomWidget.qml", mainPage),
+    widgetContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("widgetContainer")) {
+}
 
-void WidgetRoomsPage::createRoomItem(RoomInfo *ri) {
-    auto item = qobject_cast<QQuickItem*>(item_component->create(engine->rootContext()));
-    item->findChild<QQuickItem*>("room_name")->setProperty("text", ri->room_name);
-    item->findChild<QQuickItem*>("owner_name")->setProperty("text", ri->owner_name);
-    item->setProperty("owner_id", ri->owner_id);
+void WidgetRoomsPage::createRoomItem(Room &room) {
+    auto item = qobject_cast<QQuickItem*>(itemComponent->create(engine->rootContext()));
+    item->setProperty("roomName", room.name);
+    item->setProperty("roomCreatorName", room.creatorName);
+    item->setProperty("roomCreatorID", QString::number(room.creatorID));
 
-    ri->room_item = item;
-    item->setParentItem(widget_container);
-    rooms_items.append(item);
+    room.roomItem = item;
+    item->setParentItem(widgetContainer);
+    roomsItems.append(item);
 }

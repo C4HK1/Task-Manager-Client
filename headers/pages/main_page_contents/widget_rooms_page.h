@@ -3,14 +3,16 @@
 
 #include "rooms_page.h"
 
+class MainPage;
+
 class WidgetRoomsPage : public RoomsPage {
     Q_OBJECT
 public:
-    WidgetRoomsPage(QQmlEngine *engine, QQuickItem *container);
-    void createRoomItem(RoomInfo *ri) override;
+    WidgetRoomsPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage);
+    void createRoomItem(Room &room) override;
 
 private:
-    QQuickItem *widget_container;
+    QQuickItem *widgetContainer;
 };
 
 #endif // WIDGET_ROOMS_PAGE_H

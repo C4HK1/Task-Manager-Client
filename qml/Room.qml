@@ -16,14 +16,14 @@ DefaultFrame {
     id: room
     anchors.fill: parent
 
-    property alias room_name: room_name.text
-    property alias owner_name: owner_name.text
-    property int owner_id
+    property alias roomName: roomName.text
+    property alias roomCreatorName: roomCreatorName.text
+    property int roomCreatorID
     property var taskCreationWindow
 
     Text {
-        id: room_name
-        objectName: qsTr("room_name")
+        id: roomName
+        objectName: qsTr("name")
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.leftMargin: 15
@@ -38,10 +38,10 @@ DefaultFrame {
     }
 
     Text {
-        id: owner_name
-        objectName: qsTr("owner_name")
+        id: roomCreatorName
+        objectName: qsTr("roomCreatorName")
         anchors.left: parent.left
-        anchors.top: room_name.bottom
+        anchors.top: roomName.bottom
         anchors.leftMargin: 15
         anchors.topMargin: 10
         anchors.margins: 15
@@ -55,7 +55,7 @@ DefaultFrame {
 
     Flickable {
         objectName: qsTr("flickable")
-        anchors.top: owner_name.bottom
+        anchors.top: roomCreatorName.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -67,8 +67,8 @@ DefaultFrame {
         }
 
         GridLayout {
-            objectName: qsTr("tasks_container")
-            id: room_container
+            objectName: qsTr("tasksContainer")
+            id: roomContainer
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom

@@ -4,21 +4,27 @@
 #include "base_page.h"
 #include "content_structures.h"
 
+class MainPage;
+
 class TasksPage : public BasePage
 {
     Q_OBJECT
 public:
-    TasksPage(QQmlEngine *engine, QQuickItem *container);
-    void createTaskItem(TaskInfo *ti);
+    TasksPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage);
     ~TasksPage();
+
+    void createTaskItem(Task &task);
 
 public slots:
     void sortBy(QString by, bool ascending = true);
+    void tasksInitialization(ServerStatus serverStatus, Tasks tasks);
+    void openRoom(int roomCreatorID, QString roomName);
 
 protected:
-    QList<TaskInfo*> tasks_infos;
-    QQmlComponent *item_component;
-    QQuickItem *list_container;
+    Tasks tasks;
+    MainPage *mainPage;
+    QQmlComponent *itemComponent;
+    QQuickItem *listContainer;
 };
 
 template <typename T>

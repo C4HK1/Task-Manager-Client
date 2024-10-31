@@ -9,13 +9,12 @@ Rectangle {
     Layout.preferredWidth: 200
     color: "#404040"
 
-    // task_name, owner_name, owner_id;
-    property alias task_name: task_name.text;
-    property alias owner_name: owner_name.text;
-    property string owner_id;
+    property alias taskName: taskName.text;
+    property alias taskCreatorName: taskCreatorName.text;
+    property string taskCreatorID;
 
     Text {
-        id: task_name
+        id: taskName
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.leftMargin: 15
@@ -30,9 +29,9 @@ Rectangle {
     }
 
     Text {
-        id: owner_name
+        id: taskCreatorName
         anchors.left: parent.left
-        anchors.top: task_name.bottom
+        anchors.top: taskName.bottom
         anchors.leftMargin: 15
         anchors.topMargin: 10
         anchors.margins: 15

@@ -8,13 +8,13 @@ import AppFrontend
 DefaultFrame {
     id: root
 
-    property string sortedBy: "task_name"
+    property string sortedBy: "taskName"
     property bool ascending: true
 
     signal sortBy(string by, bool ascending)
 
     Rectangle {
-        id: info_top_bar
+        id: infoTopBar
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -32,10 +32,10 @@ DefaultFrame {
             flow: GridLayout.LeftToRight
 
             Repeater {
-                id: param_repeater
+                id: paramRepeater
                 model: [
-                    {name: qsTr("task_name"), text: qsTr("Task name"), width: 212},
-                    {name: qsTr("room_name"), text: qsTr("Room name"), width: 200}
+                    {name: qsTr("taskName"), text: qsTr("Task name"), width: 212},
+                    {name: qsTr("roomName"), text: qsTr("Room name"), width: 200}
                 ]
 
                 Rectangle {
@@ -48,7 +48,7 @@ DefaultFrame {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
                         anchors.leftMargin: 15
-                        id: parameter_text
+                        id: parameterText
                         color: "white"
                         font.pixelSize: 16
                         font.bold: true
@@ -57,7 +57,7 @@ DefaultFrame {
 
                     Image {
                         visible: modelData.name === sortedBy
-                        id: arrow_icon
+                        id: arrowIcon
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right
                         anchors.rightMargin: 10
@@ -96,13 +96,13 @@ DefaultFrame {
 
     Flickable {
         objectName: qsTr("flickable")
-        anchors.top: info_top_bar.bottom
+        anchors.top: infoTopBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.topMargin: 3
 
-        contentHeight: task_container.height
+        contentHeight: taskContainer.height
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -110,8 +110,8 @@ DefaultFrame {
         }
 
         GridLayout {
-            id: task_container
-            objectName: qsTr("list_container")
+            id: taskContainer
+            objectName: qsTr("listContainer")
             width: parent.width
             rowSpacing: -2
 

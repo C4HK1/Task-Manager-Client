@@ -22,7 +22,7 @@ Flickable {
         SidebarButton {
             name: "Task1"
             id: task1
-            font_size: 16
+            fontSize: 16
             onClickFunction: function () {
                 // MainApplication.switchToTask("Task1")
             }
@@ -31,7 +31,7 @@ Flickable {
         SidebarButton {
             name: "Task2"
             id: task2
-            font_size: 16
+            fontSize: 16
             onClickFunction: function () {
                 // MainApplication.switchToTask("Task2")
             }
@@ -40,7 +40,7 @@ Flickable {
         SidebarButton {
             name: "Task3"
             id: task3
-            font_size: 16
+            fontSize: 16
             onClickFunction: function () {
                 // MainApplication.switchToTask("Task3")
             }
@@ -49,7 +49,7 @@ Flickable {
         SidebarButton {
             name: "Task4"
             id: task4
-            font_size: 16
+            fontSize: 16
             onClickFunction: function () {
                 // MainApplication.switchToTask("Task4")
             }

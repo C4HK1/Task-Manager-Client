@@ -3,14 +3,19 @@
 
 #include "base_page.h"
 
+class MainPage;
+
 class RoomCreationPage : public BasePage {
     Q_OBJECT
 public:
-    RoomCreationPage(QQmlEngine *engine, QQuickItem *container);
+    RoomCreationPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage);
     ~RoomCreationPage();
 
 public slots:
-    void loadFailInfo();
+    void handleRoomCreationStatus(ServerStatus serverStatus, Room room);
+
+private:
+    MainPage *mainPage;
 };
 
 #endif // ROOM_CREATION_PAGE_H

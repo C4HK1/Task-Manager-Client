@@ -11,7 +11,7 @@ target_include_directories(Pages PUBLIC
 )
 target_link_libraries(Pages Qt6::Quick MainPageContents)
 target_sources(Pages PRIVATE
-    ${HEADER_PAGE_DIR}/authorization_page.h authorization_page.cpp
+    ${HEADER_PAGE_DIR}/loggining_page.h loggining_page.cpp
     ${HEADER_PAGE_DIR}/base_page.h base_page.cpp
     ${HEADER_PAGE_DIR}/main_page.h main_page.cpp
     ${HEADER_PAGE_DIR}/registration_page.h registration_page.cpp

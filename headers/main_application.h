@@ -21,7 +21,7 @@ class NetworkManager;
 
 class MainApplication : public QGuiApplication {
     Q_OBJECT
-    Q_PROPERTY(bool loginingError MEMBER m_loginingError NOTIFY loginingErrorChanged)
+    Q_PROPERTY(bool loginingError MEMBER loginingError NOTIFY loginingErrorChanged)
 public:
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
@@ -36,15 +36,15 @@ signals:
     void loginingErrorChanged();
 
 public slots:
-    void handleAuthentication(bool success);
-    void outFromAccount();
+    void handleAuthentication(ServerStatus serverStatus);
+    void outFromAccount(ServerStatus serverStatus = 0);
 
 private:
-    NetworkManager *net_manager;
+    NetworkManager *netManager;
     QQmlEngine *engine;
-    QQuickWindow *main_window = nullptr;
-    BasePage *cur_page = nullptr;
-    bool m_loginingError = false;
+    QQuickWindow *mainWindow = nullptr;
+    BasePage *curPage = nullptr;
+    bool loginingError = false;
 };
 
 #endif // MAIN_APPLICATION_H

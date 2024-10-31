@@ -6,19 +6,18 @@
 class RoomPage : public BasePage {
     Q_OBJECT
 public:
-    RoomPage(QQmlEngine *engine, QQuickItem *container, RoomInfo *room);
+    RoomPage(QQmlEngine *engine, QQuickItem *container, Room room);
     ~RoomPage();
 
 public slots:
-    void loadTasks(QList<TaskInfo *> task);
-    void loadTask(TaskInfo *task);
-    void taskCreationFailed();
+    void roomPageInitialization(ServerStatus serverStatus, Tasks tasks);
+    void handleTaskCreationStatus(ServerStatus serverStatus, Task task);
 
 private:
-    RoomInfo *room;
-    QList<TaskInfo *> tasks;
-    QQmlComponent *task_component;
-    QQuickItem *tasks_container;
+    Room room;
+    Tasks tasks;
+    QQmlComponent *taskComponent;
+    QQuickItem *tasksContainer;
 };
 
 #endif // ROOM__PAGE_H

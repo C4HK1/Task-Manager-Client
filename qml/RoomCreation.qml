@@ -13,7 +13,7 @@ Flickable {
     anchors.topMargin: 40
     anchors.leftMargin: 40
 
-    contentHeight: room_settings.height
+    contentHeight: roomSettings.height
     boundsBehavior: Flickable.StopAtBounds
 
     ScrollBar.vertical: ScrollBar {
@@ -21,7 +21,7 @@ Flickable {
     }
 
     GridLayout {
-        id: room_settings
+        id: roomSettings
 
         flow: GridLayout.LeftToRight
         columns: 2
@@ -43,13 +43,23 @@ Flickable {
         }
 
         DefaultTextField {
-            id: room_name
+            id: roomName
+        }
+
+        Text {
+            font.pixelSize: 18
+            text: "Room description"
+            color: "#FFFFFF"
+        }
+
+        DefaultTextField {
+            id: roomDescription
         }
 
         DefaultButton {
             Layout.columnSpan: 2
             text: "Create"
-            onClicked: { NetworkManager.sendRoomCreationRequest(room_name.text) }
+            onClicked: { NetworkManager.sendCreateRoomRequest(roomName.text, roomDescription.text) }
         }
     }
 }

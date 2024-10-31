@@ -12,16 +12,15 @@ Rectangle {
     border.width: 2
     border.color: "#303030"
 
-    property alias task_name: task_name.text
-    property alias room_name: room_name.text
+    property alias taskName: taskName.text
+    property alias roomName: roomName.text
+    property int roomCreatorID
 
-    property string room_id
-
-    signal openRoom(string s)
+    signal openRoom(int roomCreatorID, string roomName)
 
     Text {
-        id: task_name
-        objectName: qsTr("task_name")
+        id: taskName
+        objectName: qsTr("taskName")
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 20
@@ -33,9 +32,9 @@ Rectangle {
     }
 
     Text {
-        id: room_name
-        objectName: qsTr("room_name")
-        anchors.left: task_name.right
+        id: roomName
+        objectName: qsTr("roomName")
+        anchors.left: taskName.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 15
         color: "white"
@@ -48,7 +47,7 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
 
-        onClicked: openRoom(room_id)
+        onClicked: openRoom(roomCreatorID, roomName.text)
 
         onEntered: {
             parent.border.color = "#404040"

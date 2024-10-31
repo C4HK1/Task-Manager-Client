@@ -32,46 +32,46 @@ DefaultFrame {
         }
     }
     function hideToolbar() {
-        tool_bar_profile.name = "PS"
-        tool_bar_tasks.name = "TS"
+        toolBarProfile.name = "PS"
+        toolBarTasks.name = "TS"
         t.name = "XZ"
 
-        if (profile_tools !== undefined) {
-            profile_tools.destroy()
-            profile_tools = undefined
+        if (profileTools !== undefined) {
+            profileTools.destroy()
+            profileTools = undefined
         }
-        if (tasks_list !== undefined) {
-            tasks_list.destroy()
-            tasks_list = undefined
+        if (tasksList !== undefined) {
+            tasksList.destroy()
+            tasksList = undefined
         }
 
-        tool_bar_profile.anchors.bottom = undefined
-        tool_bar_tasks.anchors.bottom = undefined
-        tool_bar_tasks.anchors.top = t.bottom
-        tool_bar_profile.anchors.top = tool_bar_tasks.bottom
+        toolBarProfile.anchors.bottom = undefined
+        toolBarTasks.anchors.bottom = undefined
+        toolBarTasks.anchors.top = t.bottom
+        toolBarProfile.anchors.top = toolBarTasks.bottom
 
-        sidebar_bg.width = sidebar_bg.slimToolBarWidth
+        sidebarBG.width = sidebarBG.slimToolBarWidth
 
         mask.visible = false
     }
     function openToolbar() {
-        sidebar_bg.width = sidebar_bg.toolBarWidth
-        tool_bar_profile.name = "Profile settings"
-        tool_bar_tasks.name = "Tasks"
+        sidebarBG.width = sidebarBG.toolBarWidth
+        toolBarProfile.name = "Profile settings"
+        toolBarTasks.name = "Tasks"
         t.name = "XZ che eto"
         mask.visible = true
     }
 
-    property var profile_tools;
-    property var tasks_list;
+    property var profileTools;
+    property var tasksList;
     property bool widgetRoomsView: true
 
     Rectangle {
         id: mask
-        anchors.left: sidebar_bg.right
+        anchors.left: sidebarBG.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.top: topbar_bg.bottom
+        anchors.top: topbarBG.bottom
         z: 1
 
         color: "black"
@@ -92,9 +92,9 @@ DefaultFrame {
         property int slimToolBarWidth: 70
         property int toolBarWidth: 160
 
-        id: sidebar_bg
+        id: sidebarBG
 
-        anchors.top: topbar_bg.bottom
+        anchors.top: topbarBG.bottom
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         width: slimToolBarWidth
@@ -106,7 +106,7 @@ DefaultFrame {
             width: parent.width
             id: t
             name: "XZ"
-            font_size: 22
+            fontSize: 22
 
             onClickFunction: function() {
                 if(widgetRoomsView){
@@ -122,23 +122,23 @@ DefaultFrame {
             width: parent.width
             anchors.top: t.bottom
             name: "TS"
-            id: tool_bar_tasks
-            font_size: 22
+            id: toolBarTasks
+            fontSize: 22
 
             onClickFunction: function() {
-                if (tasks_list === undefined) {
-                    if (profile_tools !== undefined) {
-                        profile_tools.destroy()
-                        profile_tools = undefined
+                if (tasksList === undefined) {
+                    if (profileTools !== undefined) {
+                        profileTools.destroy()
+                        profileTools = undefined
                     }
 
-                    tool_bar_profile.anchors.top = undefined
-                    tool_bar_profile.anchors.bottom = parent.bottom
+                    toolBarProfile.anchors.top = undefined
+                    toolBarProfile.anchors.bottom = parent.bottom
 
-                    tasks_list = root.createImageObject("MainWorkspaceElements/Tasks.qml", sidebar_bg)
-                    tasks_list.anchors.top = tool_bar_tasks.bottom
-                    tasks_list.width = parent.width
-                    tasks_list.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
+                    tasksList = root.createImageObject("MainWorkspaceElements/Tasks.qml", sidebarBG)
+                    tasksList.anchors.top = toolBarTasks.bottom
+                    tasksList.width = parent.width
+                    tasksList.height = parent.height - toolBarTasks.height - toolBarProfile.height - t.height
 
                     switchToTasks()
                 }
@@ -147,32 +147,32 @@ DefaultFrame {
 
         SidebarButton {
             width: parent.width
-            anchors.top: tool_bar_tasks.bottom
+            anchors.top: toolBarTasks.bottom
             name: "PS"
-            id: tool_bar_profile
-            font_size: 22
+            id: toolBarProfile
+            fontSize: 22
 
             onClickFunction: function() {
-                if (profile_tools === undefined) {
-                    if (tasks_list !== undefined) {
-                        tasks_list.destroy()
-                        tasks_list = undefined
+                if (profileTools === undefined) {
+                    if (tasksList !== undefined) {
+                        tasksList.destroy()
+                        tasksList = undefined
                     }
 
-                    tool_bar_profile.anchors.bottom = undefined
-                    tool_bar_profile.anchors.top = tool_bar_tasks.bottom
+                    toolBarProfile.anchors.bottom = undefined
+                    toolBarProfile.anchors.top = toolBarTasks.bottom
 
-                    profile_tools = root.createImageObject("MainWorkspaceElements/ProfileTools.qml", sidebar_bg)
-                    profile_tools.anchors.top = tool_bar_profile.bottom
-                    profile_tools.width = parent.width
-                    profile_tools.height = parent.height - tool_bar_tasks.height - tool_bar_profile.height - t.height
+                    profileTools = root.createImageObject("MainWorkspaceElements/ProfileTools.qml", sidebarBG)
+                    profileTools.anchors.top = toolBarProfile.bottom
+                    profileTools.width = parent.width
+                    profileTools.height = parent.height - toolBarTasks.height - toolBarProfile.height - t.height
                 }
             }
         }
 
 
         MouseArea {
-            anchors.fill: sidebar_bg
+            anchors.fill: sidebarBG
             hoverEnabled: true
 
             onEntered: {
@@ -182,7 +182,7 @@ DefaultFrame {
     }
 
     Rectangle {
-        id: topbar_bg
+        id: topbarBG
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
@@ -192,7 +192,7 @@ DefaultFrame {
         color: "#303030"
 
         TopbarRoomsViewButton {
-            id: widget_view_button
+            id: widgetViewButton
             name: "W"
             anchors.top: parent.top
             anchors.right: parent.right
@@ -205,10 +205,10 @@ DefaultFrame {
         }
 
         TopbarRoomsViewButton {
-            id: list_view_button
+            id: listViewButton
             name: "L"
             anchors.top: parent.top
-            anchors.right: widget_view_button.left
+            anchors.right: widgetViewButton.left
             z: 1
 
             onClickFunction: function() {
@@ -231,10 +231,10 @@ DefaultFrame {
     Rectangle {
         color: "transparent"
         objectName: qsTr("workspace")
-        anchors.top: topbar_bg.bottom
+        anchors.top: topbarBG.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        width: parent.width - sidebar_bg.slimToolBarWidth
+        width: parent.width - sidebarBG.slimToolBarWidth
         border.width: 0
     }
 }

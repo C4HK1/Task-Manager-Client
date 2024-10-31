@@ -9,7 +9,7 @@ DefaultFrame {
     signal switchToRoomCreation()
 
     Rectangle {
-        id: info_top_bar
+        id: infoTopBar
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -20,7 +20,7 @@ DefaultFrame {
         color: "#303030"
 
         Text {
-            id: room_name
+            id: roomName
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 17
@@ -32,7 +32,7 @@ DefaultFrame {
         }
 
         Text {
-            anchors.left: room_name.right
+            anchors.left: roomName.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 13
             color: "white"
@@ -45,13 +45,13 @@ DefaultFrame {
 
     Flickable {
         objectName: qsTr("flickable")
-        anchors.top: info_top_bar.bottom
+        anchors.top: infoTopBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.topMargin: 3
 
-        contentHeight: room_container.height
+        contentHeight: roomContainer.height
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -59,8 +59,8 @@ DefaultFrame {
         }
 
         GridLayout {
-            id: room_container
-            objectName: qsTr("list_container")
+            id: roomContainer
+            objectName: qsTr("listContainer")
             width: parent.width
             rowSpacing: -2
 

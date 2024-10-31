@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import AppFrontend
 
 Rectangle {
     Layout.fillWidth: true
@@ -12,12 +13,13 @@ Rectangle {
     border.width: 2
     border.color: "#303030"
 
-    property alias room_name: room_name.text
-    property alias owner_name: owner_name.text
+    property alias roomName: roomName.text
+    property alias roomCreatorName: roomCreatorName.text
+    property int roomCreatorID
 
     Text {
-        id: room_name
-        objectName: qsTr("room_name")
+        id: roomName
+        objectName: qsTr("roomName")
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 20
@@ -29,9 +31,9 @@ Rectangle {
     }
 
     Text {
-        id: owner_name
-        objectName: qsTr("owner_name")
-        anchors.left: room_name.right
+        id: roomCreatorName
+        objectName: qsTr("roomCreatorName")
+        anchors.left: roomName.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 15
         color: "white"
@@ -50,6 +52,10 @@ Rectangle {
 
         onExited: {
             parent.color = "#242424"
+        }
+
+        onClicked: {
+            NetworkManager.sendGetRoomRequest(roomCreatorID, roomName.text)
         }
     }
 }

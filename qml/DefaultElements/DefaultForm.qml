@@ -10,7 +10,7 @@ Frame {
     anchors.fill: parent
     z: 2
 
-    property alias button_text: button.text
+    property alias buttonText: button.text
     property var option;
 
     Rectangle {

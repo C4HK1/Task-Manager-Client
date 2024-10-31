@@ -24,7 +24,7 @@ protected:
     QQmlEngine *engine;
     QQuickItem *container;
     QQuickItem *object;
-    NetworkManager *net_manager;
+    NetworkManager *netManager;
 };
 
 template <typename T>

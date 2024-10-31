@@ -1,4 +1,4 @@
-#include "registration_page.h"
+#include "loggining_page.h"
 #include "base_page.h"
 #include "content_structures.h"
 #include "network_manager.h"
@@ -6,13 +6,13 @@
 #include "main_application.h"
 #include "main_page.h"
 
-RegistrationPage::RegistrationPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
-        BasePage(engine, container, "qml/Registration.qml"),
+LogginingPage::LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
+        BasePage(engine, container, "qml/Authorization.qml"),
         mainApp(mainApp) {
-    connect(netManager, &NetworkManager::finishCreateProfileHandling, this, &RegistrationPage::finishCreateProfile);
+    connect(netManager, &NetworkManager::finishLogginResponseHandling, this, &LogginingPage::finishLoggining);
 }
 
-void RegistrationPage::finishCreateProfile(ServerStatus serverStatus, QByteArray jwt) {
+void LogginingPage::finishLoggining(ServerStatus serverStatus, QByteArray jwt) {
     if (!serverStatus.status) {
         this->mainApp->switchPage<MainPage>();
         netManager->jwt = jwt;
@@ -26,7 +26,6 @@ void RegistrationPage::finishCreateProfile(ServerStatus serverStatus, QByteArray
         file.write(netManager->jwt);
         file.close();
     } else {
-        qInfo() << "Profile creating error status: " << serverStatus.status;
+        qInfo() << "Profile loggining error status: " << serverStatus.status;
     }
 }
-

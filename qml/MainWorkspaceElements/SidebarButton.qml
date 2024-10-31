@@ -6,10 +6,10 @@ Rectangle {
     z: 21
     width: parent.width
     height: 70
-    color: sidebar_bg.color
+    color: sidebarBG.color
 
     property alias name: name.text
-    property alias font_size: name.font.pixelSize
+    property alias fontSize: name.font.pixelSize
     property var onClickFunction: function() {}
     property string id: ""
     property bool selected: false
@@ -35,7 +35,7 @@ Rectangle {
         }
 
         onExited: {
-            color = sidebar_bg.color
+            color = sidebarBG.color
         }
     }
 }

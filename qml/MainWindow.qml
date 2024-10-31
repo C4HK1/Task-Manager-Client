@@ -6,7 +6,7 @@ import DefaultElements.Fonts
 import AppFrontend
 
 Window {
-    id: main_window
+    id: mainWindow
     width: 1080
     height: 720
     minimumWidth: 600

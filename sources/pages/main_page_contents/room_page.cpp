@@ -2,56 +2,57 @@
 
 #include "room_page.h"
 
-RoomPage::RoomPage(QQmlEngine *engine, QQuickItem *container, RoomInfo *room) :
-    BasePage(engine, container, "qml/Room.qml"),
-    task_component(new QQmlComponent(engine, "qml/Task.qml")),
-    room(room),
-    tasks_container(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("tasks_container"))
-{
-    object->setProperty("room_name", room->room_name);
-    object->setProperty("owner_name", room->owner_name);
-    object->setProperty("owner_id", room->owner_id);
+RoomPage::RoomPage(QQmlEngine *engine, QQuickItem *container, Room room) :
+        BasePage(engine, container, "qml/Room.qml"),
+        taskComponent(new QQmlComponent(engine, "qml/Task.qml")),
+        tasksContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("tasksContainer")),
+        room(room) {
+    object->setProperty("roomName", room.name);
+    object->setProperty("roomCreatorName", room.creatorName);
+    object->setProperty("roomCreatorID", std::to_string(room.creatorID).c_str());
 
-    connect(net_manager, &NetworkManager::gotTasks, this, &RoomPage::loadTasks);
-    connect(net_manager, &NetworkManager::gotTask, this, &RoomPage::loadTask);
-    connect(net_manager, &NetworkManager::taskCreationFailed, this, &RoomPage::taskCreationFailed);
-    net_manager->sendGettingRoomTasksRequest(*room);
+    connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &RoomPage::roomPageInitialization);
+    connect(netManager, &NetworkManager::finishCreateTaskResponseHandling, this, &RoomPage::handleTaskCreationStatus);
+    netManager->sendGetRoomTasksRequest(room.creatorID, room.name);
 }
 
-void RoomPage::loadTasks(QList<TaskInfo *> tasks) {
-    this->tasks = tasks;
+void RoomPage::roomPageInitialization(ServerStatus serverStatus, Tasks tasks) {
+    if (!serverStatus.status) {
+        this->tasks = tasks;
 
-    for (auto task : this->tasks) {
-        auto item = qobject_cast<QQuickItem*>(task_component->create(engine->rootContext()));
-        item->setProperty("task_name", task->task_name);
-        item->setProperty("owner_name", task->owner_name);
-        item->setProperty("owner_id", task->owner_id);
-        item->setProperty("room_id", task->room_id);
-        item->setParentItem(tasks_container);
+        for (auto task : this->tasks) {
+            auto item = qobject_cast<QQuickItem*>(taskComponent->create(engine->rootContext()));
+            item->setProperty("roomCreatorID", QString::number(task.parent.creatorID));
+            item->setProperty("roomName", task.parent.name);
+            item->setProperty("taskName", task.name);
+            item->setProperty("taskCreatorID", std::to_string(task.creatorID).c_str());
+            item->setProperty("taskCreatorName", task.creatorName);
+
+            item->setParentItem(tasksContainer);
+        }
+    } else {
+        qInfo() << "error get room tasks status: " << serverStatus.status;
     }
 }
 
-void RoomPage::loadTask(TaskInfo *task) {
-    tasks.append(task);
+void RoomPage::handleTaskCreationStatus(ServerStatus serverStatus, Task task) {
+    if (!serverStatus.status) {
+        tasks.append(task);
 
-    auto item = qobject_cast<QQuickItem*>(task_component->create(engine->rootContext()));
-    item->setProperty("task_name", task->task_name);
-    item->setProperty("owner_name", task->owner_name);
-    item->setProperty("owner_id", task->owner_id);
-    item->setProperty("room_id", task->room_id);
-    item->setParentItem(tasks_container);
+        auto item = qobject_cast<QQuickItem*>(taskComponent->create(engine->rootContext()));
+        item->setProperty("roomCreatorID", QString::number(task.parent.creatorID));
+        item->setProperty("roomName", task.parent.name);
+        item->setProperty("taskName", task.name);
+        item->setProperty("taskCreatorID", QString::number(task.creatorID));
+        item->setProperty("taskCreatorName", task.creatorName);
+        item->setParentItem(tasksContainer);
 
-    QMetaObject::invokeMethod(object, "taskCreated");
-}
-
-void RoomPage::taskCreationFailed() {
-    QMetaObject::invokeMethod(object, "taskCreationFailed");
+        QMetaObject::invokeMethod(object, "taskCreated");
+    } else {
+        QMetaObject::invokeMethod(object, "taskCreationFailed");
+    }
 }
 
 RoomPage::~RoomPage() {
-    // delete room;
-
-    // for (auto task : tasks) {
-    //     delete task;
-    // }
+    taskComponent->deleteLater();
 }

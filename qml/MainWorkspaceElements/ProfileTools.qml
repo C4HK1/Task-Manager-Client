@@ -22,7 +22,7 @@ Flickable {
         SidebarButton {
             name: "Profile"
             id: profile
-            font_size: 16
+            fontSize: 16
             onClickFunction: function () {
                 switchToProfile()
             }
@@ -31,7 +31,7 @@ Flickable {
         SidebarButton {
             name: "Settings"
             id: settings
-            font_size: 16
+            fontSize: 16
             onClickFunction: function() {
                 switchToSettings()
             }
@@ -39,28 +39,33 @@ Flickable {
 
         SidebarButton {
             name: "Sign Out"
-            id: profile_signout
-            font_size: 16
+            id: profileSignout
+            fontSize: 16
 
-            property var profile_signout_page;
+            property var profileSignoutPage;
 
             onClickFunction: function() {
-                if (profile_signout_page === undefined) {
-                    profile_signout_page = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"button_text": qsTr("Sign Out"), "option": function() {MainApplication.outFromAccount()}})
+                if (profileSignoutPage === undefined) {
+                    profileSignoutPage = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"buttonText": qsTr("Sign Out"), "option": function() {MainApplication.outFromAccount()}})
                 }
             }
         }
 
         SidebarButton {
             name: "Delete Account"
-            id: profile_deleting
-            font_size: 16
+            id: profileDeleting
+            fontSize: 16
 
-            property var profile_deleting_page;
+            property var profileDeletingPage;
 
             onClickFunction: function() {
-                if (profile_deleting_page === undefined) {
-                    profile_deleting_page = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"button_text": qsTr("Delete profile"), "option": function() {NetworkManager.sendProfileDeletingRequest()}})
+                if (profileDeletingPage === undefined) {
+                    profileDeletingPage = root.createImageObject("DefaultElements/DefaultForm.qml",
+                                                                 root,
+                                                                 {
+                                                                     "buttonText": qsTr("Delete profile"),
+                                                                     "option": function() {NetworkManager.sendDeleteProfileRequest()}
+                                                                 })
                 }
             }
         }

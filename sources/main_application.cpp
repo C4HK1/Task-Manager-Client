@@ -1,79 +1,81 @@
 #include "main_application.h"
 #include "network_manager.h"
-#include "authorization_page.h"
+#include "loggining_page.h"
 #include "registration_page.h"
 #include "main_page_contents.h"
 #include "main_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
-    QGuiApplication(argc, argv), net_manager(NetworkManager::getInstance()), engine(new QQmlEngine())
+    QGuiApplication(argc, argv), netManager(NetworkManager::getInstance()), engine(new QQmlEngine())
 {
-    connect(net_manager, &NetworkManager::authorizationResponseAccept, this, &MainApplication::handleAuthentication);
-    connect(net_manager, &NetworkManager::profileDeleted, this, &MainApplication::outFromAccount);
+    connect(netManager, &NetworkManager::finishProfileAuthenticationResponseHandling, this, &MainApplication::handleAuthentication);
+    connect(netManager, &NetworkManager::finishDeleteProfileResponseHandling, this, &MainApplication::outFromAccount);
 
-    qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", net_manager);
+    qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", netManager);
     qmlRegisterSingletonInstance("AppFrontend", 1, 0, "MainApplication", this);
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWindow.qml"));
-    main_window = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
+    mainWindow = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 
     tryAuthenticate();
 }
 
 MainApplication::~MainApplication() {
-    main_window->deleteLater();
+    mainWindow->deleteLater();
     engine->deleteLater();
-    cur_page->deleteLater();
+    curPage->deleteLater();
 }
 
 void MainApplication::SetCurrentPage(BasePage *page) {
-    if(cur_page != nullptr) {
-        cur_page->deleteLater();
+    if(curPage != nullptr) {
+        curPage->deleteLater();
     }
 
-    cur_page = page;
+    curPage = page;
 }
 
 void MainApplication::tryAuthenticate() {
     QFile file("data/authentication_key.organizer");
 
     if(!file.exists()){
-        switchPage<AuthorizationPage>();
+        switchPage<LogginingPage>(this);
         return;
     }
 
     file.open(QIODevice::ReadOnly);
-    QByteArray token = file.readAll();
+    QByteArray jwt = file.readAll();
     file.close();
-    net_manager->token = token;
-    net_manager->sendAuthenticationRequest();
+    netManager->jwt = jwt;
+    netManager->sendProfileAuthenticationRequest();
 }
 
 template <typename PageType, typename ...Args> requires IsPage<PageType>
 void MainApplication::switchPage(Args... args){
-    SetCurrentPage(new PageType(engine, main_window->contentItem(), args...));
+    SetCurrentPage(new PageType(engine, mainWindow->contentItem(), args...));
 }
 
 void MainApplication::switchToRegister() {
-    switchPage<RegistrationPage>();
+    switchPage<RegistrationPage>(this);
 }
 
-void MainApplication::handleAuthentication(bool success) {
-    qInfo() << "authentication status: " << success;
-    if(success) {
+void MainApplication::handleAuthentication(ServerStatus serverStatus) {
+    qInfo() << "authentication status: " << serverStatus.status;
+    if(!serverStatus.status) {
         switchPage<MainPage>();
-        this->m_loginingError = false;
+        this->loginingError = false;
     } else {
-        switchPage<AuthorizationPage>();
-        this->m_loginingError = true;
+        switchPage<LogginingPage>(this);
+        this->loginingError = true;
     }
 
     emit loginingErrorChanged();
 }
 
-void MainApplication::outFromAccount()
+void MainApplication::outFromAccount(ServerStatus serverStatus)
 {
-    std::remove("data/authentication_key.organizer");
-    switchPage<AuthorizationPage>();
+    if (!serverStatus.status) {
+        std::remove("data/authentication_key.organizer");
+        switchPage<LogginingPage>(this);
+    }
 }

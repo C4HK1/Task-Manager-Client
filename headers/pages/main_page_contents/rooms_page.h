@@ -4,19 +4,29 @@
 #include "base_page.h"
 #include "content_structures.h"
 
+class MainPage;
+
 class RoomsPage : public BasePage
 {
     Q_OBJECT
 public:
-    RoomsPage(QQmlEngine *engine, QQuickItem *container, QString moduleName, QString itemName);
-    virtual void createRoomItem(RoomInfo *ri) = 0;
+    RoomsPage(QQmlEngine *engine, QQuickItem *container, QString moduleName, QString itemName, MainPage *mainPage);
+    virtual void createRoomItem(Room &room) = 0;
     ~RoomsPage();
+
+public slots:
+    void handleRoomEntry(ServerStatus serverStatus, Room room);
+    void initializeContents(ServerStatus serverStatus, Rooms rooms);
+    void switchToRoomCreation();
 
 signals:
 
 protected:
-    QList<QQuickItem*> rooms_items;
-    QQmlComponent *item_component;
+    MainPage *mainPage;
+    QList<QQuickItem*> roomsItems;
+    QQmlComponent *itemComponent;
+
+    Rooms rooms;
 };
 
 template <typename T>

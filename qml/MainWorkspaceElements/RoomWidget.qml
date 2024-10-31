@@ -12,13 +12,13 @@ Rectangle {
 
     color: "#404040"
 
-    property alias room_name: room_name.text
-    property alias owner_name: owner_name.text
-    property string owner_id
+    property alias roomName: roomName.text
+    property alias roomCreatorName: roomCreatorName.text
+    property int roomCreatorID
 
     Text {
-        id: room_name
-        objectName: qsTr("room_name")
+        id: roomName
+        objectName: qsTr("roomName")
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.leftMargin: 15
@@ -33,10 +33,10 @@ Rectangle {
     }
 
     Text {
-        id: owner_name
-        objectName: qsTr("owner_name")
+        id: roomCreatorName
+        objectName: qsTr("roomCreatorName")
         anchors.left: parent.left
-        anchors.top: room_name.bottom
+        anchors.top: roomName.bottom
         anchors.leftMargin: 15
         anchors.topMargin: 10
         anchors.margins: 15
@@ -61,7 +61,7 @@ Rectangle {
         }
 
         onClicked: {
-            NetworkManager.sendRoomGettingRequest(owner_id, room_name.text)
+            NetworkManager.sendGetRoomRequest(roomCreatorID, roomName.text)
         }
     }
 }

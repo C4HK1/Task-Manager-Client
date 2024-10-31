@@ -5,7 +5,7 @@ import DefaultElements.Fonts
 Rectangle {
     width: 30
     height: parent.height
-    color: sidebar_bg.color
+    color: sidebarBG.color
 
     property alias name: name.text
     property var onClickFunction: function() {}
@@ -33,7 +33,7 @@ Rectangle {
         }
 
         onExited: {
-            color = sidebar_bg.color
+            color = sidebarBG.color
         }
     }
 }

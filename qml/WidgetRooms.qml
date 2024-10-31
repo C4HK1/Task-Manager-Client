@@ -16,7 +16,7 @@ DefaultFrame {
         topMargin: 10
         bottomMargin: 10
 
-        contentHeight: room_container.height
+        contentHeight: roomContainer.height
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -24,8 +24,8 @@ DefaultFrame {
         }
 
         GridLayout {
-            objectName: qsTr("widget_container")
-            id: room_container
+            objectName: qsTr("widgetContainer")
+            id: roomContainer
             width: Math.min(parent.width, children.length * 270 + 20 * (children.length + 1))
 
             flow: GridLayout.LeftToRight

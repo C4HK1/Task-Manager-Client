@@ -1,351 +1,1056 @@
 #include "network_manager.h"
 #include "main_application.h"
+#include <iostream>
 
-const QString NetworkManager::host("http://localhost:8080");
+//FIELDS
+
+
+const QString NetworkManager::host("http://localhost:8080/");
+
+
+//METHODS
+
 
 NetworkManager* NetworkManager::getInstance() {
-    static NetworkManager net_manager;
-    return &net_manager;
+    static NetworkManager netManager;
+    return &netManager;
 }
 
-void NetworkManager::sendAuthorizationRequest(QString login, QString password)
+
+//REQUESTS
+
+
+//GET
+
+
+//Loggining
+void NetworkManager::sendLogginRequest(QString login, QString password)
 {
-    QNetworkRequest request(host + "/ProfileLogining");
+    QNetworkRequest request(host + "LogginProfile/");
 
-    QString jsonAuthInfo = QString("{\"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("login", login.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("password", password.toStdString()));
 
-    QNetworkReply *m_reply = m_networkManager.get(request, jsonAuthInfo.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleAuthorizationResponse);
-    /* DEBUG */ qInfo() << QString("http get requeast was send on " + request.url().toString() + " with data: " + jsonAuthInfo);
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleLogginResponse);
+
+    qInfo() << "\nsend authorization request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump();
 }
 
-void NetworkManager::handleAuthorizationResponse()
+void NetworkManager::sendProfileAuthenticationRequest() {
+    QNetworkRequest request(host + "ProfileAuthentication/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleProfileAuthenticationResponse);
+
+    qInfo() << "\nsend authentication request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+//Profile
+void NetworkManager::sendGetProfileRequest() {
+    QNetworkRequest request(host + "GetProfile/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileResponse);
+
+    qInfo() << "\nsend profile getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetProfilesWithPrefixRequest(QString prefix) {
+    QNetworkRequest request(host + "GetProfilesWithPrefix/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("prefix", prefix.toStdString()));
+
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetRoomResponse);
+
+    qInfo() << "\nsend profiles with prefix request on "
+                        << request.url()
+                        << " with body: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetPublicProfileRequest(u_int64_t profileID) {
+    QNetworkRequest request(host + "GetPublicProfile/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetPublicProfileResponse);
+
+    qInfo() << "\nsend public profile getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetProfileConfigRequest() {
+    QNetworkRequest request(host + "GetProfileConfig/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileConfigResponse);
+
+    qInfo() << "\nsend profile config getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetProfileRoomsRequest() {
+    QNetworkRequest request(host + "GetProfileRooms/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileRoomsResponse);
+
+    qInfo() << "\nsend profile rooms getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetProfileTasksRequest() {
+    QNetworkRequest request(host + "GetProfileTasks/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileTasksResponse);
+
+    qInfo() << "\nsend profile tasks getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetProfileAssignedTasksRequest() {
+    QNetworkRequest request(host + "GetProfileAssignedTasks/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileAssignedTasksResponse);
+
+    qInfo() << "\nsend profile assigned tasks getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetProfileReviewedTasksRequest() {
+    QNetworkRequest request(host + "GetProfileReviewedTasks/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileReviewedTasksResponse);
+
+    qInfo() << "\nsend profile reviewed tasks getting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
+}
+
+//Room
+void NetworkManager::sendGetRoomRequest(u_int64_t roomCreatorID, QString roomName) {
+    QNetworkRequest request(host + "GetRoom/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetRoomResponse);
+
+    qInfo() << "\nsend room getting request on "
+                        << request.url()
+                        << " with body: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetRoomTasksRequest(u_int64_t roomCreatorID, QString roomName) {
+    QNetworkRequest request(host + "GetRoomTasks/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetRoomTasksResponse);
+
+    qInfo() << "\nsend room tasks getting request on "
+                        << request.url()
+                        << " with body: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendGetRoomProfilesRequest(u_int64_t roomCreatorID, QString roomName) {
+    QNetworkRequest request(host + "GetRoomProfiles/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetRoomProfilesResponse);
+
+    qInfo() << "\nsend room profiles getting request on "
+                        << request.url()
+                        << " with body: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+//Task
+
+
+//POST
+
+
+//Profile
+void NetworkManager::sendCreateProfileRequest(QString name,
+                                              QString login,
+                                              QString password,
+                                              QString email,
+                                              QString phone) {
+    QNetworkRequest request(host + "CreateProfile/");
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("name", name.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("login", login.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("password", password.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("email", email.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("phone", phone.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleCreateProfileResponse);
+
+    qInfo() << "\nsend profile creation request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump();
+}
+
+//Room
+void NetworkManager::sendCreateRoomRequest(QString roomName, QString description) {
+    QNetworkRequest request(host + "CreateRoom/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("description", description.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleCreateRoomResponse);
+
+    qInfo() << "\nsend room creation request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendAppendMemberToRoomRequest(u_int64_t memberID,
+                                                   u_int64_t roomCreatorID,
+                                                   QString roomName) {
+    QNetworkRequest request(host + "AppendMemberToRoom/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("member ID", memberID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleAppendMemberToRoomResponse);
+
+    qInfo() << "\nsend append member to room request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendDeleteRoomRequest(u_int64_t roomCreatorID, QString roomName) {
+    QNetworkRequest request(host + "DeleteRoom/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleDeleteRoomResponse);
+
+    qInfo() << "\nsend room deleting request on "
+                        << request.url()
+                        << " with body: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+//Task
+void NetworkManager::sendCreateTaskRequest(u_int64_t roomCreatorID,
+                                           QString roomName,
+                                           QString taskName,
+                                           QString description,
+                                           QString label,
+                                           u_int64_t status,
+                                           u_int64_t timeToLive) {
+    QNetworkRequest request(host + "CreateTask/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("description", description.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("label", label.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("status", status));
+    requestBody.push_back(nlohmann::json::object_t::value_type("time to live", timeToLive));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleCreateTaskResponse);
+
+    qInfo() << "\nsend task creation request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendAddTaskToAssigneeRequest(u_int64_t roomCreatorID,
+                                              QString roomName,
+                                              QString taskName,
+                                              u_int64_t assigneeID) {
+    QNetworkRequest request(host + "AddTaskToAssignee/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("assignee ID", assigneeID));
+
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleAddTaskToAssigneeResponse);
+
+    qInfo() << "\nsend add task to assignee request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendAddTaskToReviewerRequest(u_int64_t roomCreatorID,
+                                              QString roomName,
+                                              QString taskName,
+                                              u_int64_t reviewerID) {
+    QNetworkRequest request(host + "AddTaskToReviewer/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("reviewer ID", reviewerID));
+
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleAddTaskToReviewerResponse);
+
+    qInfo() << "\nsend add task to reviewer request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendRemoveTaskFromAssigneeRequest(u_int64_t roomCreatorID,
+                                                   QString roomName,
+                                                   QString taskName,
+                                                   u_int64_t assigneeID) {
+    QNetworkRequest request(host + "RemoveTaskFromAssignee/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("assignee ID", assigneeID));
+
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleRemoveTaskFromAssigneeResponse);
+
+    qInfo() << "\nsend remove task from assignee request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendRemoveTaskFromReviewerRequest(u_int64_t roomCreatorID,
+                                                   QString roomName,
+                                                   QString taskName,
+                                                   u_int64_t reviewerID) {
+    QNetworkRequest request(host + "RemoveTaskFromReviewer/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("reviewer ID", reviewerID));
+
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleRemoveTaskFromReviewerResponse);
+
+    qInfo() << "\nsend remove task from reviewer request on "
+                        << request.url()
+                        << " with data: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+void NetworkManager::sendDeleteTaskRequest(u_int64_t roomCreatorID, QString roomName, QString taskName) {
+    QNetworkRequest request(host + "DeleteTask/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleDeleteTaskResponse);
+
+    qInfo() << "\nsend room deleting request on "
+                        << request.url()
+                        << " with body: "
+                        << requestBody.dump()
+                        << "\nwith header: "
+                        << this->jwt;
+}
+
+
+//DELETE
+
+
+//Profile
+void NetworkManager::sendDeleteProfileRequest()
 {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
+    QNetworkRequest request(host + "DeleteProfile/");
 
-    if(!QDir("data").exists()){
-        QDir().mkdir("data");
-    }
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
 
-    try{
-        nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-        this->token = QByteArray(QString(nlohmann::to_string(jsonInfo["JWT"]).c_str()).replace("\"", "").toUtf8());
+    QNetworkReply *reply = networkManager.deleteResource(request);
 
-        if(this->token.size() > 0){
-            QFile file("data/authentication_key.organizer");
-            file.open(QIODevice::WriteOnly);
-            file.write(this->token);
-            file.close();
-        }
-    } catch (std::exception &ex) {
-        qInfo() << ex.what();
-    }
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleDeleteProfileResponse);
 
-    sendAuthenticationRequest();
+    qInfo() << "\nsend profile deleting request on "
+                        << request.url()
+                        << " with header: "
+                        << this->jwt;
 }
 
-void NetworkManager::sendProfileCreationRequest(QString name, QString login, QString password)
+//Room
+
+//Task
+
+
+//PATCH
+
+
+//Profile
+
+//Room
+
+//Task
+
+
+
+
+
+//HANDLERS
+
+
+//GET
+
+
+//Loggining
+void NetworkManager::handleLogginResponse()
 {
-    QNetworkRequest request(host + "/ProfileCreation");
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "profile loggining server response: ";
 
-    QString jsonProfileCreationBody = QString("{\"name\": \"") + name + QString("\", \"login\": \"") + login + QString("\", \"password\": \"") + password + QString("\"}");
-    QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleProfileCreationResponse);
-}
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
 
-void NetworkManager::handleProfileCreationResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
+        int serverStatus = response.at("status");
+        std::string jwt = response.at("JWT");
 
-    if(!QDir("data").exists()){
-        QDir().mkdir("data");
-    }
-
-    try{
-        nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-        this->token  = QByteArray(QString(nlohmann::to_string(jsonInfo["JWT"]).c_str()).replace("\"", "").toUtf8());
-
-        if (this->token.size() > 0) {
-            QFile file("data/authentication_key.organizer");
-            file.open(QIODevice::WriteOnly);
-            file.write(this->token);
-            file.close();
-
-            sendAuthenticationRequest();
-        }
-    } catch (std::exception &ex) {
-        qInfo() << ex.what();
+        emit NetworkManager::finishLogginResponseHandling(serverStatus, jwt.c_str());
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
         return;
     }
+
+    reply->deleteLater();
 }
 
-void NetworkManager::sendProfileDeletingRequest()
-{
-    QNetworkRequest request(host + "/ProfileDeleting");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-    QNetworkReply *m_reply = m_networkManager.deleteResource(request);
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::profileDeleted);
-}
+void NetworkManager::handleProfileAuthenticationResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "profile authenticate server response: ";
 
-void NetworkManager::sendAuthenticationRequest() {
-    QNetworkRequest request(host);
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-    QNetworkReply *m_reply = m_networkManager.get(request);
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleAuthenticationResponse);
-}
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
 
-void NetworkManager::handleAuthenticationResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
+        int serverStatus = response.at("status");
 
-    try{
-        nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-        QString status(nlohmann::to_string(jsonInfo["authorizetion info"]).c_str());
-
-        bool result = status == "\"true\"";
-
-        emit NetworkManager::authorizationResponseAccept(result);
-    } catch (std::exception &ex) {
-        qInfo() << ex.what();
+        emit NetworkManager::finishProfileAuthenticationResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
         return;
     }
+
+    reply->deleteLater();
 }
 
-void NetworkManager::sendRoomCreationRequest(QString roomName) {
-    QNetworkRequest request(host + "/RoomCreation");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
+//Profile
+void NetworkManager::handleGetProfileResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile server response: ";
 
-    QString jsonProfileCreationBody = QString("{\"room label\": \"") + roomName + QString("\"}");
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump();
 
-    QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleRoomCreationResponse);
+        int serverStatus = response.at("status");
+        auto profile = response.at("profile");
 
-    qInfo() << "\"" + roomName + "\" room creation request";
-}
-
-void NetworkManager::handleRoomCreationResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    std::string response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << "server response: " + response;
-
-
-
-    nlohmann::json data = nlohmann::json::parse(response);
-    bool status;
-    std::istringstream(std::string(data.at("room creation info"))) >> std::boolalpha >> status;
-
-    if (status) {
-        nlohmann::json room = data.at("room");
-        RoomInfo *roomInfo = new RoomInfo();
-
-        roomInfo->room_name = std::string(room.at("label")).c_str();
-        roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
-        roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
-
-        emit gotRoom(roomInfo);
-    } else {
-        emit this->roomCreationFailed();
-    }
-}
-
-void NetworkManager::sendRoomGettingRequest(QString creatorID, QString label) {
-    QNetworkRequest request(host + "/GetRoomInfo");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-
-    QString jsonProfileCreationBody = QString("{\"room creator id\": \"") + creatorID + QString("\", \"label\": \"") + label + QString("\"}");
-
-    QNetworkReply *m_reply = m_networkManager.get(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleRoomGettingResponse);
-
-    qInfo() << "\"" + label + "\" room getting request";
-}
-
-void NetworkManager::handleRoomGettingResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    std::string response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << "server response: " + response;
-
-    nlohmann::json data = nlohmann::json::parse(response);
-
-    nlohmann::json room = data.at("room");
-    RoomInfo *roomInfo = new RoomInfo();
-
-    roomInfo->room_name = std::string(room.at("label")).c_str();
-    roomInfo->owner_name = std::string(room.at("creator_name")).c_str();
-    roomInfo->owner_id = std::string(room.at("creator_id")).c_str();
-
-    emit gotRoom(roomInfo);
-}
-
-void NetworkManager::sendTaskCreationRequest(QString taskName, QString room_name, QString owner_id) {
-    QNetworkRequest request(host + "/TaskCreation");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-
-    QString jsonProfileCreationBody = QString("{\"room label\": \"") + room_name + QString("\", \"room creator id\": \"") + owner_id + QString("\", \"task label\": \"") + taskName + QString("\"}");
-    QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleTaskCreationResponse);
-
-    qInfo() << "\"" + taskName + "\" task creation request";
-}
-
-void NetworkManager::handleTaskCreationResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    std::string response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << "server response: " + response;
-
-
-
-    nlohmann::json data = nlohmann::json::parse(response);
-    bool status;
-    std::istringstream(std::string(data.at("task creation info"))) >> std::boolalpha >> status;
-
-    if (status) {
-        nlohmann::json task = data.at("task");
-        TaskInfo *taskInfo = new TaskInfo();
-
-        taskInfo->task_name = std::string(task.at("label")).c_str();
-        taskInfo->owner_name = std::string(task.at("creator_name")).c_str();
-        taskInfo->owner_id = std::string(task.at("creator_id")).c_str();
-        taskInfo->room_id = std::string(task.at("room_id")).c_str();
-
-        emit this->gotTask(taskInfo);
-    } else {
-        emit this->taskCreationFailed();
-    }
-}
-
-void NetworkManager::sendRoomDeletingRequest(RoomInfo &room) {
-    QNetworkRequest request(host + "/RoomDeleting");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-
-    QString jsonProfileCreationBody = QString("{\"room label\": \"") + room.room_name + QString("\", \"room creator id\": \"") + room.owner_id + QString("\"}");
-
-    QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleRoomDeletingResponse);
-}
-
-void NetworkManager::handleRoomDeletingResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
-}
-
-
-void NetworkManager::sendTaskDeletingRequest(RoomInfo &room, TaskInfo &task) {
-    QNetworkRequest request(host + "/TaskDeleting");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-
-    QString jsonProfileCreationBody = QString("{\"room id\": \"") + room.room_name + QString("\", \"room creator id\": \"") + room.owner_id + QString("\", \"task creator id\": \"") + task.owner_id + QString("\", \"task label\": \"") + task.task_name + QString("\"}");
-
-    QNetworkReply *m_reply = m_networkManager.post(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleTaskDeletingResponse);
-}
-
-void NetworkManager::handleTaskDeletingResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
-}
-
-void NetworkManager::sendGettingUserRoomsRequest() {
-    QNetworkRequest request(host + "/GetProfileRooms");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-
-    QNetworkReply *m_reply = m_networkManager.get(request);
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleGettingUserRoomsResponse);
-}
-
-void NetworkManager::handleGettingUserRoomsResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
-
-    QList<RoomInfo*> rooms_info;
-    nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-
-
-    for (auto &r : jsonInfo["items"]) {
-        auto get = [&r](std::string id) { return QString(nlohmann::to_string(r[id]).c_str()).replace("\"", ""); };
-        RoomInfo *new_room = new RoomInfo{ get("label"), get("creator_name"), get("creator_id") };
-        rooms_info.append(new_room);
-
-        for(auto &t : r["tasks"]) {
-            auto tget = [&t](std::string id) { return QString(nlohmann::to_string(t[id]).c_str()).replace("\"", ""); };
-            new_room->tasks.append(new TaskInfo{ tget("label"), tget("creator_name"), QString(), tget("room_id"), new_room });
-        }
+        emit finishGetProfileResponseHandling(serverStatus, profile);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
     }
 
-    emit gotRooms(rooms_info);
+    reply->deleteLater();
 }
 
-void NetworkManager::sendGettingUserTasksRequest() {
-    QNetworkRequest request(host + "/GetProfileTasks");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
+void NetworkManager::handleGetProfilesWithPrefixResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profiles with prefix server response: ";
 
-    QNetworkReply *m_reply = m_networkManager.get(request);
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleGettingUserTasksResponse);
-}
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
 
-void NetworkManager::handleGettingUserTasksResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
-}
+        int serverStatus = response.at("status");
+        Profiles profiles = response.at("profiles");
 
-void NetworkManager::sendGettingRoomTasksRequest(RoomInfo &room) {
-    QNetworkRequest request(host + "/GetRoomTasks");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
-
-    QString jsonProfileCreationBody = QString("{\"room label\": \"") + room.room_name + QString("\", \"room creator id\": \"") + room.owner_id + QString("\"}");
-
-    QNetworkReply *m_reply = m_networkManager.get(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleGettingRoomTasksResponse);
-}
-
-void NetworkManager::handleGettingRoomTasksResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
-
-    QList<TaskInfo*> tasks_info;
-    nlohmann::json jsonInfo = nlohmann::json::parse(response.toStdString());
-
-    for (auto &r : jsonInfo["items"]) {
-        auto get = [&jsonInfo, &r](std::string id) { return QString(nlohmann::to_string(r[id]).c_str()).replace("\"", ""); };
-        tasks_info.append(new TaskInfo{ get("label"), get("creator_name"), get("creator_id"), get("room_id") });
+        emit finishGetProfilesWithPrefixHandling(serverStatus, profiles);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
     }
 
-    emit this->gotTasks(tasks_info);
+    reply->deleteLater();
 }
 
-void NetworkManager::sendGettingRoomUsersRequest(RoomInfo &room) {
-    QNetworkRequest request(host + "/GetRoomTasks");
-    request.setRawHeader(QByteArray("Authorization"), this->token);
+void NetworkManager::handleGetPublicProfileResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get public profile server response: ";
 
-    QString jsonProfileCreationBody = QString("{\"room label\": \"") + room.room_name + QString("\", \"room creator id\": \"") + room.owner_id + QString("\"}");
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
 
-    QNetworkReply *m_reply = m_networkManager.get(request, jsonProfileCreationBody.toUtf8());
-    connect(m_reply, &QNetworkReply::finished, this, &NetworkManager::handleGettingRoomUsersResponse);
+        int serverStatus = response.at("status");
+        Profile profile = response.at("profile");
+
+        emit finishGetPublicProfileResponseHandling(serverStatus, profile);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
 }
 
-void NetworkManager::handleGettingRoomUsersResponse() {
-    QNetworkReply *m_reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    QString response(m_reply->readAll());
-    m_reply->deleteLater();
-    /* DEBUG */ qInfo() << QString("server response: ") + response;
+void NetworkManager::handleGetProfileConfigResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile config server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Config config = response.at("config");
+
+        emit finishGetProfileConfigResponseHandling(serverStatus, config);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
 }
+
+void NetworkManager::handleGetProfileRoomsResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile rooms server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Rooms rooms = response.at("rooms");
+
+        emit finishGetProfileRoomsResponseHandling(serverStatus, rooms);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleGetProfileTasksResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile tasks server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishGetProfileTasksResponseHandling(serverStatus, Tasks(response.at("tasks")));
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleGetProfileAssignedTasksResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile assigned tasks server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Tasks tasks = response.at("tasks");
+
+        emit finishGetProfileTasksResponseHandling(serverStatus, tasks);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleGetProfileReviewedTasksResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile reviewed tasks server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Tasks tasks = response.at("tasks");
+
+        emit finishGetProfileTasksResponseHandling(serverStatus, tasks);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+//Room
+void NetworkManager::handleGetRoomResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get room server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Room room = response.at("room");
+
+        emit finishGetRoomResponseHandling(serverStatus, room);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleGetRoomTasksResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get room tasks server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit this->finishGetRoomTasksResponseHandling(serverStatus, Tasks(response.at("tasks")));
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+
+void NetworkManager::handleGetRoomProfilesResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get room profiles server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Profiles profiles = response.at("profiles");
+
+        emit finishGetRoomProfilesResponseHandling(serverStatus, profiles);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+//Task
+
+
+//POST
+
+
+//Profile
+void NetworkManager::handleCreateProfileResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "create profile server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        std::string jwt = response.at("JWT");
+
+        emit NetworkManager::finishCreateProfileHandling(serverStatus, jwt.c_str());
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+//Room
+void NetworkManager::handleCreateRoomResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "create room server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Room room = response.at("room");
+
+        emit finishCreateRoomResponseHandling(serverStatus, room);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleAppendMemberToRoomResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "append member to room server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAppendMemberToRoomResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleDeleteRoomResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "delete room server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishDeleteRoomResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+//Task
+void NetworkManager::handleCreateTaskResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "create task server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        // Task task = response.at("task");
+
+        emit finishCreateTaskResponseHandling(serverStatus, Task());
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleAddTaskToAssigneeResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "add task to aasignee server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAddTaskToAssigneeResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleAddTaskToReviewerResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "add task to reviewer server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAddTaskToReviewerResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleRemoveTaskFromAssigneeResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "remove task from assignee server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAddTaskToReviewerResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleRemoveTaskFromReviewerResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "remove task from reviewer server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAddTaskToReviewerResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleDeleteTaskResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "delete task server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAddTaskToReviewerResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+
+//DELETE
+
+
+//Profile
+void NetworkManager::handleDeleteProfileResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "delete profile server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishDeleteProfileResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+//Room
+
+//Task
+
+
+//PATCH
+
+
+//Profile
+
+//Room
+
+//Task

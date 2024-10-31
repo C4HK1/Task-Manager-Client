@@ -21,7 +21,7 @@ Frame {
         property bool focused: true
 
         GridLayout {
-            id: task_settings
+            id: taskSettings
 
             flow: GridLayout.LeftToRight
             columns: 2
@@ -43,16 +43,37 @@ Frame {
             }
 
             DefaultTextField {
-                id: task_name
+                id: taskName
+            }
+
+            DefaultTextField {
+                id: description
+            }
+
+            DefaultTextField {
+                id: label
+            }
+
+            DefaultTextField {
+                id: status
+            }
+
+            DefaultTextField {
+                id: timeToLive
             }
 
             DefaultButton {
                 Layout.columnSpan: 2
                 text: "Create"
-                // get("label"), get("creator_name"), get("creator_id") }
 
                 onClicked: {
-                    NetworkManager.sendTaskCreationRequest(task_name.text, room.room_name, room.owner_id)
+                    NetworkManager.sendCreateTaskRequest(room.roomCreatorID,
+                                                         room.roomName,
+                                                         taskName.text,
+                                                         description.text,
+                                                         label.text,
+                                                         parseInt(status.text),
+                                                         parseInt(timeToLive.text))
                 }
             }
         }
