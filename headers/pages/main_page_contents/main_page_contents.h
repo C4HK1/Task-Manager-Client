@@ -9,5 +9,6 @@
 #include "settings_page.h"
 #include "widget_rooms_page.h"
 #include "tasks_page.h"
+#include "task_creation_page.h"
 
 #endif // MAIN_PAGE_CONTENTS_H

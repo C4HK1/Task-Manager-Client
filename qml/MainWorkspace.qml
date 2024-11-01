@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
 import MainWorkspaceElements
-import AppFrontend
 
 DefaultFrame {
     id: root
@@ -14,6 +13,9 @@ DefaultFrame {
     signal switchToTasks()
     signal switchToProfile()
     signal switchToSettings()
+
+    signal loggout()
+    signal deleteProfile()
 
     function createImageObject(str, root, params) {
         var component = Qt.createComponent(str)

@@ -13,7 +13,13 @@ RoomPage::RoomPage(QQmlEngine *engine, QQuickItem *container, Room room) :
 
     connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &RoomPage::roomPageInitialization);
     connect(netManager, &NetworkManager::finishCreateTaskResponseHandling, this, &RoomPage::handleTaskCreationStatus);
+
+    connect(this->getObject(), SIGNAL(openTaskCreationForm()), this, SLOT(openTaskCreationForm()));
     netManager->sendGetRoomTasksRequest(room.creatorID, room.name);
+}
+
+void RoomPage::openTaskCreationForm() {
+    emit switchToTaskCreation();
 }
 
 void RoomPage::roomPageInitialization(ServerStatus serverStatus, Tasks tasks) {
@@ -46,10 +52,6 @@ void RoomPage::handleTaskCreationStatus(ServerStatus serverStatus, Task task) {
         item->setProperty("taskCreatorID", QString::number(task.creatorID));
         item->setProperty("taskCreatorName", task.creatorName);
         item->setParentItem(tasksContainer);
-
-        QMetaObject::invokeMethod(object, "taskCreated");
-    } else {
-        QMetaObject::invokeMethod(object, "taskCreationFailed");
     }
 }
 

@@ -15,8 +15,9 @@ public:
     ~RoomsPage();
 
 public slots:
-    void handleRoomEntry(ServerStatus serverStatus, Room room);
+    void finishSwitchToRoom(ServerStatus serverStatus, Room room);
     void initializeContents(ServerStatus serverStatus, Rooms rooms);
+    void switchToRoom(int roomCreatorID, QString roomName);
     void switchToRoomCreation();
 
 signals:

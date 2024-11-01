@@ -8,10 +8,12 @@ class RoomPage : public BasePage {
 public:
     RoomPage(QQmlEngine *engine, QQuickItem *container, Room room);
     ~RoomPage();
-
+signals:
+    void switchToTaskCreation();
 public slots:
     void roomPageInitialization(ServerStatus serverStatus, Tasks tasks);
     void handleTaskCreationStatus(ServerStatus serverStatus, Task task);
+    void openTaskCreationForm();
 
 private:
     Room room;

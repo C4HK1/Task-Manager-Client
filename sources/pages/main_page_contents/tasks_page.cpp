@@ -13,8 +13,6 @@ TasksPage::TasksPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPa
 }
 
 void TasksPage::tasksInitialization(ServerStatus serverStatus, Tasks tasks) {
-    qInfo() << "test";
-
     if (!serverStatus.status) {
         this->tasks = tasks;
 
@@ -40,13 +38,13 @@ void TasksPage::openRoom(int roomCreatorID, QString roomName) {
 
 void TasksPage::createTaskItem(Task &task){
     auto item = qobject_cast<QQuickItem*>(itemComponent->create(engine->rootContext()));
+
     item->setProperty("roomCreatorID", QString::number(task.parent.creatorID));
-    item->findChild<QQuickItem*>("roomName")->setProperty("text", task.parent.name);
-    item->findChild<QQuickItem*>("taskName")->setProperty("text", task.name);
+    item->setProperty("roomName", task.parent.name);
+    item->setProperty("taskName", task.name);
 
     task.taskItem = item;
     item->setParentItem(listContainer);
-    tasks.append(task);
 }
 
 void TasksPage::sortBy(QString by, bool ascending) {

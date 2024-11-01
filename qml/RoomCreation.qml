@@ -2,12 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
-import AppFrontend
 
 Flickable {
     function roomCreationFailed() {
         console.log("room creation failed")
     }
+
+    signal createRoom(string roomName, string description)
 
     anchors.fill: parent
     anchors.topMargin: 40
@@ -59,7 +60,7 @@ Flickable {
         DefaultButton {
             Layout.columnSpan: 2
             text: "Create"
-            onClicked: { NetworkManager.sendCreateRoomRequest(roomName.text, roomDescription.text) }
+            onClicked: { createRoom(roomName.text, roomDescription.text) }
         }
     }
 }

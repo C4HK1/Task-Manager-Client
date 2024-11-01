@@ -1,5 +1,4 @@
 import QtQuick
-import AppFrontend
 
 Rectangle {
     width: 35

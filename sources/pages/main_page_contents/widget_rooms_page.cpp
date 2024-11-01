@@ -7,6 +7,7 @@ WidgetRoomsPage::WidgetRoomsPage(QQmlEngine *engine, QQuickItem *container, Main
 
 void WidgetRoomsPage::createRoomItem(Room &room) {
     auto item = qobject_cast<QQuickItem*>(itemComponent->create(engine->rootContext()));
+
     item->setProperty("roomName", room.name);
     item->setProperty("roomCreatorName", room.creatorName);
     item->setProperty("roomCreatorID", QString::number(room.creatorID));

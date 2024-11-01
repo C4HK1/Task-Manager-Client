@@ -9,22 +9,32 @@ MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), netManager(NetworkManager::getInstance()), engine(new QQmlEngine())
 {
     connect(netManager, &NetworkManager::finishProfileAuthenticationResponseHandling, this, &MainApplication::handleAuthentication);
-    connect(netManager, &NetworkManager::finishDeleteProfileResponseHandling, this, &MainApplication::outFromAccount);
-
-    qmlRegisterSingletonInstance("AppFrontend", 1, 0, "NetworkManager", netManager);
-    qmlRegisterSingletonInstance("AppFrontend", 1, 0, "MainApplication", this);
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWindow.qml"));
     mainWindow = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 
-    tryAuthenticate();
+    QFile file("data/authentication_key.organizer");
+
+    if(!file.exists()){
+        this->switchToLogginingPage();
+        return;
+    }
+
+    file.open(QIODevice::ReadOnly);
+    QByteArray jwt = file.readAll();
+    file.close();
+
+    netManager->jwt = jwt;
+    netManager->sendProfileAuthenticationRequest();
 }
 
-MainApplication::~MainApplication() {
-    mainWindow->deleteLater();
-    engine->deleteLater();
-    curPage->deleteLater();
+void MainApplication::handleAuthentication(ServerStatus serverStatus) {
+    if(!serverStatus.status) {
+        this->switchToHomePage();
+    } else {
+        this->switchToLogginingPage();
+    }
 }
 
 void MainApplication::SetCurrentPage(BasePage *page) {
@@ -35,47 +45,31 @@ void MainApplication::SetCurrentPage(BasePage *page) {
     curPage = page;
 }
 
-void MainApplication::tryAuthenticate() {
-    QFile file("data/authentication_key.organizer");
-
-    if(!file.exists()){
-        switchPage<LogginingPage>(this);
-        return;
-    }
-
-    file.open(QIODevice::ReadOnly);
-    QByteArray jwt = file.readAll();
-    file.close();
-    netManager->jwt = jwt;
-    netManager->sendProfileAuthenticationRequest();
-}
-
 template <typename PageType, typename ...Args> requires IsPage<PageType>
 void MainApplication::switchPage(Args... args){
     SetCurrentPage(new PageType(engine, mainWindow->contentItem(), args...));
 }
 
-void MainApplication::switchToRegister() {
-    switchPage<RegistrationPage>(this);
+void MainApplication::switchToRegistrationPage() {
+    switchPage<RegistrationPage>();
+    connect(dynamic_cast<RegistrationPage *>(this->curPage), &RegistrationPage::switchToLogginingPage, this, &MainApplication::switchToLogginingPage);
+    connect(dynamic_cast<RegistrationPage *>(this->curPage), &RegistrationPage::switchToHomePage, this, &MainApplication::switchToHomePage);
 }
 
-void MainApplication::handleAuthentication(ServerStatus serverStatus) {
-    qInfo() << "authentication status: " << serverStatus.status;
-    if(!serverStatus.status) {
-        switchPage<MainPage>();
-        this->loginingError = false;
-    } else {
-        switchPage<LogginingPage>(this);
-        this->loginingError = true;
-    }
-
-    emit loginingErrorChanged();
+void MainApplication::switchToLogginingPage() {
+    switchPage<LogginingPage>();
+    connect(dynamic_cast<LogginingPage *>(this->curPage), &LogginingPage::switchToRegistrationPage, this, &MainApplication::switchToRegistrationPage);
+    connect(dynamic_cast<LogginingPage *>(this->curPage), &LogginingPage::switchToHomePage, this, &MainApplication::switchToHomePage);
 }
 
-void MainApplication::outFromAccount(ServerStatus serverStatus)
-{
-    if (!serverStatus.status) {
-        std::remove("data/authentication_key.organizer");
-        switchPage<LogginingPage>(this);
-    }
+void MainApplication::switchToHomePage() {
+    switchPage<MainPage>();
+    connect(dynamic_cast<MainPage *>(this->curPage), &MainPage::switchToRegistrationPage, this, &MainApplication::switchToRegistrationPage);
+    connect(dynamic_cast<MainPage *>(this->curPage), &MainPage::switchToLogginingPage, this, &MainApplication::switchToLogginingPage);
+}
+
+MainApplication::~MainApplication() {
+    curPage->deleteLater();
+    mainWindow->deleteLater();
+    engine->deleteLater();
 }

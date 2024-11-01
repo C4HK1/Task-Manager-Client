@@ -6,15 +6,23 @@
 #include "main_application.h"
 #include "main_page.h"
 
-LogginingPage::LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
-        BasePage(engine, container, "qml/Authorization.qml"),
-        mainApp(mainApp) {
+LogginingPage::LogginingPage(QQmlEngine *engine, QQuickItem *container) :
+        BasePage(engine, container, "qml/Authorization.qml") {
     connect(netManager, &NetworkManager::finishLogginResponseHandling, this, &LogginingPage::finishLoggining);
+    connect(this->getObject(), SIGNAL(switchToRegistration()), this, SLOT(switchToRegistration()));
+    connect(this->getObject(), SIGNAL(loggin(QString, QString)), this, SLOT(loggin(QString, QString)));
+}
+
+void LogginingPage::loggin(QString login, QString password) {
+    this->netManager->sendLogginRequest(login, password);
+}
+
+void LogginingPage::switchToRegistration() {
+    emit this->switchToRegistrationPage();
 }
 
 void LogginingPage::finishLoggining(ServerStatus serverStatus, QByteArray jwt) {
     if (!serverStatus.status) {
-        this->mainApp->switchPage<MainPage>();
         netManager->jwt = jwt;
 
         if(!QDir("data").exists()){
@@ -25,6 +33,8 @@ void LogginingPage::finishLoggining(ServerStatus serverStatus, QByteArray jwt) {
         file.open(QIODevice::WriteOnly);
         file.write(netManager->jwt);
         file.close();
+
+        emit switchToHomePage();
     } else {
         qInfo() << "Profile loggining error status: " << serverStatus.status;
     }

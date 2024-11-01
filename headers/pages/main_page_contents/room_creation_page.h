@@ -12,7 +12,8 @@ public:
     ~RoomCreationPage();
 
 public slots:
-    void handleRoomCreationStatus(ServerStatus serverStatus, Room room);
+    void createRoom(QString roomName, QString description);
+    void finishCreateRoom(ServerStatus serverStatus, Room room);
 
 private:
     MainPage *mainPage;

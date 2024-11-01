@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import AppFrontend
 
 Rectangle {
     Layout.margins: 10
@@ -15,6 +14,8 @@ Rectangle {
     property alias roomName: roomName.text
     property alias roomCreatorName: roomCreatorName.text
     property int roomCreatorID
+
+    signal switchToRoom(int roomCreatorID, string roomName)
 
     Text {
         id: roomName
@@ -61,7 +62,7 @@ Rectangle {
         }
 
         onClicked: {
-            NetworkManager.sendGetRoomRequest(roomCreatorID, roomName.text)
+            switchToRoom(roomCreatorID, roomName.text);
         }
     }
 }

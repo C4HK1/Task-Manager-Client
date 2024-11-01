@@ -5,12 +5,15 @@
 
 class LogginingPage : public BasePage {
     Q_OBJECT
-
-    MainApplication *mainApp;
 public:
-    LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
+    LogginingPage(QQmlEngine *engine, QQuickItem *container);
+signals:
+    void switchToRegistrationPage();
+    void switchToHomePage();
 public slots:
     void finishLoggining(ServerStatus serverStatus, QByteArray jwt);
+    void switchToRegistration();
+    void loggin(QString login, QString password);
 };
 
 #endif // AUTHORIZATION_PAGE_H

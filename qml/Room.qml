@@ -5,14 +5,6 @@ import DefaultElements
 import MainWorkspaceElements
 
 DefaultFrame {
-    function taskCreated() {
-        taskCreationWindow.destroy()
-    }
-
-    function taskCreationFailed() {
-        console.log("task creation failed")
-    }
-
     id: room
     anchors.fill: parent
 
@@ -20,6 +12,8 @@ DefaultFrame {
     property alias roomCreatorName: roomCreatorName.text
     property int roomCreatorID
     property var taskCreationWindow
+
+    signal openTaskCreationForm()
 
     Text {
         id: roomName
@@ -81,5 +75,8 @@ DefaultFrame {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 10
+        onClickFunction: function () {
+            openTaskCreationForm()
+        }
     }
 }

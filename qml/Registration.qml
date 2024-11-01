@@ -3,9 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend
 
 DefaultFrame {
+    signal createProfile(string name, string login, string password, string email, string phone)
+
     GridLayout {
         id: form
         anchors.horizontalCenter: parent.horizontalCenter
@@ -59,23 +60,12 @@ DefaultFrame {
             Layout.preferredHeight: 33
 
             onClicked: {
-                NetworkManager.sendCreateProfileRequest(nameField.text,
-                                                        loginField.text,
-                                                        passwordField.text,
-                                                        emailField.text,
-                                                        phoneField.text)
-
-                errorField.visible = MainApplication.loginingError
+                createProfile(nameField.text,
+                              loginField.text,
+                              passwordField.text,
+                              emailField.text,
+                              phoneField.text)
             }
-        }
-
-        Text {
-            id: errorField
-            visible: false
-            Layout.row: 7
-            Layout.fillWidth: true
-            color: "red";
-            text: qsTr("Пользовтель с данным логином уже существует!")
         }
     }
 }

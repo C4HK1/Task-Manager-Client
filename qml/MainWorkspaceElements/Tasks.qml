@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend
 
 Flickable {
     z: 2

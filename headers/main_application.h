@@ -21,30 +21,28 @@ class NetworkManager;
 
 class MainApplication : public QGuiApplication {
     Q_OBJECT
-    Q_PROPERTY(bool loginingError MEMBER loginingError NOTIFY loginingErrorChanged)
 public:
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
+
     QQuickItem* loadQmlFrame(QString fileName);
+
     void tryAuthenticate();
+
     void SetCurrentPage(BasePage *page);
+
     template <typename T, typename ...Args> requires IsPage<T>
     void switchPage(Args...);
-    Q_INVOKABLE void switchToRegister();
-
-signals:
-    void loginingErrorChanged();
-
 public slots:
     void handleAuthentication(ServerStatus serverStatus);
-    void outFromAccount(ServerStatus serverStatus = 0);
-
+    void switchToLogginingPage();
+    void switchToRegistrationPage();
+    void switchToHomePage();
 private:
     NetworkManager *netManager;
     QQmlEngine *engine;
     QQuickWindow *mainWindow = nullptr;
     BasePage *curPage = nullptr;
-    bool loginingError = false;
 };
 
 #endif // MAIN_APPLICATION_H

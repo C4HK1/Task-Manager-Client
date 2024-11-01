@@ -12,9 +12,18 @@ class MainPage : public BasePage {
     Q_OBJECT
 public:
     MainPage(QQmlEngine *engine, QQuickItem *container);
+
     void setCurrentPage(BasePage *page);
+    void setCurrentForm(BasePage *form);
+
+    template <typename FormType, typename ...Args> requires IsPage<FormType>
+    void switchForm(Args... args);
+
     template <typename PageType, typename ...Args> requires IsPage<PageType>
     void switchPage(Args... args);
+signals:
+    void switchToLogginingPage();
+    void switchToRegistrationPage();
 public slots:
     void switchToRoom(Room room);
     void switchToWidgetRooms();
@@ -24,9 +33,17 @@ public slots:
     void switchToProfile();
     void switchToTasks();
 
+    void switchToTaskCreation();
+
+    void closeForm();
+
+    void deleteProfile();
+    void finishDeleteProfile(ServerStatus serverStatus);
+    void loggout();
 private:
     QQuickItem *workspace = nullptr;
     BasePage *curPage = nullptr;
+    BasePage *curForm = nullptr;
     Rooms rooms;
 };
 

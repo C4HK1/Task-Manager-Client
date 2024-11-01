@@ -1,5 +1,4 @@
 import QtQuick
-import AppFrontend
 
 Rectangle {
     function createImageObject(str, root, params) {
@@ -26,7 +25,7 @@ Rectangle {
     border.width: 1
     border.color: "#202020"
 
-    property var onClickFunction: function() { parent.taskCreationWindow = createImageObject("TaskCreation.qml", parent) }
+    property var onClickFunction: function (){};
 
     id: id
 
@@ -40,6 +39,7 @@ Rectangle {
     }
 
     MouseArea {
+        id: buttonSensor
         anchors.fill: parent
         hoverEnabled: true
 

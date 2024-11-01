@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend
 
 Flickable {
     z: 2
@@ -46,7 +45,7 @@ Flickable {
 
             onClickFunction: function() {
                 if (profileSignoutPage === undefined) {
-                    profileSignoutPage = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"buttonText": qsTr("Sign Out"), "option": function() {MainApplication.outFromAccount()}})
+                    profileSignoutPage = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"buttonText": qsTr("Sign Out"), "option": function() {loggout()}})
                 }
             }
         }
@@ -64,7 +63,7 @@ Flickable {
                                                                  root,
                                                                  {
                                                                      "buttonText": qsTr("Delete profile"),
-                                                                     "option": function() {NetworkManager.sendDeleteProfileRequest()}
+                                                                     "option": function() {deleteProfile()}
                                                                  })
                 }
             }

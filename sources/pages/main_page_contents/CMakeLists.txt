@@ -3,7 +3,8 @@ set(HEADER_PAGE_DIR ${PROJECT_SOURCE_DIR}/headers/pages)
 set(HEADER_MPC_DIR ${PROJECT_SOURCE_DIR}/headers/pages/main_page_contents)
 
 qt_add_library(MainPageContents STATIC
-    tasks_page.cpp)
+    tasks_page.cpp
+    task_creation_page.cpp)
 
 target_include_directories(MainPageContents PUBLIC
     ${HEADER_MAIN_DIR}
@@ -21,5 +22,6 @@ target_sources(MainPageContents PRIVATE
     ${HEADER_MPC_DIR}/widget_rooms_page.h widget_rooms_page.cpp
     ${HEADER_MPC_DIR}/room_page.h room_page.cpp
     ${HEADER_MPC_DIR}/tasks_page.h tasks_page.cpp
+    ${HEADER_MPC_DIR}/task_creation_page.h task_creation_page.cpp
     ${HEADER_MPC_DIR}/content_structures.h
 )

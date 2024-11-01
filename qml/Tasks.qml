@@ -3,7 +3,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import MainWorkspaceElements
-import AppFrontend
 
 DefaultFrame {
     id: root

@@ -704,8 +704,9 @@ void NetworkManager::handleGetProfileTasksResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        Tasks tasks = response.at("tasks");
 
-        emit finishGetProfileTasksResponseHandling(serverStatus, Tasks(response.at("tasks")));
+        emit finishGetProfileTasksResponseHandling(serverStatus, tasks);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;
@@ -784,8 +785,9 @@ void NetworkManager::handleGetRoomTasksResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        Tasks tasks = response.at("tasks");
 
-        emit this->finishGetRoomTasksResponseHandling(serverStatus, Tasks(response.at("tasks")));
+        emit this->finishGetRoomTasksResponseHandling(serverStatus, tasks);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;
@@ -911,9 +913,9 @@ void NetworkManager::handleCreateTaskResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        // Task task = response.at("task");
+        Task task = response.at("task");
 
-        emit finishCreateTaskResponseHandling(serverStatus, Task());
+        emit finishCreateTaskResponseHandling(serverStatus, task);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;

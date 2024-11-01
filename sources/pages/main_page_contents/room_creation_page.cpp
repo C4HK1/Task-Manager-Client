@@ -6,10 +6,15 @@
 RoomCreationPage::RoomCreationPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage) :
         BasePage(engine, container, "qml/RoomCreation.qml"),
         mainPage(mainPage) {
-    connect(netManager, &NetworkManager::finishCreateRoomResponseHandling, this, &RoomCreationPage::handleRoomCreationStatus);
+    connect(netManager, &NetworkManager::finishCreateRoomResponseHandling, this, &RoomCreationPage::finishCreateRoom);
+    connect(this->getObject(), SIGNAL(createRoom(QString, QString)), this, SLOT(createRoom(QString, QString)));
 }
 
-void RoomCreationPage::handleRoomCreationStatus(ServerStatus serverStatus, Room room) {
+void RoomCreationPage::createRoom(QString roomName, QString description) {
+    this->netManager->sendCreateRoomRequest(roomName, description);
+}
+
+void RoomCreationPage::finishCreateRoom(ServerStatus serverStatus, Room room) {
     if (!serverStatus.status) {
         this->mainPage->switchToRoom(room);
     } else {

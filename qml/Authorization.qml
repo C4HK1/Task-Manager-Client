@@ -3,9 +3,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
 import DefaultElements.Fonts
-import AppFrontend
 
 DefaultFrame {
+    signal switchToRegistration()
+    signal loggin(string login, string password)
+
     GridLayout {
         id: form
         anchors.horizontalCenter: parent.horizontalCenter
@@ -38,8 +40,7 @@ DefaultFrame {
             Layout.preferredHeight: 33
 
             onClicked: {
-                NetworkManager.sendLogginRequest(loginField.text, passwordField.text)
-                // errorField.visible = MainApplication.loginingError
+                loggin(loginField.text, passwordField.text)
             }
         }
 
@@ -49,12 +50,12 @@ DefaultFrame {
             text: qsTr("Don't have an account? <html><a href=\"#\">Sign up</a></html>")
             font: DefaultFont.defaultFont
             color: "#FFFFFF"
-            onLinkActivated: MainApplication.switchToRegister()
+            onLinkActivated: switchToRegistration()
         }
 
         Text {
             id: errorField
-            visible: MainApplication.loginingError
+            visible: false
             Layout.row: 5
             Layout.fillWidth: true
             color: "red";
