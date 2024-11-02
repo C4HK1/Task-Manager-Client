@@ -8,11 +8,11 @@ import MainWorkspaceElements
 DefaultFrame {
     id: root
 
-    signal switchToWidgetRoomsPage()
-    signal switchToListRoomsPage()
-    signal switchToTasksPage()
-    signal switchToProfilePage()
-    signal switchToSettingsPage()
+    signal switchToWidgetRooms()
+    signal switchToListRooms()
+    signal switchToTasks()
+    signal switchToProfile()
+    signal switchToSettings()
 
     signal switchToLoggoutForm()
     signal switchToProfileDeleteForm()
@@ -112,9 +112,9 @@ DefaultFrame {
 
             onClickFunction: function() {
                 if(widgetRoomsView){
-                    switchToWidgetRoomsPage()
+                    switchToWidgetRooms()
                 } else {
-                    switchToListRoomsPage()
+                    switchToListRooms()
                 }
             }
         }
@@ -142,7 +142,7 @@ DefaultFrame {
                     tasksList.width = parent.width
                     tasksList.height = parent.height - toolBarTasks.height - toolBarProfile.height - t.height
 
-                    switchToTasksPage()
+                    switchToTasks()
                 }
             }
         }
@@ -202,7 +202,7 @@ DefaultFrame {
 
             onClickFunction: function() {
                 widgetRoomsView = true
-                switchToWidgetRoomsPage()
+                switchToWidgetRooms()
             }
         }
 
@@ -215,7 +215,7 @@ DefaultFrame {
 
             onClickFunction: function() {
                 widgetRoomsView = false
-                switchToListRoomsPage()
+                switchToListRooms()
             }
         }
 

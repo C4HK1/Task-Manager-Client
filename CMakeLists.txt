@@ -12,7 +12,6 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appFrontend
     sources/main.cpp
-    qml/DeleteProfile.qml
 )
 
 add_subdirectory(sources)

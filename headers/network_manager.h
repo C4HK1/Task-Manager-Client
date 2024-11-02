@@ -12,7 +12,7 @@
 #include <QPair>
 #include <QUrlQuery>
 
-#include "content_structures.h"
+#include "models.h"
 
 class NetworkManager : public QObject
 {
@@ -45,10 +45,10 @@ public:
 //POST
     //Profile
     Q_INVOKABLE void sendCreateProfileRequest(QString name,
-                                                QString login,
-                                                QString password,
-                                                QString email,
-                                                QString phone);
+                                              QString login,
+                                              QString password,
+                                              QString email,
+                                              QString phone);
 
     //Room
     Q_INVOKABLE void sendCreateRoomRequest(QString roomName, QString description);
@@ -59,12 +59,12 @@ public:
 
     //Task
     Q_INVOKABLE void sendCreateTaskRequest(u_int64_t roomCreatorID,
-                                             QString roomName,
-                                             QString taskName,
-                                             QString description,
-                                             QString label,
-                                             u_int64_t status,
-                                             u_int64_t timeToLive);
+                                           QString roomName,
+                                           QString taskName,
+                                           QString description,
+                                           QString label,
+                                           u_int64_t status,
+                                           u_int64_t timeToLive);
     Q_INVOKABLE void sendAddTaskToAssigneeRequest(u_int64_t roomCreatorID,
                                                   QString roomName,
                                                   QString taskName,
@@ -82,8 +82,8 @@ public:
                                                        QString taskName,
                                                        u_int64_t reviewerID);
     Q_INVOKABLE void sendDeleteTaskRequest(u_int64_t roomCreatorID,
-                                             QString roomName,
-                                             QString taskName);
+                                           QString roomName,
+                                           QString taskName);
 
 //DELETE
     //Profile
@@ -111,53 +111,51 @@ public:
     QNetworkRequest* createRequest(QString domain,
                                    QString header,
                                    QByteArray &data);
-
-
 signals:
 //SIGNALS
 
 //GET
     //Logginning
-    void finishLogginResponseHandling(ServerStatus serverStatus, QByteArray jwt);
-    void finishProfileAuthenticationResponseHandling(ServerStatus serverStatus);
+    void finishLogginResponseHandling(Models::ServerStatus serverStatus, QByteArray jwt);
+    void finishProfileAuthenticationResponseHandling(Models::ServerStatus serverStatus);
 
     //Profile
-    void finishGetProfileResponseHandling(ServerStatus serverStatus, Profile profile);
-    void finishGetProfilesWithPrefixHandling(ServerStatus serverStatus, Profiles profiles);
-    void finishGetPublicProfileResponseHandling(ServerStatus serverStatus, Profile profile);
-    void finishGetProfileConfigResponseHandling(ServerStatus serverStatus, Config config);
-    void finishGetProfileRoomsResponseHandling(ServerStatus serverStatus, Rooms rooms);
-    void finishGetProfileTasksResponseHandling(ServerStatus serverStatus, Tasks tasks);
-    void finishGetProfileAssignedTasksResponseHandling(ServerStatus serverStatus, Tasks tasks);
-    void finishGetProfileReviewedTasksResponseHandling(ServerStatus serverStatus, Tasks tasks);
+    void finishGetProfileResponseHandling(Models::ServerStatus serverStatus, Models::Profile profile);
+    void finishGetProfilesWithPrefixHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
+    void finishGetPublicProfileResponseHandling(Models::ServerStatus serverStatus, Models::Profile profile);
+    void finishGetProfileConfigResponseHandling(Models::ServerStatus serverStatus, Models::Config config);
+    void finishGetProfileRoomsResponseHandling(Models::ServerStatus serverStatus, Models::Rooms rooms);
+    void finishGetProfileTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
+    void finishGetProfileAssignedTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
+    void finishGetProfileReviewedTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
 
     //Room
-    void finishGetRoomResponseHandling(ServerStatus serverStatus, Room room);
-    void finishGetRoomTasksResponseHandling(ServerStatus serverStatus, Tasks tasks);
-    void finishGetRoomProfilesResponseHandling(ServerStatus serverStatus, Profiles profiles);
+    void finishGetRoomResponseHandling(Models::ServerStatus serverStatus, Models::Room room);
+    void finishGetRoomTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
+    void finishGetRoomProfilesResponseHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
 
     //Task
 
 //POST
     //Profile
-    void finishCreateProfileHandling(ServerStatus serverStatus, QByteArray jwt);
+    void finishCreateProfileHandling(Models::ServerStatus serverStatus, QByteArray jwt);
 
     //Room
-    void finishCreateRoomResponseHandling(ServerStatus serverStatus, Room room);
-    void finishAppendMemberToRoomResponseHandling(ServerStatus serverStatus);
-    void finishDeleteRoomResponseHandling(ServerStatus serverStatus);
+    void finishCreateRoomResponseHandling(Models::ServerStatus serverStatus, Models::Room room);
+    void finishAppendMemberToRoomResponseHandling(Models::ServerStatus serverStatus);
+    void finishDeleteRoomResponseHandling(Models::ServerStatus serverStatus);
 
     //Task
-    void finishCreateTaskResponseHandling(ServerStatus serverStatus, Task task);
-    void finishAddTaskToAssigneeResponseHandling(ServerStatus serverStatus);
-    void finishAddTaskToReviewerResponseHandling(ServerStatus serverStatus);
-    void finishRemoveTaskFromAssigneeResponseHandling(ServerStatus serverStatus);
-    void finishRemoveTaskFromReviewerResponseHandling(ServerStatus serverStatus);
-    void finishDeleteTaskResponseHandling(ServerStatus serverStatus);
+    void finishCreateTaskResponseHandling(Models::ServerStatus serverStatus, Models::Task task);
+    void finishAddTaskToAssigneeResponseHandling(Models::ServerStatus serverStatus);
+    void finishAddTaskToReviewerResponseHandling(Models::ServerStatus serverStatus);
+    void finishRemoveTaskFromAssigneeResponseHandling(Models::ServerStatus serverStatus);
+    void finishRemoveTaskFromReviewerResponseHandling(Models::ServerStatus serverStatus);
+    void finishDeleteTaskResponseHandling(Models::ServerStatus serverStatus);
 
 //DELETE
     //Profile
-    void finishDeleteProfileResponseHandling(ServerStatus serverStatus);
+    void finishDeleteProfileResponseHandling(Models::ServerStatus serverStatus);
 
     //Room
 
@@ -169,7 +167,6 @@ signals:
     //Room
 
     //Task
-
 
 public slots:
 //HANDLERS
@@ -227,8 +224,7 @@ public slots:
     //Room
 
     //Task
-
-
+protected:
 private:
     NetworkManager() {}
     NetworkManager(const NetworkManager&) = delete;

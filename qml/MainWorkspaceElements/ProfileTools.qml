@@ -23,7 +23,7 @@ Flickable {
             id: profile
             fontSize: 16
             onClickFunction: function () {
-                                switchToProfilePage()
+                                switchToProfile()
                             }
         }
 
@@ -32,7 +32,7 @@ Flickable {
             id: settings
             fontSize: 16
             onClickFunction: function() {
-                                switchToSettingsPage()
+                                switchToSettings()
                             }
         }
 

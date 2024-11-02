@@ -604,7 +604,7 @@ void NetworkManager::handleGetProfileResponse() {
         qInfo() << response.dump();
 
         int serverStatus = response.at("status");
-        auto profile = response.at("profile");
+        Models::Profile profile = response.at("profile");
 
         emit finishGetProfileResponseHandling(serverStatus, profile);
     } catch (nlohmann::json::exception &exception) {
@@ -624,7 +624,7 @@ void NetworkManager::handleGetProfilesWithPrefixResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Profiles profiles = response.at("profiles");
+        Models::Profiles profiles = response.at("profiles");
 
         emit finishGetProfilesWithPrefixHandling(serverStatus, profiles);
     } catch (nlohmann::json::exception &exception) {
@@ -644,7 +644,7 @@ void NetworkManager::handleGetPublicProfileResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Profile profile = response.at("profile");
+        Models::Profile profile = response.at("profile");
 
         emit finishGetPublicProfileResponseHandling(serverStatus, profile);
     } catch (nlohmann::json::exception &exception) {
@@ -664,7 +664,7 @@ void NetworkManager::handleGetProfileConfigResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Config config = response.at("config");
+        Models::Config config = response.at("config");
 
         emit finishGetProfileConfigResponseHandling(serverStatus, config);
     } catch (nlohmann::json::exception &exception) {
@@ -684,7 +684,7 @@ void NetworkManager::handleGetProfileRoomsResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Rooms rooms = response.at("rooms");
+        Models::Rooms rooms = response.at("rooms");
 
         emit finishGetProfileRoomsResponseHandling(serverStatus, rooms);
     } catch (nlohmann::json::exception &exception) {
@@ -704,7 +704,7 @@ void NetworkManager::handleGetProfileTasksResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Tasks tasks = response.at("tasks");
+        Models::Tasks tasks = response.at("tasks");
 
         emit finishGetProfileTasksResponseHandling(serverStatus, tasks);
     } catch (nlohmann::json::exception &exception) {
@@ -724,7 +724,7 @@ void NetworkManager::handleGetProfileAssignedTasksResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Tasks tasks = response.at("tasks");
+        Models::Tasks tasks = response.at("tasks");
 
         emit finishGetProfileTasksResponseHandling(serverStatus, tasks);
     } catch (nlohmann::json::exception &exception) {
@@ -744,7 +744,7 @@ void NetworkManager::handleGetProfileReviewedTasksResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Tasks tasks = response.at("tasks");
+        Models::Tasks tasks = response.at("tasks");
 
         emit finishGetProfileTasksResponseHandling(serverStatus, tasks);
     } catch (nlohmann::json::exception &exception) {
@@ -765,7 +765,7 @@ void NetworkManager::handleGetRoomResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Room room = response.at("room");
+        Models::Room room = response.at("room");
 
         emit finishGetRoomResponseHandling(serverStatus, room);
     } catch (nlohmann::json::exception &exception) {
@@ -785,7 +785,7 @@ void NetworkManager::handleGetRoomTasksResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Tasks tasks = response.at("tasks");
+        Models::Tasks tasks = response.at("tasks");
 
         emit this->finishGetRoomTasksResponseHandling(serverStatus, tasks);
     } catch (nlohmann::json::exception &exception) {
@@ -806,7 +806,7 @@ void NetworkManager::handleGetRoomProfilesResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Profiles profiles = response.at("profiles");
+        Models::Profiles profiles = response.at("profiles");
 
         emit finishGetRoomProfilesResponseHandling(serverStatus, profiles);
     } catch (nlohmann::json::exception &exception) {
@@ -854,7 +854,7 @@ void NetworkManager::handleCreateRoomResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Room room = response.at("room");
+        Models::Room room = response.at("room");
 
         emit finishCreateRoomResponseHandling(serverStatus, room);
     } catch (nlohmann::json::exception &exception) {
@@ -913,7 +913,7 @@ void NetworkManager::handleCreateTaskResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
-        Task task = response.at("task");
+        Models::Task task = response.at("task");
 
         emit finishCreateTaskResponseHandling(serverStatus, task);
     } catch (nlohmann::json::exception &exception) {

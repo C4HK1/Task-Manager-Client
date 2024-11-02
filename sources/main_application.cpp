@@ -2,8 +2,8 @@
 #include "network_manager.h"
 #include "loggining_page.h"
 #include "registration_page.h"
-#include "main_page_contents.h"
-#include "main_page.h"
+#include "home_page_contents.h"
+#include "home_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv), netManager(NetworkManager::getInstance()), engine(new QQmlEngine())
@@ -37,7 +37,7 @@ MainApplication::~MainApplication() {
 
 //Methods
 
-void MainApplication::handleAuthentication(ServerStatus serverStatus) {
+void MainApplication::handleAuthentication(Models::ServerStatus serverStatus) {
     if(!serverStatus.status) {
         this->switchToHomePage();
     } else {
@@ -46,7 +46,7 @@ void MainApplication::handleAuthentication(ServerStatus serverStatus) {
 }
 
 //Page part
-void MainApplication::SetCurrentPage(BasePage *page) {
+void MainApplication::SetCurrentPage(BaseElement *page) {
     if(curPage != nullptr) {
         curPage->deleteLater();
     }
@@ -54,25 +54,10 @@ void MainApplication::SetCurrentPage(BasePage *page) {
     curPage = page;
 }
 
-template <typename PageType, typename ...Args> requires IsPage<PageType>
+template <typename PageType, typename ...Args> requires IsElement<PageType>
 void MainApplication::switchPage(Args... args){
     SetCurrentPage(new PageType(engine, mainWindow->contentItem(), this, args...));
 }
-
-//Slots
-// void MainApplication::finishDeleteProfile(ServerStatus serverStatus)
-// {
-//         std::remove("data/authentication_key.organizer");
-//         emit switchToRegistrationPage();
-// }
-
-// void MainApplication::finishLoggout(ServerStatus serverStatus)
-// {
-//     if (!serverStatus.status) {
-//         std::remove("data/authentication_key.organizer");
-//         this->switchToLogginingPage();
-//     }
-// }
 
 //Switchers
 void MainApplication::switchToRegistrationPage() {
@@ -84,5 +69,5 @@ void MainApplication::switchToLogginingPage() {
 }
 
 void MainApplication::switchToHomePage() {
-    switchPage<MainPage>();
+    switchPage<HomePage>();
 }

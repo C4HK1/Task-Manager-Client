@@ -14,8 +14,8 @@
 #include <QQuickItem>
 #include <QQuickWindow>
 
-#include "base_page.h"
-#include "content_structures.h"
+#include "base_element.h"
+#include "models.h"
 
 class NetworkManager;
 
@@ -29,20 +29,22 @@ public:
 
     void tryAuthenticate();
 
-    void SetCurrentPage(BasePage *page);
+    void SetCurrentPage(BaseElement *page);
 
-    template <typename T, typename ...Args> requires IsPage<T>
+    template <typename T, typename ...Args> requires IsElement<T>
     void switchPage(Args...);
+signals:
 public slots:
-    void handleAuthentication(ServerStatus serverStatus);
+    void handleAuthentication(Models::ServerStatus serverStatus);
     void switchToLogginingPage();
     void switchToRegistrationPage();
     void switchToHomePage();
+protected:
 private:
     NetworkManager *netManager;
     QQmlEngine *engine;
     QQuickWindow *mainWindow = nullptr;
-    BasePage *curPage = nullptr;
+    BaseElement *curPage = nullptr;
 };
 
 #endif // MAIN_APPLICATION_H

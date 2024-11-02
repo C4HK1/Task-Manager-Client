@@ -1,22 +1,29 @@
 #include "registration_page.h"
-#include "base_page.h"
-#include "content_structures.h"
+#include "base_element.h"
+#include "models.h"
 #include "network_manager.h"
-#include "widget_rooms_page.h"
-#include "main_page.h"
+#include "widget_rooms.h"
+#include "home_page.h"
 
+//Object part
 RegistrationPage::RegistrationPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
-        BasePage(engine, container, "qml/Registration.qml"),
+        BaseElement(engine, container, "qml/Registration.qml"),
         mainApp(mainApp) {
-    connect(netManager, &NetworkManager::finishCreateProfileHandling, this, &RegistrationPage::finishCreateProfile);
     connect(this->getObject(), SIGNAL(createProfile(QString, QString, QString, QString, QString)), this, SLOT(createProfile(QString, QString, QString, QString, QString)));
+
+    connect(netManager, &NetworkManager::finishCreateProfileHandling, this, &RegistrationPage::finishCreateProfile);
 }
 
+RegistrationPage::~RegistrationPage() {
+}
+
+
+//Slots
 void RegistrationPage::createProfile(QString name, QString login, QString password, QString email, QString phone) {
     this->netManager->sendCreateProfileRequest(name, login, password, email, phone);
 }
 
-void RegistrationPage::finishCreateProfile(ServerStatus serverStatus, QByteArray jwt) {
+void RegistrationPage::finishCreateProfile(Models::ServerStatus serverStatus, QByteArray jwt) {
     if (!serverStatus.status) {
         netManager->jwt = jwt;
 
