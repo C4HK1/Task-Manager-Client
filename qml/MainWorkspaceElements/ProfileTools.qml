@@ -23,8 +23,8 @@ Flickable {
             id: profile
             fontSize: 16
             onClickFunction: function () {
-                switchToProfile()
-            }
+                                switchToProfilePage()
+                            }
         }
 
         SidebarButton {
@@ -32,22 +32,18 @@ Flickable {
             id: settings
             fontSize: 16
             onClickFunction: function() {
-                switchToSettings()
-            }
+                                switchToSettingsPage()
+                            }
         }
 
         SidebarButton {
-            name: "Sign Out"
+            name: "Loggout"
             id: profileSignout
             fontSize: 16
 
-            property var profileSignoutPage;
-
             onClickFunction: function() {
-                if (profileSignoutPage === undefined) {
-                    profileSignoutPage = root.createImageObject("DefaultElements/DefaultForm.qml", root, {"buttonText": qsTr("Sign Out"), "option": function() {loggout()}})
-                }
-            }
+                                switchToLoggoutForm()
+                            }
         }
 
         SidebarButton {
@@ -55,18 +51,9 @@ Flickable {
             id: profileDeleting
             fontSize: 16
 
-            property var profileDeletingPage;
-
             onClickFunction: function() {
-                if (profileDeletingPage === undefined) {
-                    profileDeletingPage = root.createImageObject("DefaultElements/DefaultForm.qml",
-                                                                 root,
-                                                                 {
-                                                                     "buttonText": qsTr("Delete profile"),
-                                                                     "option": function() {deleteProfile()}
-                                                                 })
-                }
-            }
+                                switchToProfileDeleteForm()
+                            }
         }
     }
 }

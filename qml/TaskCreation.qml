@@ -12,6 +12,7 @@ Frame {
     property var room: parent;
 
     signal createTask(int roomCreatorID, string roomName, string taskName, string description, string label, int status, int timeToLive);
+    signal closeTaskCreationForm()
 
     Rectangle {
         width: 500
@@ -133,8 +134,7 @@ Frame {
         anchors.fill: parent
 
         onClicked: {
-            console.log("close form")
-            // taskCreationForm.destroy()
+            closeTaskCreationForm()
         }
     }
 }

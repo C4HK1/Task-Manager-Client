@@ -8,14 +8,14 @@ import MainWorkspaceElements
 DefaultFrame {
     id: root
 
-    signal switchToWidgetRooms()
-    signal switchToListRooms()
-    signal switchToTasks()
-    signal switchToProfile()
-    signal switchToSettings()
+    signal switchToWidgetRoomsPage()
+    signal switchToListRoomsPage()
+    signal switchToTasksPage()
+    signal switchToProfilePage()
+    signal switchToSettingsPage()
 
-    signal loggout()
-    signal deleteProfile()
+    signal switchToLoggoutForm()
+    signal switchToProfileDeleteForm()
 
     function createImageObject(str, root, params) {
         var component = Qt.createComponent(str)
@@ -112,9 +112,9 @@ DefaultFrame {
 
             onClickFunction: function() {
                 if(widgetRoomsView){
-                    switchToWidgetRooms()
+                    switchToWidgetRoomsPage()
                 } else {
-                    switchToListRooms()
+                    switchToListRoomsPage()
                 }
             }
         }
@@ -142,7 +142,7 @@ DefaultFrame {
                     tasksList.width = parent.width
                     tasksList.height = parent.height - toolBarTasks.height - toolBarProfile.height - t.height
 
-                    switchToTasks()
+                    switchToTasksPage()
                 }
             }
         }
@@ -202,7 +202,7 @@ DefaultFrame {
 
             onClickFunction: function() {
                 widgetRoomsView = true
-                switchToWidgetRooms()
+                switchToWidgetRoomsPage()
             }
         }
 
@@ -215,7 +215,7 @@ DefaultFrame {
 
             onClickFunction: function() {
                 widgetRoomsView = false
-                switchToListRooms()
+                switchToListRoomsPage()
             }
         }
 

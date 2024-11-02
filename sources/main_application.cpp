@@ -29,6 +29,14 @@ MainApplication::MainApplication(int argc, char **argv) :
     netManager->sendProfileAuthenticationRequest();
 }
 
+MainApplication::~MainApplication() {
+    curPage->deleteLater();
+    mainWindow->deleteLater();
+    engine->deleteLater();
+}
+
+//Methods
+
 void MainApplication::handleAuthentication(ServerStatus serverStatus) {
     if(!serverStatus.status) {
         this->switchToHomePage();
@@ -37,6 +45,7 @@ void MainApplication::handleAuthentication(ServerStatus serverStatus) {
     }
 }
 
+//Page part
 void MainApplication::SetCurrentPage(BasePage *page) {
     if(curPage != nullptr) {
         curPage->deleteLater();
@@ -47,29 +56,33 @@ void MainApplication::SetCurrentPage(BasePage *page) {
 
 template <typename PageType, typename ...Args> requires IsPage<PageType>
 void MainApplication::switchPage(Args... args){
-    SetCurrentPage(new PageType(engine, mainWindow->contentItem(), args...));
+    SetCurrentPage(new PageType(engine, mainWindow->contentItem(), this, args...));
 }
 
+//Slots
+// void MainApplication::finishDeleteProfile(ServerStatus serverStatus)
+// {
+//         std::remove("data/authentication_key.organizer");
+//         emit switchToRegistrationPage();
+// }
+
+// void MainApplication::finishLoggout(ServerStatus serverStatus)
+// {
+//     if (!serverStatus.status) {
+//         std::remove("data/authentication_key.organizer");
+//         this->switchToLogginingPage();
+//     }
+// }
+
+//Switchers
 void MainApplication::switchToRegistrationPage() {
     switchPage<RegistrationPage>();
-    connect(dynamic_cast<RegistrationPage *>(this->curPage), &RegistrationPage::switchToLogginingPage, this, &MainApplication::switchToLogginingPage);
-    connect(dynamic_cast<RegistrationPage *>(this->curPage), &RegistrationPage::switchToHomePage, this, &MainApplication::switchToHomePage);
 }
 
 void MainApplication::switchToLogginingPage() {
     switchPage<LogginingPage>();
-    connect(dynamic_cast<LogginingPage *>(this->curPage), &LogginingPage::switchToRegistrationPage, this, &MainApplication::switchToRegistrationPage);
-    connect(dynamic_cast<LogginingPage *>(this->curPage), &LogginingPage::switchToHomePage, this, &MainApplication::switchToHomePage);
 }
 
 void MainApplication::switchToHomePage() {
     switchPage<MainPage>();
-    connect(dynamic_cast<MainPage *>(this->curPage), &MainPage::switchToRegistrationPage, this, &MainApplication::switchToRegistrationPage);
-    connect(dynamic_cast<MainPage *>(this->curPage), &MainPage::switchToLogginingPage, this, &MainApplication::switchToLogginingPage);
-}
-
-MainApplication::~MainApplication() {
-    curPage->deleteLater();
-    mainWindow->deleteLater();
-    engine->deleteLater();
 }

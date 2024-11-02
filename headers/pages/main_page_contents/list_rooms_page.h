@@ -8,6 +8,8 @@ class MainPage;
 class ListRoomsPage : public RoomsPage {
     Q_OBJECT
 public:
+    MainPage *mainPage;
+
     ListRoomsPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage);
     void createRoomItem(Room &room) override;
 

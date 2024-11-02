@@ -1,53 +1,28 @@
 #include "main_page.h"
+#include "main_application.h"
 
-MainPage::MainPage(QQmlEngine *engine, QQuickItem *container) :
+MainPage::MainPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
         BasePage(engine, container, "qml/MainWorkspace.qml"),
-        workspace(object->findChild<QQuickItem*>("workspace")) {
+        workspace(object->findChild<QQuickItem*>("workspace")),
+        mainApp(mainApp) {
     static QList<std::string> switch_slots {
-        "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
-        "switchToProfile()", "switchToTasks()"
+        "switchToWidgetRoomsPage()", "switchToListRoomsPage()", "switchToSettingsPage()",
+        "switchToProfilePage()", "switchToTasksPage()"
     };
 
-    for (std::string &ss: switch_slots) {
-        connect(object, ("2" + ss).c_str(), this, ("1" + ss).c_str());
+    for (std::string &switch_slot: switch_slots) {
+        connect(object, ("2" + switch_slot).c_str(), this, ("1" + switch_slot).c_str());
     }
 
-    connect(this->getObject(), SIGNAL(loggout()), this, SLOT(loggout()));
-    connect(this->getObject(), SIGNAL(deleteProfile()), this, SLOT(deleteProfile()));
-    connect(netManager, &NetworkManager::finishDeleteProfileResponseHandling, this, &MainPage::finishDeleteProfile);
+    connect(this->getObject(), SIGNAL(switchToLoggoutForm()), this, SLOT(switchToLoggoutForm()));
+    connect(this->getObject(), SIGNAL(switchToProfileDeleteForm()), this, SLOT(switchToProfileDeleteForm()));
 
-    switchToWidgetRooms();
+    switchToWidgetRoomsPage();
 }
 
-void MainPage::deleteProfile()
-{
-    netManager->sendDeleteProfileRequest();
-}
+//Elements management
 
-void MainPage::finishDeleteProfile(ServerStatus serverStatus)
-{
-    if (!serverStatus.status) {
-        std::remove("data/authentication_key.organizer");
-        emit switchToLogginingPage();
-    } else {
-        qInfo() << "error profile deleting with status: " << serverStatus.status;
-    }
-}
-
-void MainPage::loggout()
-{
-    std::remove("data/authentication_key.organizer");
-    emit switchToLogginingPage();
-}
-
-void MainPage::setCurrentPage(BasePage *page){
-    if (curPage != nullptr) {
-        curPage->deleteLater();
-    }
-
-    curPage = page;
-}
-
+//Form part
 void MainPage::setCurrentForm(BasePage *form){
     if (curForm != nullptr) {
         curForm->deleteLater();
@@ -58,32 +33,44 @@ void MainPage::setCurrentForm(BasePage *form){
 
 template <typename FormType, typename ...Args> requires IsPage<FormType>
 void MainPage::switchForm(Args... args) {
-    qInfo() << this->curPage->getObject();
-    setCurrentForm(new FormType(engine, this->curPage->getObject(), args...));
+    setCurrentForm(new FormType(engine, this->getObject(), this, args...));
 }
 
-void MainPage::closeForm() {
-    setCurrentForm(nullptr);
+//Page part
+void MainPage::setCurrentPage(BasePage *page){
+    if (curPage != nullptr) {
+        curPage->deleteLater();
+    }
+
+    curPage = page;
 }
 
 template <typename PageType, typename ...Args> requires IsPage<PageType>
 void MainPage::switchPage(Args... args) {
-    setCurrentPage(new PageType(engine, workspace, args...));
+    setCurrentPage(new PageType(engine, workspace, this, args...));
 }
 
-void MainPage::switchToRoom(Room room) {
-    switchPage<RoomPage>(room);
-    connect(dynamic_cast<RoomPage *>(this->curPage), &RoomPage::switchToTaskCreation, this, &MainPage::switchToTaskCreation);
-}
-void MainPage::switchToWidgetRooms() { switchPage<WidgetRoomsPage>(this); }
-void MainPage::switchToListRooms() { switchPage<ListRoomsPage>(this); }
-void MainPage::switchToSettings() { switchPage<SettingsPage>(); }
-void MainPage::switchToRoomCreation() { switchPage<RoomCreationPage>(this); }
-void MainPage::switchToProfile() { switchPage<ProfilePage>(); }
-void MainPage::switchToTasks() { switchPage<TasksPage>(this); }
 
-void MainPage::switchToTaskCreation() {
-    switchForm<TaskCreationPage>();
-    connect(dynamic_cast<TaskCreationPage *>(this->curForm), &TaskCreationPage::closeTaskCreatiornForm, this, &MainPage::closeForm);
-}
+//Slots
 
+// void MainPage::deleteProfile()
+// {
+//     netManager->sendDeleteProfileRequest();
+// }
+
+//Switchers
+
+//Form
+void MainPage::closeForm() { setCurrentForm(nullptr); }
+
+void MainPage::switchToLoggoutForm() { switchForm<LoggoutForm>(); }
+void MainPage::switchToProfileDeleteForm() { switchForm<ProfileDeleteForm>(); }
+
+//Page
+void MainPage::switchToRoomPage(Room room) { switchPage<RoomPage>(room); }
+void MainPage::switchToWidgetRoomsPage() { switchPage<WidgetRoomsPage>(); }
+void MainPage::switchToListRoomsPage() { switchPage<ListRoomsPage>(); }
+void MainPage::switchToSettingsPage() { switchPage<SettingsPage>(); }
+void MainPage::switchToRoomCreationPage() { switchPage<RoomCreationPage>(); }
+void MainPage::switchToProfilePage() { switchPage<ProfilePage>(); }
+void MainPage::switchToTasksPage() { switchPage<TasksPage>(); }

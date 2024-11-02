@@ -2,14 +2,17 @@
 #define AUTHORIZATION_PAGE_H
 
 #include "base_page.h"
+#include "main_application.h"
+
+class MainApplication;
 
 class LogginingPage : public BasePage {
     Q_OBJECT
 public:
-    LogginingPage(QQmlEngine *engine, QQuickItem *container);
+    MainApplication *mainApp;
+
+    LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
 signals:
-    void switchToRegistrationPage();
-    void switchToHomePage();
 public slots:
     void finishLoggining(ServerStatus serverStatus, QByteArray jwt);
     void switchToRegistration();

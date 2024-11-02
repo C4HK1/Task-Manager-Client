@@ -3,11 +3,14 @@
 
 #include "base_page.h"
 
-class SettingsPage : public BasePage
-{
+class MainPage;
+
+class SettingsPage : public BasePage {
     Q_OBJECT
 public:
-    SettingsPage(QQmlEngine *engine, QQuickItem *container);
+    MainPage *mainPage;
+
+    SettingsPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage);
 
 signals:
 };

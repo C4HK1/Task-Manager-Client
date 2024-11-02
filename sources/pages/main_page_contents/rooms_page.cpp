@@ -27,12 +27,12 @@ void RoomsPage::switchToRoom(int roomCreatorID, QString roomName) {
 }
 
 void RoomsPage::switchToRoomCreation() {
-    this->mainPage->switchToRoomCreation();
+    this->mainPage->switchToRoomCreationPage();
 }
 
 void RoomsPage::finishSwitchToRoom(ServerStatus serverStatus, Room room) {
     if (!serverStatus.status) {
-        this->mainPage->switchToRoom(room);
+        this->mainPage->switchToRoomPage(room);
     } else {
         qInfo() << "error room entry with status: " << serverStatus.status;
     }

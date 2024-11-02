@@ -5,8 +5,6 @@
 #include <QQmlEngine>
 #include "network_manager.h"
 
-class MainApplication;
-
 class BasePage : public QObject {
     Q_OBJECT
 public:

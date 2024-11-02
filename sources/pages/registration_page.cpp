@@ -3,11 +3,11 @@
 #include "content_structures.h"
 #include "network_manager.h"
 #include "widget_rooms_page.h"
-#include "main_application.h"
 #include "main_page.h"
 
-RegistrationPage::RegistrationPage(QQmlEngine *engine, QQuickItem *container) :
-        BasePage(engine, container, "qml/Registration.qml") {
+RegistrationPage::RegistrationPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
+        BasePage(engine, container, "qml/Registration.qml"),
+        mainApp(mainApp) {
     connect(netManager, &NetworkManager::finishCreateProfileHandling, this, &RegistrationPage::finishCreateProfile);
     connect(this->getObject(), SIGNAL(createProfile(QString, QString, QString, QString, QString)), this, SLOT(createProfile(QString, QString, QString, QString, QString)));
 }
@@ -29,7 +29,7 @@ void RegistrationPage::finishCreateProfile(ServerStatus serverStatus, QByteArray
         file.write(netManager->jwt);
         file.close();
 
-        emit switchToHomePage();
+        this->mainApp->switchToHomePage();
     } else {
         qInfo() << "Profile creating error status: " << serverStatus.status;
     }

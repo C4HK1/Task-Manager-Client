@@ -3,11 +3,15 @@
 
 #include "base_page.h"
 
+class MainPage;
+
 class ProfilePage : public BasePage
 {
     Q_OBJECT
 public:
-    explicit ProfilePage(QQmlEngine *engine, QQuickItem *container);
+    MainPage *mainPage;
+
+    explicit ProfilePage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPage);
 
 signals:
 };

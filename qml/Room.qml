@@ -13,7 +13,7 @@ DefaultFrame {
     property int roomCreatorID
     property var taskCreationWindow
 
-    signal openTaskCreationForm()
+    signal switchToTaskCreationForm()
 
     Text {
         id: roomName
@@ -76,7 +76,7 @@ DefaultFrame {
         anchors.top: parent.top
         anchors.margins: 10
         onClickFunction: function () {
-            openTaskCreationForm()
+            switchToTaskCreationForm()
         }
     }
 }

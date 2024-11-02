@@ -16,9 +16,9 @@ void RoomCreationPage::createRoom(QString roomName, QString description) {
 
 void RoomCreationPage::finishCreateRoom(ServerStatus serverStatus, Room room) {
     if (!serverStatus.status) {
-        this->mainPage->switchToRoom(room);
+        this->mainPage->switchToRoomPage(room);
     } else {
-        QMetaObject::invokeMethod(object, "roomCreationFailed");
+        qInfo() << "error room creatio with status: " << serverStatus.status;
     }
 }
 

@@ -3,15 +3,17 @@
 
 #include <QSignalMapper>
 #include "base_page.h"
-#include "rooms_page.h"
 #include "content_structures.h"
 #include "network_manager.h"
 #include "main_page_contents.h"
+#include "main_application.h"
 
 class MainPage : public BasePage {
     Q_OBJECT
 public:
-    MainPage(QQmlEngine *engine, QQuickItem *container);
+    MainApplication *mainApp;
+
+    MainPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
 
     void setCurrentPage(BasePage *page);
     void setCurrentForm(BasePage *form);
@@ -21,25 +23,19 @@ public:
 
     template <typename PageType, typename ...Args> requires IsPage<PageType>
     void switchPage(Args... args);
-signals:
-    void switchToLogginingPage();
-    void switchToRegistrationPage();
 public slots:
-    void switchToRoom(Room room);
-    void switchToWidgetRooms();
-    void switchToListRooms();
-    void switchToSettings();
-    void switchToRoomCreation();
-    void switchToProfile();
-    void switchToTasks();
+    void switchToRoomPage(Room room);
+    void switchToWidgetRoomsPage();
+    void switchToListRoomsPage();
+    void switchToSettingsPage();
+    void switchToRoomCreationPage();
+    void switchToProfilePage();
+    void switchToTasksPage();
 
-    void switchToTaskCreation();
+    void switchToLoggoutForm();
+    void switchToProfileDeleteForm();
 
     void closeForm();
-
-    void deleteProfile();
-    void finishDeleteProfile(ServerStatus serverStatus);
-    void loggout();
 private:
     QQuickItem *workspace = nullptr;
     BasePage *curPage = nullptr;

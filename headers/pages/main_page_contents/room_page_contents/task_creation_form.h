@@ -1,18 +1,18 @@
-#ifndef TASK_CREATION_PAGE_H
-#define TASK_CREATION_PAGE_H
+#ifndef TASK_CREATION_FORM_H
+#define TASK_CREATION_FORM_H
 
 #include "base_page.h"
-#include "room_page.h"
 
-class MainPage;
+class RoomPage;
 
-class TaskCreationPage : public BasePage {
+class TaskCreationForm : public BasePage {
     Q_OBJECT
 public:
-    TaskCreationPage(QQmlEngine *engine, QQuickItem *container);
-    ~TaskCreationPage();
+    RoomPage *roomPage;
+
+    TaskCreationForm(QQmlEngine *engine, QQuickItem *container, RoomPage *roomPage);
+    ~TaskCreationForm();
 signals:
-    void closeTaskCreatiornForm();
 public slots:
     void createTask(int roomCreatorID,
                     QString roomName,
@@ -21,9 +21,11 @@ public slots:
                     QString label,
                     int status,
                     int timeToLive);
+    void closeTaskCreationForm();
+
     void finishCreateTask(ServerStatus serverStatus, Task task);
 
 private:
 };
 
-#endif // TASK_CREATION_PAGE_H
+#endif // TASK_CREATION_FORM_H

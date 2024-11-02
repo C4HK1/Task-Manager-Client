@@ -9,6 +9,7 @@ TasksPage::TasksPage(QQmlEngine *engine, QQuickItem *container, MainPage *mainPa
         mainPage(mainPage) {
     connect(object, SIGNAL(sortBy(QString,bool)), this, SLOT(sortBy(QString,bool)));
     connect(netManager, &NetworkManager::finishGetProfileTasksResponseHandling, this, &TasksPage::tasksInitialization);
+
     netManager->sendGetProfileTasksRequest();
 }
 
@@ -30,7 +31,7 @@ void TasksPage::tasksInitialization(ServerStatus serverStatus, Tasks tasks) {
 void TasksPage::openRoom(int roomCreatorID, QString roomName) {
     for (auto &task : this->tasks) {    // REIMPLEMENTATION REQUIRED
         if (task.parent.creatorID == roomCreatorID && task.parent.name == roomName) {
-            mainPage->switchToRoom(task.parent);
+            this->mainPage->switchToRoomPage(task.parent);
             break;
         }
     }
