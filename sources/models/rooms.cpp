@@ -1,8 +1,8 @@
 #include "models/rooms.h"
 
 Models::Rooms::Rooms(nlohmann::json rooms) {
-    for (auto room : rooms) {
-        this->rooms.append(room);
+    for (auto &room : rooms) {
+        this->rooms.append(Models::Room(room));
     }
 }
 

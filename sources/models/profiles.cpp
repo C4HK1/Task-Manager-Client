@@ -1,8 +1,8 @@
 #include "models/profiles.h"
 
 Models::Profiles::Profiles(nlohmann::json profiles) {
-    for (auto profile : profiles) {
-        this->profiles.append(profile);
+    for (auto &profile : profiles) {
+        this->profiles.append(Models::Profile(profile));
     }
 }
 

@@ -1,8 +1,8 @@
 #include "models/tasks.h"
 
 Models::Tasks::Tasks(nlohmann::json tasks) {
-    for (auto task : tasks) {
-        this->tasks.append(task);
+    for (auto &task : tasks) {
+        this->tasks.append(Models::Task(task));
     }
 }
 
