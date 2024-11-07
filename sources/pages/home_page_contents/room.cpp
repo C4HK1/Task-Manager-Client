@@ -3,6 +3,7 @@
 #include "room.h"
 #include "home_page.h"
 #include "task_creation_form.h"
+#include "invitation_form.h"
 
 //Object part
 Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models::Room room) :
@@ -17,6 +18,7 @@ Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models
 
     connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::roomInitialization);
     connect(this->getObject(), SIGNAL(switchToTaskCreationForm()), this, SLOT(switchToTaskCreationForm()));
+    connect(this->getObject(), SIGNAL(switchToInvitationForm()), this, SLOT(switchToInvitationForm()));
 
     netManager->sendGetRoomTasksRequest(room.creatorID, room.name);
 }
@@ -80,3 +82,4 @@ void Room::roomInitialization(Models::ServerStatus serverStatus, Models::Tasks t
 
 //Switchers
 void Room::switchToTaskCreationForm() { switchForm<TaskCreationForm>(); }
+void Room::switchToInvitationForm() { switchForm<InvitationForm>(); }

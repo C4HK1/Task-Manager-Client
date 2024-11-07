@@ -10,7 +10,7 @@ class TaskCreationForm : public BaseElement {
 public:
     Room *room;
 
-    TaskCreationForm(QQmlEngine *engine, QQuickItem *container, Room *roomPage);
+    TaskCreationForm(QQmlEngine *engine, QQuickItem *container, Room *room);
     ~TaskCreationForm();
 signals:
 public slots:

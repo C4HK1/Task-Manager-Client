@@ -16,4 +16,5 @@ target_include_directories(RoomContents PUBLIC
 target_link_libraries(RoomContents Qt6::Quick)
 target_sources(RoomContents PRIVATE
     ${HEADER_RPC_DIR}/task_creation_form.h task_creation_form.cpp
+    ${HEADER_RPC_DIR}/invitation_form.h invitation_form.cpp
 )

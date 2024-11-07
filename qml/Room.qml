@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
+import DefaultElements.Fonts
 import MainWorkspaceElements
 
 DefaultFrame {
@@ -14,42 +15,50 @@ DefaultFrame {
     property var taskCreationWindow
 
     signal switchToTaskCreationForm()
+    signal switchToInvitationForm()
 
-    Text {
-        id: roomName
-        objectName: qsTr("name")
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.leftMargin: 15
-        anchors.topMargin: 15
-        color: "#FFFFFF"
-        font.pixelSize: 18
-        font.bold: true
-        width: parent.width - anchors.leftMargin * 2
-        wrapMode: Text.WordWrap
-        maximumLineCount: 2
-        elide: Text.ElideRight
-    }
+    GridLayout {
+        id: roomInfo
+        rows: 3
+        columns: 1
 
-    Text {
-        id: roomCreatorName
-        objectName: qsTr("roomCreatorName")
-        anchors.left: parent.left
-        anchors.top: roomName.bottom
-        anchors.leftMargin: 15
-        anchors.topMargin: 10
-        anchors.margins: 15
-        color: "#FFFFFF"
-        font.pixelSize: 16
-        width: parent.width - anchors.leftMargin * 2
-        wrapMode: Text.WordWrap
-        maximumLineCount: 2
-        elide: Text.ElideRight
+        Text {
+            Layout.row: 1
+            id: roomName
+            objectName: qsTr("name")
+            color: "#FFFFFF"
+            font.pixelSize: 18
+            font.bold: true
+            width: parent.width - anchors.leftMargin * 2
+            wrapMode: Text.WordWrap
+            maximumLineCount: 2
+            elide: Text.ElideRight
+        }
+
+        Text {
+            Layout.row: 2
+            id: roomCreatorName
+            objectName: qsTr("roomCreatorName")
+            color: "#FFFFFF"
+            font.pixelSize: 16
+            width: parent.width - anchors.leftMargin * 2
+            wrapMode: Text.WordWrap
+            maximumLineCount: 2
+            elide: Text.ElideRight
+        }
+
+        Text {
+            Layout.row: 3
+            text: qsTr("<html><a href=\"#\">Invite users?</a></html>")
+            font: DefaultFont.defaultFont
+            color: "#FFFFFF"
+            onLinkActivated: switchToInvitationForm()
+        }
     }
 
     Flickable {
         objectName: qsTr("flickable")
-        anchors.top: roomCreatorName.bottom
+        anchors.top: roomInfo.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -62,7 +71,7 @@ DefaultFrame {
 
         GridLayout {
             objectName: qsTr("tasksContainer")
-            id: roomContainer
+            id: tasksContainer
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom

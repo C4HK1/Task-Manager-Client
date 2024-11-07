@@ -28,6 +28,7 @@ public slots:
     void roomInitialization(Models::ServerStatus serverStatus, Models::Tasks tasks);
 
     void switchToTaskCreationForm();
+    void switchToInvitationForm();
     void closeForm();
 protected:
 private:

@@ -5,11 +5,12 @@ qt_add_qml_module(MainWorkspaceElements
     QML_FILES
         RoomWidget.qml
         RoomListItem.qml
-	SidebarButton.qml
+        SidebarButton.qml
         ProfileTools.qml
         TopbarRoomsViewButton.qml
         Tasks.qml
         RoomCreationButton.qml
+        Invitation.qml
 
     RESOURCE_PREFIX /MainWorkspaceElements
     QML_FILES TaskListItem.qml
