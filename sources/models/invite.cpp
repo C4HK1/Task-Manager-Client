@@ -1,0 +1,19 @@
+#include "models/invite.h"
+
+Models::Invite::Invite(nlohmann::json invite) {
+    this->senderID = invite.at("sender ID");
+    this->receiverID = invite.at("receiver ID");
+    this->roomCreatorID = invite.at("room creator ID");
+    this->roomName = QString::fromStdString(invite.at("room name"));
+    this->senderName = QString::fromStdString(invite.at("sender name"));
+    this->receiverName = QString::fromStdString(invite.at("receiver name"));
+}
+
+QVariant Models::Invite::property(const char *name) const{
+    int index = staticMetaObject.indexOfProperty(name);
+    if(index == -1){
+        return QVariant();
+    }
+
+    return staticMetaObject.property(index).readOnGadget(this);
+}

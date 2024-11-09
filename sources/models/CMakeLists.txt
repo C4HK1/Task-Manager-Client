@@ -15,6 +15,8 @@ target_sources(Models PRIVATE
     ${HEADER_MODELS_DIR}/models/tasks.h tasks.cpp
     ${HEADER_MODELS_DIR}/models/config.h config.cpp
     ${HEADER_MODELS_DIR}/models/server_status.h server_status.cpp
+    ${HEADER_MODELS_DIR}/models/invite.h invite.cpp
+    ${HEADER_MODELS_DIR}/models/invites.h invites.cpp
 )
 
 

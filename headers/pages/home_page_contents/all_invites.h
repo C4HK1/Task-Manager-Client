@@ -1,0 +1,21 @@
+#ifndef ALL_INVITES_H
+#define ALL_INVITES_H
+
+#include "invites_list.h"
+
+class HomePage;
+
+class AllInvites : public InvitesList {
+    Q_OBJECT
+public:
+    AllInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    ~AllInvites() override;
+
+    void createInviteItem(Models::Invite &invite, InviteType inviteType) override;
+signals:
+public slots:
+protected:
+private:
+};
+
+#endif // ALL_INVITES_H

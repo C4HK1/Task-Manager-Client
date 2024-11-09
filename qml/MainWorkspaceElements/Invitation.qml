@@ -10,10 +10,9 @@ Frame {
     z: 2
 
     property var room: parent
-    property var profiles: []
 
     signal findProfilesWithSuchName(string name)
-    signal invite(var recieversID, int roomCreatorID, string roomName)
+    signal invite(int recieverID, int roomCreatorID, string roomName)
     signal closeInvitationForm()
 
     Rectangle {
@@ -26,54 +25,50 @@ Frame {
 
         property bool focused: true
 
-        GridLayout {
-            width: 200
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+        TextField {
+            anchors.top: parent.top
+            id: name
+            width: 500
 
-            columns: 1
+            onTextChanged: function() {
+                findProfilesWithSuchName(name.text)
+            }
+        }
 
-            TextField {
-                Layout.row: 1
-                id: name
-                width: 500
+        Flickable {
+            id: profiles
+            width: parent.width
+            height: profilesContainer.height
+            anchors.top: name.bottom
+            objectName: qsTr("flickable")
 
-                onTextChanged: function() {
-                    console.log(name.text)
-                    findProfilesWithSuchName(name.text)
-                }
+            boundsBehavior: Flickable.StopAtBounds
+
+            ScrollBar.vertical: ScrollBar {
+                anchors.right: parent.right
             }
 
             GridLayout {
-                Layout.row: 2
-                columnSpacing: 3
+                id: profilesContainer
+
+                property int receiverID: 0
+                objectName: qsTr("profilesContainer")
+                width: parent.width
+                rowSpacing: -2
+
                 flow: GridLayout.LeftToRight
-
-                Repeater {
-                    id: paramRepeater
-                    model: [
-                        {name: qsTr("profileName"), text: qsTr("profileID"), width: 300}
-                    ]
-
-                    Rectangle {
-                        Text {
-                            text: modelData.name
-                        }
-                    }
-                }
+                columns: 1
             }
+        }
 
-            DefaultButton {
-                Layout.row: 3
-                id: button
-                Layout.fillWidth: true
-                Layout.preferredHeight: 33
-                text: "invite"
+        DefaultButton {
+            anchors.top: profiles.bottom
+            id: button
+            width: parent.width
+            text: "invite"
 
-                onClicked: {
-                    console.log("invite")
-                    invite(recieversID, room.roomcraetorID, room.roomName)
-                }
+            onClicked: {
+                invite(profilesContainer.receiverID, room.roomcraetorID, room.roomName)
             }
         }
     }

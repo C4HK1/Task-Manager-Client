@@ -14,9 +14,9 @@ Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models
         room(room) {
     object->setProperty("roomName", room.name);
     object->setProperty("roomCreatorName", room.creatorName);
-    object->setProperty("roomCreatorID", std::to_string(room.creatorID).c_str());
+    object->setProperty("roomCreatorID", QString::number(room.creatorID));
 
-    connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::roomInitialization);
+    connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::setTasks);
     connect(this->getObject(), SIGNAL(switchToTaskCreationForm()), this, SLOT(switchToTaskCreationForm()));
     connect(this->getObject(), SIGNAL(switchToInvitationForm()), this, SLOT(switchToInvitationForm()));
 
@@ -61,7 +61,7 @@ void Room::closeForm() {
 
 
 //Slots part
-void Room::roomInitialization(Models::ServerStatus serverStatus, Models::Tasks tasks) {
+void Room::setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks) {
     if (!serverStatus.status) {
         this->tasks = tasks;
 

@@ -13,7 +13,7 @@ public:
     HomePage *homePage;
 
     TasksList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
-    ~TasksList();
+    virtual ~TasksList();
 
     void createTaskItem(Models::Task &task);
 signals:

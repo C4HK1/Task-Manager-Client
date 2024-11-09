@@ -24,6 +24,13 @@ target_sources(HomePageContents PRIVATE
     ${HEADER_MPC_DIR}/widget_rooms.h widget_rooms.cpp
     ${HEADER_MPC_DIR}/room.h room.cpp
     ${HEADER_MPC_DIR}/tasks_list.h tasks_list.cpp
+    ${HEADER_MPC_DIR}/all_tasks.h all_tasks.cpp
+    ${HEADER_MPC_DIR}/assigned_tasks.h assigned_tasks.cpp
+    ${HEADER_MPC_DIR}/reviewed_tasks.h reviewed_tasks.cpp
+    ${HEADER_MPC_DIR}/invites_list.h invites_list.cpp
+    ${HEADER_MPC_DIR}/all_invites.h all_invites.cpp
+    ${HEADER_MPC_DIR}/sended_invites.h sended_invites.cpp
+    ${HEADER_MPC_DIR}/received_invites.h received_invites.cpp
     ${HEADER_MPC_DIR}/loggout_form.h loggout_form.cpp
     ${HEADER_MPC_DIR}/profile_delete_form.h profile_delete_form.cpp
 )

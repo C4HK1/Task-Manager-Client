@@ -27,13 +27,16 @@ public:
 
     //Profile
     Q_INVOKABLE void sendGetProfileRequest();
-    Q_INVOKABLE void sendGetProfilesWithPrefixRequest(QString prefix);
+    Q_INVOKABLE void sendGetProfilesWithSubstrRequest(QString substr, u_int64_t offset);
     Q_INVOKABLE void sendGetPublicProfileRequest(u_int64_t profileID);
     Q_INVOKABLE void sendGetProfileConfigRequest();
     Q_INVOKABLE void sendGetProfileRoomsRequest();
     Q_INVOKABLE void sendGetProfileTasksRequest();
     Q_INVOKABLE void sendGetProfileAssignedTasksRequest();
     Q_INVOKABLE void sendGetProfileReviewedTasksRequest();
+    Q_INVOKABLE void sendGetProfileReceivedInvitesRequest();
+    Q_INVOKABLE void sendGetProfileSendedInvitesRequest();
+
 
     //Room
     Q_INVOKABLE void sendGetRoomRequest(u_int64_t roomCreatorID, QString roomName);
@@ -41,6 +44,8 @@ public:
     Q_INVOKABLE void sendGetRoomProfilesRequest(u_int64_t roomCreatorID, QString roomName);
 
     //Task
+
+    //Invite
 
 //POST
     //Profile
@@ -85,6 +90,19 @@ public:
                                            QString roomName,
                                            QString taskName);
 
+    //Invite
+    Q_INVOKABLE void sendCreateInviteRequest(u_int64_t receiverID,
+                                             u_int64_t roomCreatorID,
+                                             QString roomName);
+    Q_INVOKABLE void sendAcceptInviteRequest(u_int64_t roomCreatorID,
+                                             QString roomName);
+    Q_INVOKABLE void sendDeleteSendedInviteRequest(u_int64_t receiverID,
+                                                   u_int64_t roomCreatorID,
+                                                   QString roomName);
+    Q_INVOKABLE void sendDeleteReceivedInviteRequest(u_int64_t senderID,
+                                                     u_int64_t roomCreatorID,
+                                                     QString roomName);
+
 //DELETE
     //Profile
     Q_INVOKABLE void sendDeleteProfileRequest();
@@ -99,6 +117,8 @@ public:
     //Room
 
     //Task
+
+    //Invite
 
 
 //FIELDS
@@ -121,13 +141,15 @@ signals:
 
     //Profile
     void finishGetProfileResponseHandling(Models::ServerStatus serverStatus, Models::Profile profile);
-    void finishGetProfilesWithPrefixHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
+    void finishGetProfilesWithSubstrHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
     void finishGetPublicProfileResponseHandling(Models::ServerStatus serverStatus, Models::Profile profile);
     void finishGetProfileConfigResponseHandling(Models::ServerStatus serverStatus, Models::Config config);
     void finishGetProfileRoomsResponseHandling(Models::ServerStatus serverStatus, Models::Rooms rooms);
     void finishGetProfileTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
     void finishGetProfileAssignedTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
     void finishGetProfileReviewedTasksResponseHandling(Models::ServerStatus serverStatus, Models::Tasks tasks);
+    void finishGetProfileReceivedInvitesResponseHandling(Models::ServerStatus serverStatus, Models::Invites invites);
+    void finishGetProfileSendedInvitesResponseHandling(Models::ServerStatus serverStatus, Models::Invites invites);
 
     //Room
     void finishGetRoomResponseHandling(Models::ServerStatus serverStatus, Models::Room room);
@@ -135,6 +157,8 @@ signals:
     void finishGetRoomProfilesResponseHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
 
     //Task
+
+    //Invite
 
 //POST
     //Profile
@@ -153,6 +177,12 @@ signals:
     void finishRemoveTaskFromReviewerResponseHandling(Models::ServerStatus serverStatus);
     void finishDeleteTaskResponseHandling(Models::ServerStatus serverStatus);
 
+    //Invite
+    void finishCreateInviteResponseHandling(Models::ServerStatus serverStatus);
+    void finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus);
+    void finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus);
+    void finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus);
+
 //DELETE
     //Profile
     void finishDeleteProfileResponseHandling(Models::ServerStatus serverStatus);
@@ -161,12 +191,16 @@ signals:
 
     //Task
 
+    //Invite
+
 //PATCH
     //Profile
 
     //Room
 
     //Task
+
+    //Invite
 
 public slots:
 //HANDLERS
@@ -178,13 +212,15 @@ public slots:
 
     //Profile
     void handleGetProfileResponse();
-    void handleGetProfilesWithPrefixResponse();
+    void handleGetProfilesWithSubstrResponse();
     void handleGetPublicProfileResponse();
     void handleGetProfileConfigResponse();
     void handleGetProfileRoomsResponse();
     void handleGetProfileTasksResponse();
     void handleGetProfileAssignedTasksResponse();
     void handleGetProfileReviewedTasksResponse();
+    void handleGetProfileReceivedInvitesResponse();
+    void handleGetProfileSendedInvitesResponse();
 
     //Room
     void handleGetRoomResponse();
@@ -192,6 +228,8 @@ public slots:
     void handleGetRoomProfilesResponse();
 
     //Task
+
+    //Invite
 
 //POST
     //Profile
@@ -210,6 +248,12 @@ public slots:
     void handleRemoveTaskFromReviewerResponse();
     void handleDeleteTaskResponse();
 
+    //Invite
+    void handleCreateInviteResponse();
+    void handleAcceptInviteResponse();
+    void handleDeleteSendedInviteResponse();
+    void handleDeleteReceivedInviteResponse();
+
 //DELETE
     //Profile
     void handleDeleteProfileResponse();
@@ -218,12 +262,16 @@ public slots:
 
     //Task
 
+    //Invite
+
 //PATCH
     //Profile
 
     //Room
 
     //Task
+
+    //Invite
 protected:
 private:
     NetworkManager() {}

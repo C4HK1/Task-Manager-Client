@@ -9,9 +9,6 @@ TasksList::TasksList(QQmlEngine *engine, QQuickItem *container, HomePage *homePa
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")),
         homePage(homePage) {
     connect(object, SIGNAL(sortBy(QString,bool)), this, SLOT(sortBy(QString,bool)));
-    connect(netManager, &NetworkManager::finishGetProfileTasksResponseHandling, this, &TasksList::tasksInitialization);
-
-    netManager->sendGetProfileTasksRequest();
 }
 
 TasksList::~TasksList(){

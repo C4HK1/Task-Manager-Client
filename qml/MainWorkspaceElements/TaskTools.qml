@@ -19,38 +19,30 @@ Flickable {
         width: parent.width
 
         SidebarButton {
-            name: "Task1"
-            id: task1
+            name: "All"
+            id: allTasks
             fontSize: 16
             onClickFunction: function () {
-                // MainApplication.switchToTask("Task1")
+                console.log(switchToAllTasks)
+                switchToAllTasks()
             }
         }
 
         SidebarButton {
-            name: "Task2"
-            id: task2
+            name: "Reviewed"
+            id: reviewedTasks
             fontSize: 16
             onClickFunction: function () {
-                // MainApplication.switchToTask("Task2")
+                switchToReviewedTasks()
             }
         }
 
         SidebarButton {
-            name: "Task3"
-            id: task3
+            name: "Assigned"
+            id: assignedTasks
             fontSize: 16
             onClickFunction: function () {
-                // MainApplication.switchToTask("Task3")
-            }
-        }
-
-        SidebarButton {
-            name: "Task4"
-            id: task4
-            fontSize: 16
-            onClickFunction: function () {
-                // MainApplication.switchToTask("Task4")
+                switchToAssignedTasks()
             }
         }
     }

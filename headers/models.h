@@ -9,5 +9,7 @@
 #include "models/tasks.h"
 #include "models/config.h"
 #include "models/server_status.h"
+#include "models/invite.h"
+#include "models/invites.h"
 
 #endif // MODELS_H

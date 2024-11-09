@@ -8,7 +8,7 @@ HomePage::HomePage(QQmlEngine *engine, QQuickItem *container, MainApplication *m
         mainApp(mainApp) {
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
-        "switchToProfile()", "switchToTasks()"
+        "switchToProfile()", "switchToAllTasks()", "switchToReviewedTasks()", "switchToAssignedTasks()",
     };
 
     for (std::string &switch_slot: switch_slots) {
@@ -17,6 +17,10 @@ HomePage::HomePage(QQmlEngine *engine, QQuickItem *container, MainApplication *m
 
     connect(this->getObject(), SIGNAL(switchToLoggoutForm()), this, SLOT(switchToLoggoutForm()));
     connect(this->getObject(), SIGNAL(switchToProfileDeleteForm()), this, SLOT(switchToProfileDeleteForm()));
+
+    connect(this->getObject(), SIGNAL(switchToAllInvites()), this, SLOT(switchToAllInvites()));
+    connect(this->getObject(), SIGNAL(switchToReceivedInvites()), this, SLOT(switchToReceivedInvites()));
+    connect(this->getObject(), SIGNAL(switchToSendedInvites()), this, SLOT(switchToSendedInvites()));
 
     switchToWidgetRooms();
 }
@@ -60,6 +64,7 @@ void HomePage::switchPage(Args... args) {
 
 //Form
 void HomePage::closeForm() { setCurrentForm(nullptr); }
+void HomePage::closePage() { setCurrentPage(nullptr); }
 
 void HomePage::switchToLoggoutForm() { switchForm<LoggoutForm>(); }
 void HomePage::switchToProfileDeleteForm() { switchForm<ProfileDeleteForm>(); }
@@ -71,4 +76,12 @@ void HomePage::switchToListRooms() { switchPage<ListRooms>(); }
 void HomePage::switchToSettings() { switchPage<Settings>(); }
 void HomePage::switchToRoomCreation() { switchPage<RoomCreation>(); }
 void HomePage::switchToProfile() { switchPage<Profile>(); }
-void HomePage::switchToTasks() { switchPage<TasksList>(); }
+
+void HomePage::switchToAllTasks() { switchPage<AllTasks>(); }
+void HomePage::switchToReviewedTasks() { switchPage<ReviewedTasks>(); }
+void HomePage::switchToAssignedTasks() { switchPage<AssignedTasks>(); }
+
+void HomePage::switchToAllInvites() { switchPage<AllInvites>(); }
+void HomePage::switchToReceivedInvites() { switchPage<ReceivedInvites>(); }
+void HomePage::switchToSendedInvites() { switchPage<SendedInvites>(); }
+

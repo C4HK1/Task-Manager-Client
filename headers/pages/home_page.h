@@ -32,12 +32,20 @@ public slots:
     void switchToSettings();
     void switchToRoomCreation();
     void switchToProfile();
-    void switchToTasks();
 
     void switchToLoggoutForm();
     void switchToProfileDeleteForm();
 
+    void switchToAllTasks();
+    void switchToReviewedTasks();
+    void switchToAssignedTasks();
+
+    void switchToAllInvites();
+    void switchToReceivedInvites();
+    void switchToSendedInvites();
+
     void closeForm();
+    void closePage();
 protected:
 private:
     QQuickItem *workspace = nullptr;

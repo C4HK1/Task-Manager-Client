@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import DefaultElements
-import MainWorkspaceElements.Fonts
-
+import DefaultElements.Fonts
+import MainWorkspaceElements
 
 DefaultFrame {
     signal switchToRoomCreation()

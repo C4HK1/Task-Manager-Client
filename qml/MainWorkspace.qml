@@ -10,12 +10,19 @@ DefaultFrame {
 
     signal switchToWidgetRooms()
     signal switchToListRooms()
-    signal switchToTasks()
     signal switchToProfile()
     signal switchToSettings()
 
     signal switchToLoggoutForm()
     signal switchToProfileDeleteForm()
+
+    signal switchToAllTasks()
+    signal switchToReviewedTasks()
+    signal switchToAssignedTasks()
+
+    signal switchToAllInvites()
+    signal switchToReceivedInvites()
+    signal switchToSendedInvites()
 
     function createImageObject(str, root, params) {
         var component = Qt.createComponent(str)
@@ -33,24 +40,34 @@ DefaultFrame {
             console.log("Error loading component:", component.errorString())
         }
     }
-    function hideToolbar() {
-        toolBarProfile.name = "PS"
-        toolBarTasks.name = "TS"
-        t.name = "XZ"
-
+    function makeDefaultToolsAnchorsh() {
         if (profileTools !== undefined) {
             profileTools.destroy()
             profileTools = undefined
         }
-        if (tasksList !== undefined) {
-            tasksList.destroy()
-            tasksList = undefined
+        if (taskTools !== undefined) {
+            taskTools.destroy()
+            taskTools = undefined
+        }
+        if (inviteTools !== undefined) {
+            inviteTools.destroy()
+            inviteTools = undefined
         }
 
+
         toolBarProfile.anchors.bottom = undefined
-        toolBarTasks.anchors.bottom = undefined
-        toolBarTasks.anchors.top = t.bottom
-        toolBarProfile.anchors.top = toolBarTasks.bottom
+        toolBarInvite.anchors.top = toolBarTask.bottom
+        toolBarTask.anchors.top = toolBarHome.bottom
+        toolBarProfile.anchors.top = toolBarInvite.bottom
+    }
+
+    function hideToolbar() {
+        toolBarProfile.name = "PS"
+        toolBarTask.name = "TS"
+        toolBarInvite.name = "IT"
+        toolBarHome.name = "HM"
+
+        makeDefaultToolsAnchorsh()
 
         sidebarBG.width = sidebarBG.slimToolBarWidth
 
@@ -59,13 +76,15 @@ DefaultFrame {
     function openToolbar() {
         sidebarBG.width = sidebarBG.toolBarWidth
         toolBarProfile.name = "Profile settings"
-        toolBarTasks.name = "Tasks"
-        t.name = "XZ che eto"
+        toolBarTask.name = "Tasks"
+        toolBarInvite.name = "Invites"
+        toolBarHome.name = "Home"
         mask.visible = true
     }
 
     property var profileTools;
-    property var tasksList;
+    property var taskTools;
+    property var inviteTools;
     property bool widgetRoomsView: true
 
     Rectangle {
@@ -106,8 +125,8 @@ DefaultFrame {
 
         SidebarButton {
             width: parent.width
-            id: t
-            name: "XZ"
+            id: toolBarHome
+            name: "HM"
             fontSize: 22
 
             onClickFunction: function() {
@@ -122,52 +141,67 @@ DefaultFrame {
 
         SidebarButton {
             width: parent.width
-            anchors.top: t.bottom
+            anchors.top: toolBarHome.bottom
             name: "TS"
-            id: toolBarTasks
+            id: toolBarTask
             fontSize: 22
 
             onClickFunction: function() {
-                if (tasksList === undefined) {
-                    if (profileTools !== undefined) {
-                        profileTools.destroy()
-                        profileTools = undefined
-                    }
+                if (taskTools === undefined) {
+                    makeDefaultToolsAnchorsh()
 
-                    toolBarProfile.anchors.top = undefined
+                    taskTools = root.createImageObject("MainWorkspaceElements/TaskTools.qml", sidebarBG)
+                    taskTools.anchors.top = toolBarTask.bottom
+                    taskTools.width = parent.width
+                    taskTools.height = parent.height - toolBarTask.height - toolBarInvite.height - toolBarProfile.height - toolBarHome.height
+
+                    toolBarInvite.anchors.top = taskTools.bottom
                     toolBarProfile.anchors.bottom = parent.bottom
 
-                    tasksList = root.createImageObject("MainWorkspaceElements/Tasks.qml", sidebarBG)
-                    tasksList.anchors.top = toolBarTasks.bottom
-                    tasksList.width = parent.width
-                    tasksList.height = parent.height - toolBarTasks.height - toolBarProfile.height - t.height
-
-                    switchToTasks()
+                    switchToAllTasks()
                 }
             }
         }
 
         SidebarButton {
             width: parent.width
-            anchors.top: toolBarTasks.bottom
+            anchors.top: toolBarTask.bottom
+            name: "IT"
+            id: toolBarInvite
+            fontSize: 22
+
+            onClickFunction: function() {
+                if (inviteTools === undefined) {
+                    makeDefaultToolsAnchorsh()
+
+                    toolBarProfile.anchors.top = undefined
+                    toolBarProfile.anchors.bottom = parent.bottom
+
+                    inviteTools = root.createImageObject("MainWorkspaceElements/InviteTools.qml", sidebarBG)
+                    inviteTools.anchors.top = toolBarInvite.bottom
+                    inviteTools.width = parent.width
+                    inviteTools.height = parent.height - toolBarTask.height - toolBarInvite.height - toolBarProfile.height - toolBarHome.height
+
+                    switchToAllInvites()
+                }
+            }
+        }
+
+        SidebarButton {
+            width: parent.width
+            anchors.top: toolBarInvite.bottom
             name: "PS"
             id: toolBarProfile
             fontSize: 22
 
             onClickFunction: function() {
                 if (profileTools === undefined) {
-                    if (tasksList !== undefined) {
-                        tasksList.destroy()
-                        tasksList = undefined
-                    }
-
-                    toolBarProfile.anchors.bottom = undefined
-                    toolBarProfile.anchors.top = toolBarTasks.bottom
+                    makeDefaultToolsAnchorsh()
 
                     profileTools = root.createImageObject("MainWorkspaceElements/ProfileTools.qml", sidebarBG)
                     profileTools.anchors.top = toolBarProfile.bottom
                     profileTools.width = parent.width
-                    profileTools.height = parent.height - toolBarTasks.height - toolBarProfile.height - t.height
+                    profileTools.height = parent.height - toolBarTask.height - toolBarInvite.height - toolBarInvite.height - toolBarProfile.height - toolBarHome.height
                 }
             }
         }

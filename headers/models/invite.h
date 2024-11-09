@@ -1,0 +1,35 @@
+#ifndef INVITE_H
+#define INVITE_H
+
+#include <QQuickItem>
+#include <nlohmann/json.hpp>
+
+namespace Models {
+    struct Invite {
+        Q_GADGET
+        Q_PROPERTY(QString senderName READ getSenderName)
+        Q_PROPERTY(QString roomName READ getRoomName)
+
+    public:
+        u_int64_t senderID = 0;
+        u_int64_t receiverID = 0;
+        u_int64_t roomCreatorID = 0;
+        QString roomName, senderName, receiverName;
+
+        QQuickItem *inviteItem;
+
+
+        QString getSenderName() const { return this->senderName; }
+        QString getRoomName() const { return this->roomName; }
+
+        Invite() = default;
+
+        Invite(nlohmann::json task);
+
+        // ~Task() { if(taskItem != nullptr) taskItem->deleteLater(); }
+
+        QVariant property(const char *name) const;
+    };
+}
+
+#endif // INVITE_H

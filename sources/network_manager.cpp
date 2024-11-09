@@ -73,19 +73,20 @@ void NetworkManager::sendGetProfileRequest() {
                         << this->jwt;
 }
 
-void NetworkManager::sendGetProfilesWithPrefixRequest(QString prefix) {
-    QNetworkRequest request(host + "GetProfilesWithPrefix/");
+void NetworkManager::sendGetProfilesWithSubstrRequest(QString substr, u_int64_t offset) {
+    QNetworkRequest request(host + "GetProfilesWithSubstr/");
 
     request.setRawHeader(QByteArray("Authorization"), this->jwt);
 
     nlohmann::json requestBody;
-    requestBody.push_back(nlohmann::json::object_t::value_type("prefix", prefix.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("substr", substr.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("offset", offset));
 
     QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
 
-    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetRoomResponse);
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfilesWithSubstrResponse);
 
-    qInfo() << "\nsend profiles with prefix request on "
+    qInfo() << "\nsend profiles with substr request on "
                         << request.url()
                         << " with body: "
                         << requestBody.dump()
@@ -181,6 +182,36 @@ void NetworkManager::sendGetProfileReviewedTasksRequest() {
                         << request.url()
                         << " with header: "
                         << this->jwt;
+}
+
+void NetworkManager::sendGetProfileReceivedInvitesRequest() {
+    QNetworkRequest request(host + "GetProfileReceivedInvites/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileReceivedInvitesResponse);
+
+    qInfo() << "\nsend profile received invites getting  request on "
+            << request.url()
+            << " with header: "
+            << this->jwt;
+}
+
+void NetworkManager::sendGetProfileSendedInvitesRequest() {
+    QNetworkRequest request(host + "GetProfileSendedInvites/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    QNetworkReply *reply = networkManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetProfileSendedInvitesResponse);
+
+    qInfo() << "\nsend profile sended invites getting request on "
+            << request.url()
+            << " with header: "
+            << this->jwt;
 }
 
 //Room
@@ -508,6 +539,101 @@ void NetworkManager::sendDeleteTaskRequest(u_int64_t roomCreatorID, QString room
                         << this->jwt;
 }
 
+//Invites
+void NetworkManager::sendCreateInviteRequest(u_int64_t receiverID,
+                                             u_int64_t roomCreatorID,
+                                             QString roomName) {
+    QNetworkRequest request(host + "CreateInvite/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("receiver ID", receiverID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleCreateInviteResponse);
+
+    qInfo() << "\nsend create invite request on "
+            << request.url()
+            << " with body: "
+            << requestBody.dump()
+            << "\nwith header: "
+            << this->jwt;
+}
+
+void NetworkManager::sendAcceptInviteRequest(u_int64_t roomCreatorID,
+                                             QString roomName) {
+    QNetworkRequest request(host + "AcceptInvite/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleAcceptInviteResponse);
+
+    qInfo() << "\nsend accept invite request on "
+            << request.url()
+            << " with body: "
+            << requestBody.dump()
+            << "\nwith header: "
+            << this->jwt;
+}
+
+void NetworkManager::sendDeleteSendedInviteRequest(u_int64_t receiverID,
+                                                   u_int64_t roomCreatorID,
+                                                   QString roomName) {
+    QNetworkRequest request(host + "DeleteSendedInvite/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("receiver ID", receiverID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleDeleteSendedInviteResponse);
+
+    qInfo() << "\nsend delete sended invite request on "
+            << request.url()
+            << " with body: "
+            << requestBody.dump()
+            << "\nwith header: "
+            << this->jwt;
+}
+
+void NetworkManager::sendDeleteReceivedInviteRequest(u_int64_t senderID,
+                                                     u_int64_t roomCreatorID,
+                                                     QString roomName) {
+    QNetworkRequest request(host + "DeleteReceivedInvite/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("sender ID", senderID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+
+    QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleDeleteReceivedInviteResponse);
+
+    qInfo() << "\nsend delete received invite request on "
+            << request.url()
+            << " with body: "
+            << requestBody.dump()
+            << "\nwith header: "
+            << this->jwt;
+}
+
 
 //DELETE
 
@@ -615,9 +741,9 @@ void NetworkManager::handleGetProfileResponse() {
     reply->deleteLater();
 }
 
-void NetworkManager::handleGetProfilesWithPrefixResponse() {
+void NetworkManager::handleGetProfilesWithSubstrResponse() {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    qInfo() << "get profiles with prefix server response: ";
+    qInfo() << "get profiles with substr server response: ";
 
     try {
         nlohmann::json response = nlohmann::json::parse(reply->readAll());
@@ -626,7 +752,7 @@ void NetworkManager::handleGetProfilesWithPrefixResponse() {
         int serverStatus = response.at("status");
         Models::Profiles profiles = response.at("profiles");
 
-        emit finishGetProfilesWithPrefixHandling(serverStatus, profiles);
+        emit finishGetProfilesWithSubstrHandling(serverStatus, profiles);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;
@@ -754,6 +880,47 @@ void NetworkManager::handleGetProfileReviewedTasksResponse() {
 
     reply->deleteLater();
 }
+
+void NetworkManager::handleGetProfileReceivedInvitesResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile reveived invites server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Models::Invites invites = response.at("invites");
+
+        emit finishGetProfileReceivedInvitesResponseHandling(serverStatus, invites);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleGetProfileSendedInvitesResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get profile sended invites server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Models::Invites invites = response.at("invites");
+
+        emit finishGetProfileSendedInvitesResponseHandling(serverStatus, invites);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
 
 //Room
 void NetworkManager::handleGetRoomResponse() {
@@ -1019,6 +1186,82 @@ void NetworkManager::handleDeleteTaskResponse() {
     reply->deleteLater();
 }
 
+//Invite
+void NetworkManager::handleCreateInviteResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "create invite server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishCreateInviteResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleAcceptInviteResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "accept invite server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishAcceptInviteResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleDeleteSendedInviteResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "delete sended invite server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishDeleteSendedInviteResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleDeleteReceivedInviteResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "delete received invite server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+
+        emit finishDeleteReceivedInviteResponseHandling(serverStatus);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
 
 //DELETE
 

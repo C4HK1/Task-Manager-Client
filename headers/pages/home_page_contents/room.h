@@ -25,7 +25,7 @@ public:
     void switchForm(Args... args);
 signals:
 public slots:
-    void roomInitialization(Models::ServerStatus serverStatus, Models::Tasks tasks);
+    void setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks);
 
     void switchToTaskCreationForm();
     void switchToInvitationForm();

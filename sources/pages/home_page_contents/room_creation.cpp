@@ -22,6 +22,7 @@ void RoomCreation::createRoom(QString roomName, QString description) {
 
 void RoomCreation::finishCreateRoom(Models::ServerStatus serverStatus, Models::Room room) {
     if (!serverStatus.status) {
+        this->homePage->closePage();
         this->homePage->switchToRoom(room);
     } else {
         qInfo() << "error room creatio with status: " << serverStatus.status;
