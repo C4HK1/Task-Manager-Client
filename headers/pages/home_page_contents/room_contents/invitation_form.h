@@ -20,7 +20,7 @@ public slots:
     void invite(int receiverID, int roomCreatorID, QString roomName);
 
     void finishFindProfilesWithSuchName(Models::ServerStatus serverStatus, Models::Profiles profiles);
-    void finishInvite(Models::ServerStatus serverStatus);
+    void finishInvite(Models::ServerStatus serverStatus, Models::Invite invite);
 
     void closeInvitationForm();
 

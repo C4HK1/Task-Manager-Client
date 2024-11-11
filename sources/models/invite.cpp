@@ -9,6 +9,13 @@ Models::Invite::Invite(nlohmann::json invite) {
     this->receiverName = QString::fromStdString(invite.at("receiver name"));
 }
 
+bool Models::Invite::operator ==(Models::Invite invite) {
+    return this->senderID == invite.senderID &&
+           this->receiverID == invite.receiverID &&
+           this->roomCreatorID == invite.roomCreatorID &&
+           this->roomName == invite.roomName;
+}
+
 QVariant Models::Invite::property(const char *name) const{
     int index = staticMetaObject.indexOfProperty(name);
     if(index == -1){

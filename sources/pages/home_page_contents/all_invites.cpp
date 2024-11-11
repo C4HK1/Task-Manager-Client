@@ -16,8 +16,8 @@ AllInvites::~AllInvites() {
     this->sendedItemComponent->deleteLater();
 }
 
-void AllInvites::createInviteItem(Models::Invite &invite, InviteType inviteType) {
-    if (inviteType == RECEIVED) {
+void AllInvites::createInviteItem(Models::Invite &invite) {
+    if (invite.type == Models::RECEIVED) {
         auto item = qobject_cast<QQuickItem*>(receivedItemComponent->create(engine->rootContext()));
 
         item->setProperty("senderName", invite.senderName);
@@ -36,7 +36,6 @@ void AllInvites::createInviteItem(Models::Invite &invite, InviteType inviteType)
         item->setProperty("roomCreatorID", QString::number(invite.roomCreatorID));
 
         invite.inviteItem = item;
-        qInfo() << invite.inviteItem;
         item->setParentItem(listContainer);
     }
 }

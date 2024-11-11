@@ -14,6 +14,7 @@ Rectangle {
 
     property alias receiverName: receiverName.text
     property alias roomName: roomName.text
+    property int roomCreatorID
     property int receiverID
 
     signal deleteSendedInvite(int receiverID, int roomCreatorID, string roomName)
@@ -44,7 +45,11 @@ Rectangle {
     }
 
     Button {
+        id: cancekButton
         text: "cancel invite"
+        anchors.left: roomName.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 15
 
         onClicked: {
             deleteSendedInvite(receiverID, roomCreatorID, roomName.text)

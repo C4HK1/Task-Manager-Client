@@ -33,7 +33,7 @@ DefaultFrame {
             Repeater {
                 id: paramRepeater
                 model: [
-                    {name: qsTr("senderName"), text: qsTr("Sender name"), width: 212},
+                    {name: qsTr("profile name"), text: qsTr("Sender name"), width: 212},
                     {name: qsTr("roomName"), text: qsTr("Room name"), width: 200}
                 ]
 

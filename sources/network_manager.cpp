@@ -891,6 +891,7 @@ void NetworkManager::handleGetProfileReceivedInvitesResponse() {
 
         int serverStatus = response.at("status");
         Models::Invites invites = response.at("invites");
+        invites.setType(Models::RECEIVED);
 
         emit finishGetProfileReceivedInvitesResponseHandling(serverStatus, invites);
     } catch (nlohmann::json::exception &exception) {
@@ -911,6 +912,7 @@ void NetworkManager::handleGetProfileSendedInvitesResponse() {
 
         int serverStatus = response.at("status");
         Models::Invites invites = response.at("invites");
+        invites.setType(Models::SENDED);
 
         emit finishGetProfileSendedInvitesResponseHandling(serverStatus, invites);
     } catch (nlohmann::json::exception &exception) {
@@ -1196,8 +1198,10 @@ void NetworkManager::handleCreateInviteResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        Models::Invite invite = response.at("invite");
+        invite.type = Models::SENDED;
 
-        emit finishCreateInviteResponseHandling(serverStatus);
+        emit finishCreateInviteResponseHandling(serverStatus, invite);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;
@@ -1215,8 +1219,10 @@ void NetworkManager::handleAcceptInviteResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        Models::Invite invite = response.at("invite");
+        invite.type = Models::RECEIVED;
 
-        emit finishAcceptInviteResponseHandling(serverStatus);
+        emit finishAcceptInviteResponseHandling(serverStatus, invite);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;
@@ -1234,8 +1240,10 @@ void NetworkManager::handleDeleteSendedInviteResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        Models::Invite invite = response.at("invite");        
+        invite.type = Models::SENDED;
 
-        emit finishDeleteSendedInviteResponseHandling(serverStatus);
+        emit finishDeleteSendedInviteResponseHandling(serverStatus, invite);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;
@@ -1253,8 +1261,10 @@ void NetworkManager::handleDeleteReceivedInviteResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        Models::Invite invite = response.at("invite");
+        invite.type = Models::RECEIVED;
 
-        emit finishDeleteReceivedInviteResponseHandling(serverStatus);
+        emit finishDeleteReceivedInviteResponseHandling(serverStatus, invite);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;

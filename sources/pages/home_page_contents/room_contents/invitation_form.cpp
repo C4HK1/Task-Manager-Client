@@ -6,7 +6,7 @@
 
 //Object part
 InvitationForm::InvitationForm(QQmlEngine *engine, QQuickItem *container, Room *room) :
-        BaseElement(engine, container, "qml/MainWorkspaceElements/Invitation.qml"),
+        BaseElement(engine, container, "qml/MainWorkspaceElements/InviteForm.qml"),
         itemComponent(new QQmlComponent(engine, "qml/ProfileRow.qml")),
         profilesContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("profilesContainer")),
         room(room) {
@@ -19,6 +19,10 @@ InvitationForm::InvitationForm(QQmlEngine *engine, QQuickItem *container, Room *
 }
 
 InvitationForm::~InvitationForm() {
+    for (auto &item : items) {
+        item->deleteLater();
+    }
+    itemComponent->deleteLater();
 }
 
 
@@ -31,7 +35,6 @@ void InvitationForm::findProfilesWithSuchName(QString name) {
 }
 
 void InvitationForm::invite(int receiverID, int roomCreatorID, QString roomName) {
-    qInfo() << "invite: " << receiverID << roomCreatorID << roomName;
     this->netManager->sendCreateInviteRequest(receiverID, roomCreatorID, roomName);
 }
 
@@ -45,8 +48,12 @@ void InvitationForm::finishFindProfilesWithSuchName(Models::ServerStatus serverS
     }
 }
 
-void InvitationForm::finishInvite(Models::ServerStatus serverStatus) {
-    qInfo() << "inviting status: " << serverStatus.status;
+void InvitationForm::finishInvite(Models::ServerStatus serverStatus, Models::Invite invite) {
+    if (!serverStatus.status) {
+        this->room->closeForm();
+    } else {
+        qInfo() << "error invite creation with status: " << serverStatus.status;
+    }
 }
 
 void InvitationForm::closeInvitationForm() {

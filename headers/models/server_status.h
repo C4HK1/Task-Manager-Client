@@ -53,7 +53,7 @@ namespace Models {
         FILE_PARSER_WRITING_DATA_ERROR,
     };
 
-    constexpr size_t DATA_BASE_BITS_COUNT{5};
+    constexpr size_t DATA_BASE_BITS_COUNT{6};
     constexpr size_t JWT_BITS_COUNT{3};
     constexpr size_t FILE_PARSER_BITS_COUNT{3};
 

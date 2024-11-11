@@ -4,11 +4,6 @@
 #include "base_element.h"
 #include "models.h"
 
-enum InviteType {
-    RECEIVED,
-    SENDED
-};
-
 class HomePage;
 
 class InvitesList : public BaseElement
@@ -17,10 +12,14 @@ class InvitesList : public BaseElement
 public:
     HomePage *homePage;
 
-    InvitesList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    InvitesList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);    
     virtual ~InvitesList();
 
-    virtual void createInviteItem(Models::Invite &invite, InviteType inviteType) = 0;
+    QQuickItem *getInviteItem(Models::Invite invite);
+
+    int find(Models::Invite invite, Models::Invites invites);
+
+    virtual void createInviteItem(Models::Invite &invite) = 0;
 signals:
 public slots:
     void sortBy(QString by, bool ascending = true);
@@ -31,9 +30,9 @@ public slots:
     void deleteReceivedInvite(int senderID, int roomCreatorID, QString roomName);
     void deleteSendedInvite(int receiverID, int roomCreatorID, QString roomName);
 
-    void finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus);
-    void finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus);
-    void finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus);
+    void finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
+    void finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
+    void finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
 protected:
     QQuickItem *listContainer;
     QQmlComponent *sendedItemComponent;

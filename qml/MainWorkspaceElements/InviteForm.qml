@@ -68,7 +68,7 @@ Frame {
             text: "invite"
 
             onClicked: {
-                invite(profilesContainer.receiverID, room.roomcraetorID, room.roomName)
+                invite(profilesContainer.receiverID, room.roomCreatorID, room.roomName)
             }
         }
     }

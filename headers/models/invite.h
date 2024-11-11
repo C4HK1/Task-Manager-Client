@@ -5,6 +5,11 @@
 #include <nlohmann/json.hpp>
 
 namespace Models {
+    enum InviteTypes : u_int64_t {
+        RECEIVED,
+        SENDED
+    };
+
     struct Invite {
         Q_GADGET
         Q_PROPERTY(QString senderName READ getSenderName)
@@ -18,6 +23,9 @@ namespace Models {
 
         QQuickItem *inviteItem;
 
+        InviteTypes type;
+
+        bool operator ==(Invite invite);
 
         QString getSenderName() const { return this->senderName; }
         QString getRoomName() const { return this->roomName; }

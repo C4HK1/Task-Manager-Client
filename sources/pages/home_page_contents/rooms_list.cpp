@@ -29,7 +29,6 @@ void RoomsList::initializeContents(Models::ServerStatus serverStatus, Models::Ro
 
     for(auto &room : this->rooms){
         this->createRoomItem(room);
-        qInfo() << room.roomItem;
         connect(room.roomItem, SIGNAL(switchToRoom(int, QString)), this, SLOT(switchToRoom(int, QString)));
     }
 }

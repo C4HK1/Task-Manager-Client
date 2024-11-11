@@ -21,6 +21,9 @@ InvitesList::~InvitesList(){
         invite.inviteItem->deleteLater();
         invite.inviteItem = nullptr;
     }
+
+    sendedItemComponent->deleteLater();
+    receivedItemComponent->deleteLater();
 }
 
 
@@ -42,10 +45,13 @@ void InvitesList::sortBy(QString by, bool ascending) {
 
 void InvitesList::receivedInvitesInitialization(Models::ServerStatus serverStatus, Models::Invites invites) {
     if (!serverStatus.status) {
-        this->invites = invites;
+        this->invites.append(invites);
 
         for(auto &invite : this->invites){
-            this->createInviteItem(invite, RECEIVED);
+            if (this->find(invite, invites) == -1)
+                continue;
+
+            this->createInviteItem(invite);
             connect(invite.inviteItem, SIGNAL(acceptInvite(int, QString)), this, SLOT(acceptInvite(int, QString)));
             connect(invite.inviteItem, SIGNAL(deleteReceivedInvite(int, int, QString)), this, SLOT(deleteReceivedInvite(int, int, QString)));
         }
@@ -58,10 +64,13 @@ void InvitesList::receivedInvitesInitialization(Models::ServerStatus serverStatu
 
 void InvitesList::sendedInvitesInitialization(Models::ServerStatus serverStatus, Models::Invites invites) {
     if (!serverStatus.status) {
-        this->invites = invites;
+        this->invites.append(invites);
 
         for(auto &invite : this->invites){
-            this->createInviteItem(invite, SENDED);
+            if (this->find(invite, invites) == -1)
+                continue;
+
+            this->createInviteItem(invite);
             connect(invite.inviteItem, SIGNAL(deleteSendedInvite(int, int, QString)), this, SLOT(deleteSendedInvite(int, int, QString)));
         }
 
@@ -83,26 +92,91 @@ void InvitesList::deleteSendedInvite(int receiverID, int roomCreatorID, QString 
     this->netManager->sendDeleteSendedInviteRequest(receiverID, roomCreatorID, roomName);
 }
 
-void InvitesList::finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus) {
+void InvitesList::finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite) {
     if (!serverStatus.status) {
+        auto item = this->getInviteItem(invite);
 
+        if (!item) {
+            qInfo() << "there is no inivte with such parameters";
+            return;
+        }
+
+        item->deleteLater();
+        this->invites.removeAcceptedInvites(invite);
     } else {
         qInfo() << "accept invite failed with status: " << serverStatus.status;
     }
 }
 
-void InvitesList::finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus) {
+void InvitesList::finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite) {
     if (!serverStatus.status) {
+        auto item = this->getInviteItem(invite);
 
+        if (!item) {
+            qInfo() << "there is no inivte with such parameters";
+            return;
+        }
+
+        item->deleteLater();
+        this->invites.remove(invite);
     } else {
         qInfo() << "delete received invite failed with status: " << serverStatus.status;
     }
 }
 
-void InvitesList::finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus) {
+void InvitesList::finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite) {
     if (!serverStatus.status) {
+        auto item = this->getInviteItem(invite);
 
+        if (!item) {
+            qInfo() << "there is no inivte with such parameters";
+            return;
+        }
+
+        item->deleteLater();
+        this->invites.remove(invite);
     } else {
         qInfo() << "delete sended invite failed with status: " << serverStatus.status;
     }
+}
+
+//Methods
+QQuickItem *InvitesList::getInviteItem(Models::Invite invite) {
+    auto senderID = invite.senderID;
+    auto receiverID = invite.receiverID;
+    auto roomCreatorID = invite.roomCreatorID;
+    auto roomName = invite.roomName;
+
+    for (auto &invite : this->invites) {
+        if     (invite.senderID == senderID &&
+                invite.receiverID == receiverID &&
+                invite.roomCreatorID == roomCreatorID &&
+                invite.roomName == roomName) {
+            return invite.inviteItem;
+        }
+    }
+
+    return nullptr;
+}
+
+int InvitesList::find(Models::Invite invite, Models::Invites invites) {
+    auto senderID = invite.senderID;
+    auto receiverID = invite.receiverID;
+    auto roomCreatorID = invite.roomCreatorID;
+    auto roomName = invite.roomName;
+    auto invites_count = invites.size();
+
+    int i = 0;
+    for (auto invite : invites) {
+        if (invite.senderID == senderID &&
+            invite.receiverID == receiverID &&
+            invite.roomCreatorID == roomCreatorID &&
+            invite.roomName == roomName) {
+            return i;
+        }
+
+        ++i;
+    }
+
+    return -1;
 }

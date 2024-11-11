@@ -17,7 +17,12 @@ namespace Models {
 
         size_t size();
 
+        void setType(Models::InviteTypes type);
+
         void append(Invite invite);
+        void append(Invites invites);
+        void remove(Invite invite);
+        void removeAcceptedInvites(Models::Invite invite);
     private:
         QList<Invite> invites;
     };

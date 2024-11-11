@@ -11,7 +11,7 @@ public:
     AllInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
     ~AllInvites() override;
 
-    void createInviteItem(Models::Invite &invite, InviteType inviteType) override;
+    void createInviteItem(Models::Invite &invite) override;
 signals:
 public slots:
 protected:

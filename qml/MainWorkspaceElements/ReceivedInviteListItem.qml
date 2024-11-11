@@ -46,14 +46,24 @@ Rectangle {
     }
 
     Button {
+        id: acceptButton
         text: "accept"
+        anchors.left: roomName.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 15
+
         onClicked: {
             acceptInvite(senderID, roomName.text)
         }
     }
 
     Button {
+        id: discardButton
         text: "discard"
+        anchors.left: acceptButton.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 15
+
         onClicked: {
             deleteReceivedInvite(senderID, roomCreatorID, roomName.text)
         }

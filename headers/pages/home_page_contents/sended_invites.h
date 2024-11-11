@@ -11,7 +11,7 @@ public:
     SendedInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
     ~SendedInvites() override;
 
-    void createInviteItem(Models::Invite &invite, InviteType inviteType = SENDED) override;
+    void createInviteItem(Models::Invite &invite) override;
 signals:
 public slots:
 protected:

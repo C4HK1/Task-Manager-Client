@@ -178,10 +178,10 @@ signals:
     void finishDeleteTaskResponseHandling(Models::ServerStatus serverStatus);
 
     //Invite
-    void finishCreateInviteResponseHandling(Models::ServerStatus serverStatus);
-    void finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus);
-    void finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus);
-    void finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus);
+    void finishCreateInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
+    void finishAcceptInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
+    void finishDeleteSendedInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
+    void finishDeleteReceivedInviteResponseHandling(Models::ServerStatus serverStatus, Models::Invite invite);
 
 //DELETE
     //Profile

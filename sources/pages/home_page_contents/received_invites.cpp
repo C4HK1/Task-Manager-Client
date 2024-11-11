@@ -11,7 +11,7 @@ ReceivedInvites::ReceivedInvites(QQmlEngine *engine, QQuickItem *container, Home
 ReceivedInvites::~ReceivedInvites() {}
 
 //Methods
-void ReceivedInvites::createInviteItem(Models::Invite &invite, InviteType) {
+void ReceivedInvites::createInviteItem(Models::Invite &invite) {
     auto item = qobject_cast<QQuickItem*>(receivedItemComponent->create(engine->rootContext()));
 
     item->setProperty("senderName", invite.senderName);

@@ -3,7 +3,6 @@
 //Object part
 SendedInvites::SendedInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
         InvitesList(engine, container, homePage) {
-    qInfo() << "test";
     connect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
 
     netManager->sendGetProfileSendedInvitesRequest();
@@ -12,7 +11,10 @@ SendedInvites::SendedInvites(QQmlEngine *engine, QQuickItem *container, HomePage
 SendedInvites::~SendedInvites() {}
 
 //Methods
-void SendedInvites::createInviteItem(Models::Invite &invite, InviteType inviteType){
+void SendedInvites::createInviteItem(Models::Invite &invite){
+    if (invite.type != Models::SENDED)
+        return;
+
     auto item = qobject_cast<QQuickItem*>(sendedItemComponent->create(engine->rootContext()));
 
     item->setProperty("receiverName", invite.receiverName);
