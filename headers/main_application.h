@@ -29,6 +29,8 @@ public:
     QQuickItem* loadQmlFrame(QString fileName);
 
     void tryAuthenticate();
+    template <typename ElementType, typename ...Args> requires IsElement<ElementType>
+    BaseElement* createElement(Args... args);
 signals:
 public slots:
     void handleAuthentication(Models::ServerStatus serverStatus);

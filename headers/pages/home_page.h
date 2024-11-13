@@ -22,6 +22,9 @@ public:
     template <typename FormType, typename ...Args> requires IsElement<FormType>
     void switchForm(Args... args);
 
+    template <typename ElementType, typename ...Args> requires IsElement<ElementType>
+    BaseElement* createElement(Args... args);
+
 signals:
 public slots:
     void switchToRoom(Models::Room room);

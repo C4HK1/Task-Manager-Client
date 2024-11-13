@@ -48,6 +48,10 @@ void HomePage::switchForm(Args... args) {
 
 //Page part
 
+template <typename ElementType, typename ...Args> requires IsElement<ElementType>
+BaseElement* HomePage::createElement(Args... args) {
+    return new ElementType(engine, args...);
+}
 
 //Slots
 
@@ -59,18 +63,18 @@ void HomePage::switchToLoggoutForm() { switchForm<LoggoutForm>(); }
 void HomePage::switchToProfileDeleteForm() { switchForm<ProfileDeleteForm>(); }
 
 //Page
-void HomePage::switchToRoom(Models::Room room) { nav_service->switchTo<Room>(this, room); }
-void HomePage::switchToWidgetRooms() { nav_service->switchTo<WidgetRooms>(this); }
-void HomePage::switchToListRooms() { nav_service->switchTo<ListRooms>(this); }
-void HomePage::switchToSettings() { nav_service->switchTo<Settings>(this); }
-void HomePage::switchToRoomCreation() { nav_service->switchTo<RoomCreation>(this); }
-void HomePage::switchToProfile() { nav_service->switchTo<Profile>(this); }
+void HomePage::switchToRoom(Models::Room room) { nav_service->switchTo(createElement<Room>(this, room)); }
+void HomePage::switchToWidgetRooms() { nav_service->switchTo(createElement<WidgetRooms>(this)); }
+void HomePage::switchToListRooms() { nav_service->switchTo(createElement<ListRooms>(this)); }
+void HomePage::switchToSettings() { nav_service->switchTo(createElement<Settings>(this)); }
+void HomePage::switchToRoomCreation() { nav_service->switchTo(createElement<RoomCreation>(this)); }
+void HomePage::switchToProfile() { nav_service->switchTo(createElement<Profile>(this)); }
 
-void HomePage::switchToAllTasks() { nav_service->switchTo<AllTasks>(this); }
-void HomePage::switchToReviewedTasks() { nav_service->switchTo<ReviewedTasks>(this); }
-void HomePage::switchToAssignedTasks() { nav_service->switchTo<AssignedTasks>(this); }
+void HomePage::switchToAllTasks() { nav_service->switchTo(createElement<AllTasks>(this)); }
+void HomePage::switchToReviewedTasks() { nav_service->switchTo(createElement<ReviewedTasks>(this)); }
+void HomePage::switchToAssignedTasks() { nav_service->switchTo(createElement<AssignedTasks>(this)); }
 
-void HomePage::switchToAllInvites() { nav_service->switchTo<AllInvites>(this); }
-void HomePage::switchToReceivedInvites() { nav_service->switchTo<ReceivedInvites>(this); }
-void HomePage::switchToSendedInvites() { nav_service->switchTo<SendedInvites>(this); }
+void HomePage::switchToAllInvites() { nav_service->switchTo(createElement<AllInvites>(this)); }
+void HomePage::switchToReceivedInvites() { nav_service->switchTo(createElement<ReceivedInvites>(this)); }
+void HomePage::switchToSendedInvites() { nav_service->switchTo(createElement<SendedInvites>(this)); }
 

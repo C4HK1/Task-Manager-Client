@@ -1,5 +1,4 @@
 #include "navigation_service.h"
-#include "home_page.h"
 
 NavigationService::NavigationService(QQmlEngine *engine, QQuickItem *container)
     : engine(engine), container(container), current(elements.begin()) {}
@@ -8,16 +7,24 @@ NavigationService::~NavigationService() {
     clearMemory(elements.begin(), elements.end());
 }
 
-template<typename ElementType, typename ...Args> requires IsElement<ElementType>
-void NavigationService::switchTo(Args... args) {
-    clear(current + 1, elements.end());
+void NavigationService::switchTo(BaseElement *newElement) {
+    if(elements.size()) {
+        (*current)->getObject()->setParentItem(nullptr);
 
-    ElementType *newElement = new ElementType(engine, args...);
+        if(current != elements.end() - 1) {
+            clear(current + 1, elements.end());
+        }
+    }
+
     newElement->getObject()->setParentItem(container);
-    (*current)->getObject()->setParentItem(nullptr);
 
     elements.append(newElement);
     current = elements.end() - 1;
+
+    for (auto &e : elements) {
+        qInfo() << e << ' ' << e->getObject()->parentItem();
+    }
+    qInfo() << '\n';
 }
 
 void NavigationService::switchForward() {
@@ -42,7 +49,14 @@ void NavigationService::switchBackward() {
 
 void NavigationService::clear(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end) {
     if (begin >= end || !(begin < current && end <= current) || !(begin > current && end > current)) {
-        qInfo("incorrect iterators on clear");
+        qInfo() << "incorrect iterators on clear";
+
+        for (auto &e : elements) {
+            qInfo() << e;
+        }
+
+        qInfo() << std::distance(elements.begin(), begin) << ' ' << std::distance(elements.begin(), end) << '\n';
+
         return;
     }
 
@@ -73,7 +87,3 @@ bool NavigationService::isFirst() {
 bool NavigationService::isLast() {
     return current == elements.end() - 1;
 }
-
-// template definitions
-
-template void NavigationService::switchTo<HomePage, MainApplication*>(MainApplication*);

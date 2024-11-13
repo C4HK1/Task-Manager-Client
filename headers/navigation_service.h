@@ -7,8 +7,7 @@ class NavigationService final {
 public:
     NavigationService(QQmlEngine *engine, QQuickItem *container);
     ~NavigationService();
-    template<typename T, typename ...Args> requires IsElement<T>
-    void switchTo(Args... args);
+    void switchTo(BaseElement *newElement);
     void switchBackward();
     void switchForward();
     void clear(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end);

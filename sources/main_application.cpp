@@ -14,7 +14,7 @@ MainApplication::MainApplication(int argc, char **argv) :
     mainWindow = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 
-    nav_service = new NavigationService(engine, qobject_cast<QQuickItem*>(mainWindow));
+    nav_service = new NavigationService(engine, mainWindow->contentItem());
 
     QFile file("data/authentication_key.organizer");
 
@@ -48,16 +48,21 @@ void MainApplication::handleAuthentication(Models::ServerStatus serverStatus) {
 
 //Page part
 
+template <typename ElementType, typename ...Args> requires IsElement<ElementType>
+BaseElement* MainApplication::createElement(Args... args) {
+    return new ElementType(engine, args...);
+}
+
 
 //Switchers
 void MainApplication::switchToRegistrationPage() {
-    nav_service->switchTo<RegistrationPage>(this);
+    nav_service->switchTo(createElement<RegistrationPage>(this));
 }
 
 void MainApplication::switchToLogginingPage() {
-    nav_service->switchTo<LogginingPage>(this);
+    nav_service->switchTo(createElement<LogginingPage>(this));
 }
 
 void MainApplication::switchToHomePage() {
-    nav_service->switchTo<HomePage>(this);
+    nav_service->switchTo(createElement<HomePage>(this));
 }
