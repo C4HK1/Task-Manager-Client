@@ -8,7 +8,7 @@ class HomePage;
 class ListRooms : public RoomsList {
     Q_OBJECT
 public:
-    ListRooms(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    ListRooms(QQmlEngine *engine, HomePage *homePage);
     ~ListRooms();
 
     void createRoomItem(Models::Room &room) override;

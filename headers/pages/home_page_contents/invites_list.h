@@ -12,7 +12,7 @@ class InvitesList : public BaseElement
 public:
     HomePage *homePage;
 
-    InvitesList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);    
+    InvitesList(QQmlEngine *engine, HomePage *homePage);
     virtual ~InvitesList();
 
     QQuickItem *getInviteItem(Models::Invite invite);

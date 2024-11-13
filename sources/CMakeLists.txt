@@ -18,6 +18,7 @@ target_include_directories(MainApplication PUBLIC
 target_link_libraries(MainApplication Qt6::Quick Pages Models)
 target_sources(MainApplication PRIVATE
     ${HEADER_MAIN_DIR}/main_application.h main_application.cpp
+    ${HEADER_MAIN_DIR}/navigation_service.h navigation_service.cpp
     ${HEADER_MAIN_DIR}/network_manager.h network_manager.cpp
     ${HEADER_MAIN_DIR}/models.h
     ${HEADER_MODELS_DIR}

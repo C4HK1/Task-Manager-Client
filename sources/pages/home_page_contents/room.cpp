@@ -6,8 +6,8 @@
 #include "invitation_form.h"
 
 //Object part
-Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models::Room room) :
-        BaseElement(engine, container, "qml/Room.qml"),
+Room::Room(QQmlEngine *engine, HomePage *homePage, Models::Room room) :
+        BaseElement(engine, "qml/Room.qml"),
         taskComponent(new QQmlComponent(engine, "qml/Task.qml")),
         tasksContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("tasksContainer")),
         homePage(homePage),

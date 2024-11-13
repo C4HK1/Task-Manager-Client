@@ -11,7 +11,7 @@ class Profile : public BaseElement
 public:
     HomePage *homePage;
 
-    explicit Profile(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    explicit Profile(QQmlEngine *engine, HomePage *homePage);
     ~Profile();
 signals:
 public slots:

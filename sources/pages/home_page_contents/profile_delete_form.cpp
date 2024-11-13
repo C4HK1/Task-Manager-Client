@@ -5,7 +5,7 @@
 
 //Object part
 ProfileDeleteForm::ProfileDeleteForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/ProfileDelete.qml"),
+    BaseElement(engine, "qml/ProfileDelete.qml"), container(container),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(profileDelete()), this, SLOT(profileDelete()));
     connect(this->getObject(), SIGNAL(closeProfileDeleteForm()), this, SLOT(closeProfileDeleteForm()));

@@ -3,8 +3,9 @@
 
 //Object part
 HomePage::HomePage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
-        BaseElement(engine, container, "qml/MainWorkspace.qml"),
+        BaseElement(engine, "qml/MainWorkspace.qml"),
         workspace(object->findChild<QQuickItem*>("workspace")),
+        nav_service(engine, workspace),
         mainApp(mainApp) {
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
@@ -46,42 +47,30 @@ void HomePage::switchForm(Args... args) {
 }
 
 //Page part
-void HomePage::setCurrentPage(BaseElement *element){
-    if (curWorkspaceElement != nullptr) {
-        curWorkspaceElement->deleteLater();
-    }
-
-    curWorkspaceElement = element;
-}
-
-template <typename PageType, typename ...Args> requires IsElement<PageType>
-void HomePage::switchPage(Args... args) {
-    setCurrentPage(new PageType(engine, workspace, this, args...));
-}
 
 
 //Slots
 
 //Form
 void HomePage::closeForm() { setCurrentForm(nullptr); }
-void HomePage::closePage() { setCurrentPage(nullptr); }
+void HomePage::closePage() { /* setCurrentPage(nullptr); */ }
 
 void HomePage::switchToLoggoutForm() { switchForm<LoggoutForm>(); }
 void HomePage::switchToProfileDeleteForm() { switchForm<ProfileDeleteForm>(); }
 
 //Page
-void HomePage::switchToRoom(Models::Room room) { switchPage<Room>(room); }
-void HomePage::switchToWidgetRooms() { switchPage<WidgetRooms>(); }
-void HomePage::switchToListRooms() { switchPage<ListRooms>(); }
-void HomePage::switchToSettings() { switchPage<Settings>(); }
-void HomePage::switchToRoomCreation() { switchPage<RoomCreation>(); }
-void HomePage::switchToProfile() { switchPage<Profile>(); }
+void HomePage::switchToRoom(Models::Room room) { nav_service.switchTo<Room>(room); }
+void HomePage::switchToWidgetRooms() { nav_service.switchTo<WidgetRooms>(); }
+void HomePage::switchToListRooms() { nav_service.switchTo<ListRooms>(); }
+void HomePage::switchToSettings() { nav_service.switchTo<Settings>(); }
+void HomePage::switchToRoomCreation() { nav_service.switchTo<RoomCreation>(); }
+void HomePage::switchToProfile() { nav_service.switchTo<Profile>(); }
 
-void HomePage::switchToAllTasks() { switchPage<AllTasks>(); }
-void HomePage::switchToReviewedTasks() { switchPage<ReviewedTasks>(); }
-void HomePage::switchToAssignedTasks() { switchPage<AssignedTasks>(); }
+void HomePage::switchToAllTasks() { nav_service.switchTo<AllTasks>(); }
+void HomePage::switchToReviewedTasks() { nav_service.switchTo<ReviewedTasks>(); }
+void HomePage::switchToAssignedTasks() { nav_service.switchTo<AssignedTasks>(); }
 
-void HomePage::switchToAllInvites() { switchPage<AllInvites>(); }
-void HomePage::switchToReceivedInvites() { switchPage<ReceivedInvites>(); }
-void HomePage::switchToSendedInvites() { switchPage<SendedInvites>(); }
+void HomePage::switchToAllInvites() { nav_service.switchTo<AllInvites>(); }
+void HomePage::switchToReceivedInvites() { nav_service.switchTo<ReceivedInvites>(); }
+void HomePage::switchToSendedInvites() { nav_service.switchTo<SendedInvites>(); }
 

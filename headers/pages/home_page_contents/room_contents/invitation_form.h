@@ -31,6 +31,7 @@ protected:
     QQmlComponent *itemComponent;
     QQuickItem *profilesContainer;
 private:
+    QQuickItem *container;
 };
 
 #endif // INVITATION_FORM_H

@@ -20,6 +20,7 @@ public slots:
     void finishProfileDelete(Models::ServerStatus serverStatus);
 protected:
 private:
+    QQuickItem *container;
 };
 
 #endif // PROFILE_DELETE_FORM_H

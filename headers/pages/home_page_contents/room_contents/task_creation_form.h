@@ -26,6 +26,7 @@ public slots:
     void finishCreateTask(Models::ServerStatus serverStatus, Models::Task task);
 protected:
 private:
+    QQuickItem *container;
 };
 
 #endif // TASK_CREATION_FORM_H

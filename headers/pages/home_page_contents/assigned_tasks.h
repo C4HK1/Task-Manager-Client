@@ -8,7 +8,7 @@ class HomePage;
 class AssignedTasks : public TasksList {
     Q_OBJECT
 public:
-    AssignedTasks(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    AssignedTasks(QQmlEngine *engine, HomePage *homePage);
     ~AssignedTasks() override;
 signals:
 public slots:

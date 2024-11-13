@@ -7,6 +7,7 @@
 #include "network_manager.h"
 #include "home_page_contents.h"
 #include "main_application.h"
+#include "navigation_service.h"
 
 class HomePage : public BaseElement {
     Q_OBJECT
@@ -16,14 +17,11 @@ public:
     HomePage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
     ~HomePage();
 
-    void setCurrentPage(BaseElement *page);
     void setCurrentForm(BaseElement *form);
 
     template <typename FormType, typename ...Args> requires IsElement<FormType>
     void switchForm(Args... args);
 
-    template <typename PageType, typename ...Args> requires IsElement<PageType>
-    void switchPage(Args... args);
 signals:
 public slots:
     void switchToRoom(Models::Room room);
@@ -49,7 +47,7 @@ public slots:
 protected:
 private:
     QQuickItem *workspace = nullptr;
-    BaseElement *curWorkspaceElement = nullptr;
+    NavigationService nav_service;
     BaseElement *curForm = nullptr;
     Models::Rooms rooms;
 };

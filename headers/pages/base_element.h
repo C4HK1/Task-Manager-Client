@@ -8,8 +8,7 @@
 class BaseElement : public QObject {
     Q_OBJECT
 public:
-    BaseElement(QQmlEngine *engine, QQuickItem *container, QString moduleName);
-    BaseElement(QQmlEngine *engine, BaseElement *container, QString moduleName);
+    BaseElement(QQmlEngine *engine, QString moduleName);
     ~BaseElement();
 
     QQuickItem* loadQmlFrame(QString moduleName);
@@ -18,7 +17,6 @@ signals:
 public slots:
 protected:
     QQmlEngine *engine;
-    QQuickItem *container;
     QQuickItem *object;
     NetworkManager *netManager;
 private:

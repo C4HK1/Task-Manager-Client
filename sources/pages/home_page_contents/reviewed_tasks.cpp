@@ -1,7 +1,7 @@
 #include "reviewed_tasks.h"
 
-ReviewedTasks::ReviewedTasks(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-    TasksList(engine, container, homePage) {
+ReviewedTasks::ReviewedTasks(QQmlEngine *engine, HomePage *homePage) :
+    TasksList(engine, homePage) {
     connect(netManager, &NetworkManager::finishGetProfileReviewedTasksResponseHandling, this, &TasksList::tasksInitialization);
 
     netManager->sendGetProfileReviewedTasksRequest();

@@ -10,7 +10,7 @@ class Settings : public BaseElement {
 public:
     HomePage *homePage;
 
-    Settings(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    Settings(QQmlEngine *engine, HomePage *homePage);
     ~Settings();
 signals:
 public slots:

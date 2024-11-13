@@ -1,8 +1,8 @@
 #include "settings.h"
 
 //Object part
-Settings::Settings(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/Settings.qml"),
+Settings::Settings(QQmlEngine *engine, HomePage *homePage) :
+        BaseElement(engine, "qml/Settings.qml"),
         homePage(homePage) {
 }
 

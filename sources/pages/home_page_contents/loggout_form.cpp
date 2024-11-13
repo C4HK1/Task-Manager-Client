@@ -5,7 +5,7 @@
 
 //Object part
 LoggoutForm::LoggoutForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/Loggout.qml"),
+    BaseElement(engine, "qml/Loggout.qml"), container(container),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(loggout()), this, SLOT(loggout()));
     connect(this->getObject(), SIGNAL(closeLoggoutForm()), this, SLOT(closeLoggoutForm()));

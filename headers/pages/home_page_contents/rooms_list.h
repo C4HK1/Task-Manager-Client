@@ -12,7 +12,7 @@ class RoomsList : public BaseElement
 public:
     HomePage *homePage;
 
-    RoomsList(QQmlEngine *engine, QQuickItem *container, QString moduleName, QString itemName, HomePage *homePage);
+    RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, HomePage *homePage);
     virtual void createRoomItem(Models::Room &room) = 0;
     ~RoomsList();
 signals:

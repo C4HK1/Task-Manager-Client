@@ -4,8 +4,8 @@
 #include "home_page.h"
 
 //Object part
-RoomCreation::RoomCreation(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/RoomCreation.qml"),
+RoomCreation::RoomCreation(QQmlEngine *engine, HomePage *homePage) :
+        BaseElement(engine, "qml/RoomCreation.qml"),
         homePage(homePage) {
     connect(netManager, &NetworkManager::finishCreateRoomResponseHandling, this, &RoomCreation::finishCreateRoom);
     connect(this->getObject(), SIGNAL(createRoom(QString, QString)), this, SLOT(createRoom(QString, QString)));

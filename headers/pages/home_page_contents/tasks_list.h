@@ -12,7 +12,7 @@ class TasksList : public BaseElement
 public:
     HomePage *homePage;
 
-    TasksList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    TasksList(QQmlEngine *engine, HomePage *homePage);
     virtual ~TasksList();
 
     void createTaskItem(Models::Task &task);

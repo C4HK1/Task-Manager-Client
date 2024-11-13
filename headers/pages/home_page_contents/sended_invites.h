@@ -8,7 +8,7 @@ class HomePage;
 class SendedInvites : public InvitesList {
     Q_OBJECT
 public:
-    SendedInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    SendedInvites(QQmlEngine *engine, HomePage *homePage);
     ~SendedInvites() override;
 
     void createInviteItem(Models::Invite &invite) override;

@@ -2,8 +2,8 @@
 #include "home_page.h"
 
 //Object part
-RoomsList::RoomsList(QQmlEngine *engine, QQuickItem *container, QString moduleName, QString itemName, HomePage *homePage) :
-        BaseElement(engine, container, moduleName),
+RoomsList::RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, HomePage *homePage) :
+        BaseElement(engine, moduleName),
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile(itemName))),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));

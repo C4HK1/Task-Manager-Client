@@ -1,8 +1,8 @@
 #include "sended_invites.h"
 
 //Object part
-SendedInvites::SendedInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        InvitesList(engine, container, homePage) {
+SendedInvites::SendedInvites(QQmlEngine *engine, HomePage *homePage) :
+        InvitesList(engine, homePage) {
     connect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
 
     netManager->sendGetProfileSendedInvitesRequest();

@@ -1,8 +1,8 @@
 #include "list_rooms.h"
 
 //Object part
-ListRooms::ListRooms(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        RoomsList(engine, container, "qml/ListRooms.qml", "qml/MainWorkspaceElements/RoomListItem.qml", homePage),
+ListRooms::ListRooms(QQmlEngine *engine, HomePage *homePage) :
+        RoomsList(engine, "qml/ListRooms.qml", "qml/MainWorkspaceElements/RoomListItem.qml", homePage),
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")) {
 }
 

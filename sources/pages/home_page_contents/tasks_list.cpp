@@ -3,8 +3,8 @@
 #include "home_page.h"
 
 //Object part
-TasksList::TasksList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/Tasks.qml"),
+TasksList::TasksList(QQmlEngine *engine, HomePage *homePage) :
+        BaseElement(engine, "qml/Tasks.qml"),
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/TaskListItem.qml"))),
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")),
         homePage(homePage) {

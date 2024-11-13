@@ -6,7 +6,7 @@
 
 //Object part
 InvitationForm::InvitationForm(QQmlEngine *engine, QQuickItem *container, Room *room) :
-        BaseElement(engine, container, "qml/MainWorkspaceElements/InviteForm.qml"),
+    BaseElement(engine, "qml/MainWorkspaceElements/InviteForm.qml"), container(container),
         itemComponent(new QQmlComponent(engine, "qml/ProfileRow.qml")),
         profilesContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("profilesContainer")),
         room(room) {

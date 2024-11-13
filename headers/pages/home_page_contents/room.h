@@ -12,7 +12,7 @@ public:
     HomePage *homePage;
 
     //Object part
-    Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models::Room room);
+    Room(QQmlEngine *engine, HomePage *homePage, Models::Room room);
     ~Room();
 
     //Methods

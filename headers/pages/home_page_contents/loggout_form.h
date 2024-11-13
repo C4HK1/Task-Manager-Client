@@ -19,6 +19,7 @@ public slots:
     void closeLoggoutForm();
 protected:
 private:
+    QQuickItem *container;
 };
 
 #endif // LOGGOUT_FORM_H

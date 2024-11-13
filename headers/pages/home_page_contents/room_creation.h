@@ -10,7 +10,7 @@ class RoomCreation : public BaseElement {
 public:
     HomePage *homePage;
 
-    RoomCreation(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    RoomCreation(QQmlEngine *engine, HomePage *homePage);
     ~RoomCreation();
 signals:
 public slots:
