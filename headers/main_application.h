@@ -16,6 +16,7 @@
 
 #include "base_element.h"
 #include "models.h"
+#include "navigation_service.h"
 
 class NetworkManager;
 
@@ -28,11 +29,6 @@ public:
     QQuickItem* loadQmlFrame(QString fileName);
 
     void tryAuthenticate();
-
-    void SetCurrentPage(BaseElement *page);
-
-    template <typename T, typename ...Args> requires IsElement<T>
-    void switchPage(Args...);
 signals:
 public slots:
     void handleAuthentication(Models::ServerStatus serverStatus);
@@ -44,7 +40,7 @@ private:
     NetworkManager *netManager;
     QQmlEngine *engine;
     QQuickWindow *mainWindow = nullptr;
-    BaseElement *curPage = nullptr;
+    NavigationService *nav_service = nullptr;
 };
 
 #endif // MAIN_APPLICATION_H

@@ -11,7 +11,7 @@ class LogginingPage : public BaseElement {
 public:
     MainApplication *mainApp;
 
-    LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
+    LogginingPage(QQmlEngine *engine, MainApplication *mainApp);
     ~LogginingPage();
 signals:
 public slots:

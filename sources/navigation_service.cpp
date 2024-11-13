@@ -1,10 +1,11 @@
 #include "navigation_service.h"
+#include "home_page.h"
 
 NavigationService::NavigationService(QQmlEngine *engine, QQuickItem *container)
     : engine(engine), container(container), current(elements.begin()) {}
 
 NavigationService::~NavigationService() {
-    clear(elements.begin(), elements.end());
+    clearMemory(elements.begin(), elements.end());
 }
 
 template<typename ElementType, typename ...Args> requires IsElement<ElementType>
@@ -53,12 +54,16 @@ void NavigationService::clear(QList<BaseElement*>::iterator begin, QList<BaseEle
         dist = std::distance(elements.begin(), current);
     }
 
-    for(auto it = begin; it != end; ++it) {
-        (*it)->deleteLater();
-    }
+    clearMemory(begin, end);
 
     elements.erase(QList<BaseElement*>::const_iterator(begin), QList<BaseElement*>::const_iterator(end));
     current = elements.begin() + dist;
+}
+
+void NavigationService::clearMemory(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end) {
+    for(auto it = begin; it != end; ++it) {
+        (*it)->deleteLater();
+    }
 }
 
 bool NavigationService::isFirst() {
@@ -68,3 +73,7 @@ bool NavigationService::isFirst() {
 bool NavigationService::isLast() {
     return current == elements.end() - 1;
 }
+
+// template definitions
+
+template void NavigationService::switchTo<HomePage, MainApplication*>(MainApplication*);

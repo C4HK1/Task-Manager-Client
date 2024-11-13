@@ -6,8 +6,8 @@
 #include "home_page.h"
 
 //Object part
-RegistrationPage::RegistrationPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
-        BaseElement(engine, container, "qml/Registration.qml"),
+RegistrationPage::RegistrationPage(QQmlEngine *engine, MainApplication *mainApp) :
+        BaseElement(engine, "qml/Registration.qml"),
         mainApp(mainApp) {
     connect(this->getObject(), SIGNAL(createProfile(QString, QString, QString, QString, QString)), this, SLOT(createProfile(QString, QString, QString, QString, QString)));
 

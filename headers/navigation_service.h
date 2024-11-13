@@ -12,6 +12,7 @@ public:
     void switchBackward();
     void switchForward();
     void clear(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end);
+    void clearMemory(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end);
 
     bool isFirst();
     bool isLast();

@@ -11,7 +11,7 @@ class RegistrationPage : public BaseElement {
 public:
     MainApplication *mainApp;
 
-    RegistrationPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
+    RegistrationPage(QQmlEngine *engine, MainApplication *mainApp);
     ~RegistrationPage();
 signals:
 public slots:

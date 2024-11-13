@@ -2,10 +2,10 @@
 #include "main_application.h"
 
 //Object part
-HomePage::HomePage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
+HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
         BaseElement(engine, "qml/MainWorkspace.qml"),
         workspace(object->findChild<QQuickItem*>("workspace")),
-        nav_service(engine, workspace),
+        nav_service(new NavigationService(engine, workspace)),
         mainApp(mainApp) {
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
@@ -59,18 +59,18 @@ void HomePage::switchToLoggoutForm() { switchForm<LoggoutForm>(); }
 void HomePage::switchToProfileDeleteForm() { switchForm<ProfileDeleteForm>(); }
 
 //Page
-void HomePage::switchToRoom(Models::Room room) { nav_service.switchTo<Room>(room); }
-void HomePage::switchToWidgetRooms() { nav_service.switchTo<WidgetRooms>(); }
-void HomePage::switchToListRooms() { nav_service.switchTo<ListRooms>(); }
-void HomePage::switchToSettings() { nav_service.switchTo<Settings>(); }
-void HomePage::switchToRoomCreation() { nav_service.switchTo<RoomCreation>(); }
-void HomePage::switchToProfile() { nav_service.switchTo<Profile>(); }
+void HomePage::switchToRoom(Models::Room room) { nav_service->switchTo<Room>(this, room); }
+void HomePage::switchToWidgetRooms() { nav_service->switchTo<WidgetRooms>(this); }
+void HomePage::switchToListRooms() { nav_service->switchTo<ListRooms>(this); }
+void HomePage::switchToSettings() { nav_service->switchTo<Settings>(this); }
+void HomePage::switchToRoomCreation() { nav_service->switchTo<RoomCreation>(this); }
+void HomePage::switchToProfile() { nav_service->switchTo<Profile>(this); }
 
-void HomePage::switchToAllTasks() { nav_service.switchTo<AllTasks>(); }
-void HomePage::switchToReviewedTasks() { nav_service.switchTo<ReviewedTasks>(); }
-void HomePage::switchToAssignedTasks() { nav_service.switchTo<AssignedTasks>(); }
+void HomePage::switchToAllTasks() { nav_service->switchTo<AllTasks>(this); }
+void HomePage::switchToReviewedTasks() { nav_service->switchTo<ReviewedTasks>(this); }
+void HomePage::switchToAssignedTasks() { nav_service->switchTo<AssignedTasks>(this); }
 
-void HomePage::switchToAllInvites() { nav_service.switchTo<AllInvites>(); }
-void HomePage::switchToReceivedInvites() { nav_service.switchTo<ReceivedInvites>(); }
-void HomePage::switchToSendedInvites() { nav_service.switchTo<SendedInvites>(); }
+void HomePage::switchToAllInvites() { nav_service->switchTo<AllInvites>(this); }
+void HomePage::switchToReceivedInvites() { nav_service->switchTo<ReceivedInvites>(this); }
+void HomePage::switchToSendedInvites() { nav_service->switchTo<SendedInvites>(this); }
 

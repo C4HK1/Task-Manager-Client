@@ -14,7 +14,7 @@ class HomePage : public BaseElement {
 public:
     MainApplication *mainApp;
 
-    HomePage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
+    HomePage(QQmlEngine *engine, MainApplication *mainApp);
     ~HomePage();
 
     void setCurrentForm(BaseElement *form);
@@ -47,7 +47,7 @@ public slots:
 protected:
 private:
     QQuickItem *workspace = nullptr;
-    NavigationService nav_service;
+    NavigationService *nav_service = nullptr;
     BaseElement *curForm = nullptr;
     Models::Rooms rooms;
 };
