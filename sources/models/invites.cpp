@@ -42,8 +42,6 @@ void Models::Invites::remove(Models::Invite invite) {
     auto roomCreatorID = invite.roomCreatorID;
     auto roomName = invite.roomName;
 
-    auto invites_count = this->invites.size();
-
     int i = 0;
     for (auto &invite : invites) {
         if (invite.senderID == senderID &&
@@ -62,13 +60,13 @@ void Models::Invites::removeAcceptedInvites(Models::Invite invite) {
     auto roomCreatorID = invite.roomCreatorID;
     auto roomName = invite.roomName;
 
-    auto invites_count = this->invites.size();
-
-    for (int i = 0; i < invites_count; ++i) {
-        if (invites[i].receiverID == receiverID &&
-            invites[i].roomCreatorID == roomCreatorID &&
-            invites[i].roomName == roomName) {
+    int i = 0;
+    for (auto invite : this->invites) {
+        if (invite.receiverID == receiverID &&
+            invite.roomCreatorID == roomCreatorID &&
+            invite.roomName == roomName) {
             this->invites.removeAt(i);
         }
+        i += 1;
     }
 }

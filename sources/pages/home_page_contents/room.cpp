@@ -17,8 +17,10 @@ Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models
     object->setProperty("roomCreatorID", QString::number(room.creatorID));
 
     connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::setTasks);
+    connect(netManager, &NetworkManager::finishLeaveFromRoomResponseHandling, this, &Room::finishLeaveFromRoom);
     connect(this->getObject(), SIGNAL(switchToTaskCreationForm()), this, SLOT(switchToTaskCreationForm()));
     connect(this->getObject(), SIGNAL(switchToInvitationForm()), this, SLOT(switchToInvitationForm()));
+    connect(this->getObject(), SIGNAL(leaveFormRoom(int, QString)), this, SLOT(leaveFormRoom(int, QString)));
 
     netManager->sendGetRoomTasksRequest(room.creatorID, room.name);
 }
@@ -55,11 +57,6 @@ void Room::switchForm(Args... args) {
     setCurrentForm(new FormType(engine, this->getObject(), this, args...));
 }
 
-void Room::closeForm() {
-    setCurrentForm(nullptr);
-}
-
-
 //Slots part
 void Room::setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks) {
     if (!serverStatus.status) {
@@ -80,6 +77,23 @@ void Room::setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks) {
     }
 }
 
+void Room::leaveFormRoom(int roomCreatorID, QString roomName) {
+    this->netManager->sendLeaveFromRoomRequest(roomCreatorID, roomName);
+}
+
+void Room::finishLeaveFromRoom(Models::ServerStatus serverStatus) {
+    if (!serverStatus.status) {
+        this->homePage->switchToWidgetRooms();
+    } else {
+        qInfo() << "error leave from room with status: " << serverStatus.status;
+    }
+}
+
 //Switchers
 void Room::switchToTaskCreationForm() { switchForm<TaskCreationForm>(); }
 void Room::switchToInvitationForm() { switchForm<InvitationForm>(); }
+
+void Room::closeForm() {
+    setCurrentForm(nullptr);
+}
+

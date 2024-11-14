@@ -53,7 +53,7 @@ Rectangle {
         anchors.leftMargin: 15
 
         onClicked: {
-            acceptInvite(senderID, roomName.text)
+            acceptInvite(roomCreatorID, roomName.text)
         }
     }
 

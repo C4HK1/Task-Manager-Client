@@ -57,9 +57,8 @@ public:
 
     //Room
     Q_INVOKABLE void sendCreateRoomRequest(QString roomName, QString description);
-    Q_INVOKABLE void sendAppendMemberToRoomRequest(u_int64_t memberID,
-                                                   u_int64_t roomCreatorID,
-                                                   QString roomName);
+    Q_INVOKABLE void sendLeaveFromRoomRequest(u_int64_t roomCreatorID,
+                                              QString roomName);
     Q_INVOKABLE void sendDeleteRoomRequest(u_int64_t roomCreatorID, QString roomName);
 
     //Task
@@ -166,7 +165,7 @@ signals:
 
     //Room
     void finishCreateRoomResponseHandling(Models::ServerStatus serverStatus, Models::Room room);
-    void finishAppendMemberToRoomResponseHandling(Models::ServerStatus serverStatus);
+    void finishLeaveFromRoomResponseHandling(Models::ServerStatus serverStatus);
     void finishDeleteRoomResponseHandling(Models::ServerStatus serverStatus);
 
     //Task
@@ -237,7 +236,7 @@ public slots:
 
     //Room
     void handleCreateRoomResponse();
-    void handleAppendMemberToRoomResponse();
+    void handleLeaveFromRoomResponse();
     void handleDeleteRoomResponse();
 
     //Task

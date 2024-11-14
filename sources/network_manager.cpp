@@ -3,14 +3,10 @@
 #include <iostream>
 
 //FIELDS
-
-
 const QString NetworkManager::host("http://localhost:8080/");
 
 
 //METHODS
-
-
 NetworkManager* NetworkManager::getInstance() {
     static NetworkManager netManager;
     return &netManager;
@@ -331,23 +327,21 @@ void NetworkManager::sendCreateRoomRequest(QString roomName, QString description
                         << this->jwt;
 }
 
-void NetworkManager::sendAppendMemberToRoomRequest(u_int64_t memberID,
-                                                   u_int64_t roomCreatorID,
-                                                   QString roomName) {
-    QNetworkRequest request(host + "AppendMemberToRoom/");
+void NetworkManager::sendLeaveFromRoomRequest(u_int64_t roomCreatorID,
+                                              QString roomName) {
+    QNetworkRequest request(host + "LeaveFromRoom/");
 
     request.setRawHeader(QByteArray("Authorization"), this->jwt);
 
     nlohmann::json requestBody;
-    requestBody.push_back(nlohmann::json::object_t::value_type("member ID", memberID));
     requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
     requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
 
     QNetworkReply *reply = networkManager.post(request, requestBody.dump().c_str());
 
-    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleAppendMemberToRoomResponse);
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleLeaveFromRoomResponse);
 
-    qInfo() << "\nsend append member to room request on "
+    qInfo() << "\nsend leave from room request on "
                         << request.url()
                         << " with data: "
                         << requestBody.dump()
@@ -1034,9 +1028,9 @@ void NetworkManager::handleCreateRoomResponse() {
     reply->deleteLater();
 }
 
-void NetworkManager::handleAppendMemberToRoomResponse() {
+void NetworkManager::handleLeaveFromRoomResponse() {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
-    qInfo() << "append member to room server response: ";
+    qInfo() << "leave from room server response: ";
 
     try {
         nlohmann::json response = nlohmann::json::parse(reply->readAll());
@@ -1044,7 +1038,7 @@ void NetworkManager::handleAppendMemberToRoomResponse() {
 
         int serverStatus = response.at("status");
 
-        emit finishAppendMemberToRoomResponseHandling(serverStatus);
+        emit finishLeaveFromRoomResponseHandling(serverStatus);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;

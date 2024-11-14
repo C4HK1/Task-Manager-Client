@@ -16,6 +16,7 @@ DefaultFrame {
 
     signal switchToTaskCreationForm()
     signal switchToInvitationForm()
+    signal leaveFormRoom(int roomCreatorID, string roomName)
 
     GridLayout {
         id: roomInfo
@@ -53,6 +54,15 @@ DefaultFrame {
             font: DefaultFont.defaultFont
             color: "#FFFFFF"
             onLinkActivated: switchToInvitationForm()
+        }
+
+        Text {
+            Layout.row: 3
+            leftPadding: 100
+            text: qsTr("<html><a href=\"#\">Leave from room</a></html>")
+            font: DefaultFont.defaultFont
+            color: "#FFFFFF"
+            onLinkActivated: leaveFormRoom(roomCreatorID, roomName.text)
         }
     }
 

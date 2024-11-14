@@ -26,7 +26,10 @@ public:
 signals:
 public slots:
     void setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks);
+    void leaveFormRoom(int roomCreatorID, QString roomName);
+    void finishLeaveFromRoom(Models::ServerStatus sreverStatus);
 
+    //Switches
     void switchToTaskCreationForm();
     void switchToInvitationForm();
     void closeForm();
