@@ -25,3 +25,7 @@ size_t Models::Rooms::size() {
 void Models::Rooms::append(Models::Room room) {
     this->rooms.append(room);
 }
+
+void Models::Rooms::clear() {
+    this->rooms.clear();
+}

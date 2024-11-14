@@ -7,8 +7,6 @@ RoomsList::RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, H
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile(itemName))),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));
-
-    connect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
 }
 
 RoomsList::~RoomsList(){
@@ -17,11 +15,13 @@ RoomsList::~RoomsList(){
 }
 
 void RoomsList::update() {
+    connect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
     connect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
     netManager->sendGetProfileRoomsRequest();
 }
 
 void RoomsList::leave() {
+    disconnect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
     disconnect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
     clearContents();
 }
@@ -41,6 +41,7 @@ void RoomsList::clearContents() {
         roomsItems[room.localID]->deleteLater();
     }
 
+    rooms.clear();
     roomsItems.clear();
 }
 

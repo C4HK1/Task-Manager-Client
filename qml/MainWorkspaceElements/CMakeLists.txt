@@ -15,6 +15,6 @@ qt_add_qml_module(MainWorkspaceElements
         TaskTools.qml
         InviteTools.qml
         ProfileTools.qml
-
-    RESOURCE_PREFIX /qml/MainWorkspaceElements
+        PageSwitchingButton.qml
+    RESOURCE_PREFIX /
 )

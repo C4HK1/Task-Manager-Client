@@ -21,8 +21,7 @@ qt_add_qml_module(Qml
         TaskCreationButton.qml
         Tasks.qml
         WidgetRooms.qml
-
-    RESOURCE_PREFIX /qml
+    RESOURCE_PREFIX /
 )
 
 add_subdirectory(DefaultElements)

@@ -10,18 +10,14 @@ HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
         "switchToProfile()", "switchToAllTasks()", "switchToReviewedTasks()", "switchToAssignedTasks()",
+        "switchToLoggoutForm()", "switchToProfileDeleteForm()",
+        "switchToAllInvites()", "switchToReceivedInvites()", "switchToSendedInvites()",
+        "switchBackward()", "switchForward()"
     };
 
-    for (std::string &switch_slot: switch_slots) {
+    for (std::string &switch_slot : switch_slots) {
         connect(object, ("2" + switch_slot).c_str(), this, ("1" + switch_slot).c_str());
     }
-
-    connect(this->getObject(), SIGNAL(switchToLoggoutForm()), this, SLOT(switchToLoggoutForm()));
-    connect(this->getObject(), SIGNAL(switchToProfileDeleteForm()), this, SLOT(switchToProfileDeleteForm()));
-
-    connect(this->getObject(), SIGNAL(switchToAllInvites()), this, SLOT(switchToAllInvites()));
-    connect(this->getObject(), SIGNAL(switchToReceivedInvites()), this, SLOT(switchToReceivedInvites()));
-    connect(this->getObject(), SIGNAL(switchToSendedInvites()), this, SLOT(switchToSendedInvites()));
 
     switchToWidgetRooms();
 }
@@ -80,3 +76,5 @@ void HomePage::switchToAllInvites() { nav_service->switchTo(createElement<AllInv
 void HomePage::switchToReceivedInvites() { nav_service->switchTo(createElement<ReceivedInvites>(this)); }
 void HomePage::switchToSendedInvites() { nav_service->switchTo(createElement<SendedInvites>(this)); }
 
+void HomePage::switchBackward() { nav_service->switchBackward(); }
+void HomePage::switchForward() { nav_service->switchForward(); }

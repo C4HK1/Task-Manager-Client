@@ -8,5 +8,5 @@ qt_add_qml_module(Fonts
     VERSION 1.0
     QML_FILES
         DefaultFont.qml
-    RESOURCE_PREFIX /qml/DefaultElements/Fonts
+    RESOURCE_PREFIX /
 )

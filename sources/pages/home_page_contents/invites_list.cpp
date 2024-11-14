@@ -27,6 +27,7 @@ void InvitesList::clearContents() {
         invitesItems[invite.localID]->deleteLater();
     }
 
+    invites.clear();
     invitesItems.clear();
 }
 

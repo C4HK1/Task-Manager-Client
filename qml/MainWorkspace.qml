@@ -24,6 +24,9 @@ DefaultFrame {
     signal switchToReceivedInvites()
     signal switchToSendedInvites()
 
+    signal switchBackward()
+    signal switchForward()
+
     function createImageObject(str, root, params) {
         var component = Qt.createComponent(str)
         if (component.status === Component.Ready || component.status === Component.Error)
@@ -226,6 +229,48 @@ DefaultFrame {
         z: -1
 
         color: "#303030"
+
+        PageSwitchingButton {
+            id: pageBackwardButton
+            anchors.left: parent.left
+            anchors.top: parent.top
+            z: 1
+
+            Image {
+                source: "images/arrow_left.png"
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                width: 15
+                height: 15
+                z: 2
+            }
+
+            onClickFunction: function() {
+                switchBackward()
+            }
+        }
+
+        PageSwitchingButton {
+            id: pageForwardButton
+            anchors.left: pageBackwardButton.right
+            anchors.top: parent.top
+            z: 1
+
+            Image {
+                source: "images/arrow_right.png"
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                width: 15
+                height: 15
+                z: 2
+            }
+
+            onClickFunction: function() {
+                switchForward()
+            }
+        }
 
         TopbarRoomsViewButton {
             id: widgetViewButton

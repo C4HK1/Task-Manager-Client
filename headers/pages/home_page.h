@@ -48,6 +48,9 @@ public slots:
     void switchToReceivedInvites();
     void switchToSendedInvites();
 
+    void switchBackward();
+    void switchForward();
+
     void closeForm();
     void closePage();
 protected:

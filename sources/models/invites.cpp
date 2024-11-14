@@ -72,3 +72,7 @@ void Models::Invites::removeAcceptedInvites(Models::Invite invite) {
         }
     }
 }
+
+void Models::Invites::clear() {
+    this->invites.clear();
+}

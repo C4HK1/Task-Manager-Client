@@ -53,6 +53,7 @@ void TasksList::clearContents() {
         tasksItems[task.localID]->deleteLater();
     }
 
+    tasks.clear();
     tasksItems.clear();
 }
 

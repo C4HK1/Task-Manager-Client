@@ -19,6 +19,7 @@ namespace Models {
         size_t size();
 
         void append(Task task);
+        void clear();
     private:
         QList<Task> tasks;
     };

@@ -7,7 +7,7 @@ qt_add_qml_module(DefaultElements
         DefaultTextField.qml
         DefaultFrame.qml
         DefaultForm.qml
-    RESOURCE_PREFIX /qml/DefaultElements
+    RESOURCE_PREFIX /
 )
 
 add_subdirectory(Fonts)

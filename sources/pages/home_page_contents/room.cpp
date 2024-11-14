@@ -40,6 +40,7 @@ void Room::clearContents() {
         tasksItems[task.localID]->deleteLater();
     }
 
+    tasks.clear();
     tasksItems.clear();
 }
 

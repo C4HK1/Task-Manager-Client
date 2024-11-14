@@ -23,10 +23,12 @@ void NavigationService::switchTo(BasePage *newPage) {
     elements.append(newPage);
     current = elements.end() - 1;
 
+    /*
     for (auto &e : elements) {
         qInfo() << e << ' ' << e->getObject()->parentItem();
     }
     qInfo() << '\n';
+    */
 }
 
 void NavigationService::switchForward() {
@@ -56,16 +58,9 @@ void NavigationService::switchBackward() {
 }
 
 void NavigationService::clear(QList<BasePage*>::iterator begin, QList<BasePage*>::iterator end) {
-    if (begin >= end || !(begin < current && end <= current) || !(begin > current && end > current)) {
-        qInfo() << "incorrect iterators on clear";
-
-        for (auto &e : elements) {
-            qInfo() << e;
-        }
-
-        qInfo() << std::distance(elements.begin(), begin) << ' ' << std::distance(elements.begin(), end) << '\n';
-
-        return;
+    if (begin >= end || (begin <= current && end > current)) {
+        qInfo() << "incorrect iterators on clear: "
+            << std::distance(elements.begin(), begin) << ' ' << std::distance(elements.begin(), end) << '\n';
     }
 
     size_t dist;
