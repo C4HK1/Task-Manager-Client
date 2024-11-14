@@ -4,9 +4,9 @@ set_source_files_properties(DefaultFont.qml PROPERTIES
 
 qt_add_library(Fonts STATIC)
 qt_add_qml_module(Fonts
-    URI "DefaultElements.Fonts"
+    URI "qml.DefaultElements.Fonts"
     VERSION 1.0
     QML_FILES
         DefaultFont.qml
-    RESOURCE_PREFIX /DefaultElements/Fonts
+    RESOURCE_PREFIX /qml/DefaultElements/Fonts
 )

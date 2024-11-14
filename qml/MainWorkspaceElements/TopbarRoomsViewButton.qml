@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import DefaultElements.Fonts
+import qml.DefaultElements.Fonts
 
 Rectangle {
     width: 30

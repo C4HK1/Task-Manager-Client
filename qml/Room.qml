@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import DefaultElements
-import DefaultElements.Fonts
-import MainWorkspaceElements
+import qml.DefaultElements
+import qml.DefaultElements.Fonts
+import qml.MainWorkspaceElements
 
 DefaultFrame {
     id: room

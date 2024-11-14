@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import DefaultElements
-import MainWorkspaceElements
+import qml.DefaultElements
+import qml.MainWorkspaceElements
 
 Rectangle {
     Layout.fillHeight: true

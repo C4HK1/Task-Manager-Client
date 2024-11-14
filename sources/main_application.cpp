@@ -11,6 +11,7 @@ MainApplication::MainApplication(int argc, char **argv) :
     connect(netManager, &NetworkManager::finishProfileAuthenticationResponseHandling, this, &MainApplication::handleAuthentication);
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWindow.qml"));
+    qInfo() << component->errors();
     mainWindow = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 
