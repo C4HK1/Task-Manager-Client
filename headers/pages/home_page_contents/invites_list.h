@@ -2,17 +2,19 @@
 #define INVITES_LIST_H
 
 #include "base_element.h"
+#include "base_page.h"
 #include "models.h"
 
 class HomePage;
 
-class InvitesList : public BaseElement
+class InvitesList : public BasePage
 {
     Q_OBJECT
 public:
     HomePage *homePage;
 
     InvitesList(QQmlEngine *engine, HomePage *homePage);
+    void update() override;
     virtual ~InvitesList();
 
     QQuickItem *getInviteItem(Models::Invite invite);

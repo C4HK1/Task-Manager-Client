@@ -7,7 +7,7 @@
 
 //Object part
 Room::Room(QQmlEngine *engine, HomePage *homePage, Models::Room room) :
-        BaseElement(engine, "qml/Room.qml"),
+        BasePage(engine, "qml/Room.qml"),
         taskComponent(new QQmlComponent(engine, "qml/Task.qml")),
         tasksContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("tasksContainer")),
         homePage(homePage),
@@ -26,6 +26,8 @@ Room::Room(QQmlEngine *engine, HomePage *homePage, Models::Room room) :
 Room::~Room() {
     taskComponent->deleteLater();
 }
+
+void Room::update() {}
 
 
 //Methods

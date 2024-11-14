@@ -3,7 +3,7 @@
 
 //Object part
 HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
-        BaseElement(engine, "qml/MainWorkspace.qml"),
+        BasePage(engine, "qml/MainWorkspace.qml"),
         workspace(object->findChild<QQuickItem*>("workspace")),
         nav_service(new NavigationService(engine, workspace)),
         mainApp(mainApp) {
@@ -29,11 +29,12 @@ HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
 HomePage::~HomePage() {
 }
 
+void HomePage::update() {}
 
 //Elements management
 
 //Form part
-void HomePage::setCurrentForm(BaseElement *form){
+void HomePage::setCurrentForm(BaseForm *form){
     if (curForm != nullptr) {
         curForm->deleteLater();
     }
@@ -41,15 +42,15 @@ void HomePage::setCurrentForm(BaseElement *form){
     curForm = form;
 }
 
-template <typename FormType, typename ...Args> requires IsElement<FormType>
+template <typename FormType, typename ...Args> requires IsForm<FormType>
 void HomePage::switchForm(Args... args) {
     setCurrentForm(new FormType(engine, this->getObject(), this, args...));
 }
 
 //Page part
 
-template <typename ElementType, typename ...Args> requires IsElement<ElementType>
-BaseElement* HomePage::createElement(Args... args) {
+template <typename ElementType, typename ...Args> requires IsPage<ElementType>
+BasePage* HomePage::createElement(Args... args) {
     return new ElementType(engine, args...);
 }
 

@@ -48,8 +48,8 @@ void MainApplication::handleAuthentication(Models::ServerStatus serverStatus) {
 
 //Page part
 
-template <typename ElementType, typename ...Args> requires IsElement<ElementType>
-BaseElement* MainApplication::createElement(Args... args) {
+template <typename ElementType, typename ...Args> requires IsPage<ElementType>
+BasePage* MainApplication::createElement(Args... args) {
     return new ElementType(engine, args...);
 }
 

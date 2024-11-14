@@ -2,14 +2,16 @@
 #define SETTINGS_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 
 class HomePage;
 
-class Settings : public BaseElement {
+class Settings : public BasePage {
     Q_OBJECT
 public:
     HomePage *homePage;
 
+    void update() override;
     Settings(QQmlEngine *engine, HomePage *homePage);
     ~Settings();
 signals:

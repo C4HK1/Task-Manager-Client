@@ -5,7 +5,7 @@
 
 //Object part
 TaskCreationForm::TaskCreationForm(QQmlEngine *engine, QQuickItem *container, Room *room) :
-    BaseElement(engine, "qml/TaskCreation.qml"), container(container),
+    BaseForm(engine, "qml/TaskCreation.qml"), container(container),
         room(room) {
     connect(this->getObject(), SIGNAL(createTask(int, QString, QString, QString, QString, int, int)), this, SLOT(createTask(int, QString, QString, QString, QString, int, int)));
     connect(this->getObject(), SIGNAL(closeTaskCreationForm()), this, SLOT(closeTaskCreationForm()));

@@ -1,11 +1,11 @@
 #ifndef TASK_CREATION_FORM_H
 #define TASK_CREATION_FORM_H
 
-#include "base_element.h"
+#include "base_form.h"
 
 class Room;
 
-class TaskCreationForm : public BaseElement {
+class TaskCreationForm : public BaseForm {
     Q_OBJECT
 public:
     Room *room;

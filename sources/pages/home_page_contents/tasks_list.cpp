@@ -4,7 +4,7 @@
 
 //Object part
 TasksList::TasksList(QQmlEngine *engine, HomePage *homePage) :
-        BaseElement(engine, "qml/Tasks.qml"),
+        BasePage(engine, "qml/Tasks.qml"),
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/TaskListItem.qml"))),
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")),
         homePage(homePage) {
@@ -20,6 +20,8 @@ TasksList::~TasksList(){
     itemComponent->deleteLater();
 }
 
+void TasksList::update() {}
+
 
 //Slots
 void TasksList::sortBy(QString by, bool ascending) {
@@ -29,8 +31,8 @@ void TasksList::sortBy(QString by, bool ascending) {
 
     auto get_str = [&by](Models::Task task) { return (task.property(by.toStdString().c_str())).toString().toLower().trimmed(); };
 
-    std::sort(tasks.begin(), tasks.end(),
-              [&ascending, &by, &get_str](Models::Task t1, Models::Task t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
+    std::stable_sort(tasks.begin(), tasks.end(),
+              [&ascending, &by, &get_str](const Models::Task t1, const Models::Task t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
 
     for(auto &task : tasks) {
         task.taskItem->setParentItem(listContainer);

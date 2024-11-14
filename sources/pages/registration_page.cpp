@@ -7,7 +7,7 @@
 
 //Object part
 RegistrationPage::RegistrationPage(QQmlEngine *engine, MainApplication *mainApp) :
-        BaseElement(engine, "qml/Registration.qml"),
+        BasePage(engine, "qml/Registration.qml"),
         mainApp(mainApp) {
     connect(this->getObject(), SIGNAL(createProfile(QString, QString, QString, QString, QString)), this, SLOT(createProfile(QString, QString, QString, QString, QString)));
 
@@ -17,6 +17,7 @@ RegistrationPage::RegistrationPage(QQmlEngine *engine, MainApplication *mainApp)
 RegistrationPage::~RegistrationPage() {
 }
 
+void RegistrationPage::update() {};
 
 //Slots
 void RegistrationPage::createProfile(QString name, QString login, QString password, QString email, QString phone) {

@@ -1,12 +1,12 @@
 #ifndef LOGGOUT_FORM_H
 #define LOGGOUT_FORM_H
 
-#include "base_element.h"
+#include "base_form.h"
 #include "room.h"
 
 class HomePage;
 
-class LoggoutForm : public BaseElement {
+class LoggoutForm : public BaseForm {
     Q_OBJECT
 public:
     HomePage *homePage;

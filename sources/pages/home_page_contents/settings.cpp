@@ -2,9 +2,12 @@
 
 //Object part
 Settings::Settings(QQmlEngine *engine, HomePage *homePage) :
-        BaseElement(engine, "qml/Settings.qml"),
+        BasePage(engine, "qml/Settings.qml"),
         homePage(homePage) {
 }
 
 Settings::~Settings() {
 }
+
+
+void Settings::update() {}

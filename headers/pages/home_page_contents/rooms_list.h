@@ -2,11 +2,12 @@
 #define ROOMS_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 #include "models.h"
 
 class HomePage;
 
-class RoomsList : public BaseElement
+class RoomsList : public BasePage
 {
     Q_OBJECT
 public:
@@ -14,6 +15,8 @@ public:
 
     RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, HomePage *homePage);
     virtual void createRoomItem(Models::Room &room) = 0;
+    void update() override;
+    void clearContents();
     ~RoomsList();
 signals:
 public slots:

@@ -3,9 +3,11 @@
 
 //Object part
 Profile::Profile(QQmlEngine *engine, HomePage *homePage) :
-        BaseElement(engine, "qml/Profile.qml"),
+        BasePage(engine, "qml/Profile.qml"),
         homePage(homePage) {
 }
 
 Profile::~Profile() {
 }
+
+void Profile::update() {}

@@ -1,5 +1,5 @@
-#ifndef BASE_PAGE_H
-#define BASE_PAGE_H
+#ifndef BASE_ELEMENT_H
+#define BASE_ELEMENT_H
 
 #include <QQuickItem>
 #include <QQmlEngine>
@@ -9,7 +9,7 @@ class BaseElement : public QObject {
     Q_OBJECT
 public:
     BaseElement(QQmlEngine *engine, QString moduleName);
-    ~BaseElement();
+    virtual ~BaseElement();
 
     QQuickItem* loadQmlFrame(QString moduleName);
     QQuickItem* getObject();

@@ -8,8 +8,8 @@ Models::Room::Room(nlohmann::json room) {
 }
 
 Models::Room::~Room() {
-    if(roomItem != nullptr)
-        roomItem->deleteLater();
+    // if(roomItem != nullptr)
+    //     roomItem->deleteLater();
 }
 
 QVariant Models::Room::property(const char *name) const{

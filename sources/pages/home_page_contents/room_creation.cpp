@@ -5,7 +5,7 @@
 
 //Object part
 RoomCreation::RoomCreation(QQmlEngine *engine, HomePage *homePage) :
-        BaseElement(engine, "qml/RoomCreation.qml"),
+        BasePage(engine, "qml/RoomCreation.qml"),
         homePage(homePage) {
     connect(netManager, &NetworkManager::finishCreateRoomResponseHandling, this, &RoomCreation::finishCreateRoom);
     connect(this->getObject(), SIGNAL(createRoom(QString, QString)), this, SLOT(createRoom(QString, QString)));
@@ -13,6 +13,8 @@ RoomCreation::RoomCreation(QQmlEngine *engine, HomePage *homePage) :
 
 RoomCreation::~RoomCreation() {
 }
+
+void RoomCreation::update() {}
 
 
 //Slots

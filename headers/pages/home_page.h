@@ -2,28 +2,30 @@
 #define HOME_PAGE_H
 
 #include <QSignalMapper>
-#include "base_element.h"
+#include "base_page.h"
+#include "base_form.h"
 #include "models.h"
 #include "network_manager.h"
 #include "home_page_contents.h"
 #include "main_application.h"
 #include "navigation_service.h"
 
-class HomePage : public BaseElement {
+class HomePage : public BasePage {
     Q_OBJECT
 public:
     MainApplication *mainApp;
 
     HomePage(QQmlEngine *engine, MainApplication *mainApp);
+    void update() override;
     ~HomePage();
 
-    void setCurrentForm(BaseElement *form);
+    void setCurrentForm(BaseForm *form);
 
-    template <typename FormType, typename ...Args> requires IsElement<FormType>
+    template <typename FormType, typename ...Args> requires IsForm<FormType>
     void switchForm(Args... args);
 
-    template <typename ElementType, typename ...Args> requires IsElement<ElementType>
-    BaseElement* createElement(Args... args);
+    template <typename ElementType, typename ...Args> requires IsPage<ElementType>
+    BasePage* createElement(Args... args);
 
 signals:
 public slots:
@@ -51,7 +53,7 @@ protected:
 private:
     QQuickItem *workspace = nullptr;
     NavigationService *nav_service = nullptr;
-    BaseElement *curForm = nullptr;
+    BaseForm *curForm = nullptr;
     Models::Rooms rooms;
 };
 

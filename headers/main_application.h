@@ -15,6 +15,7 @@
 #include <QQuickWindow>
 
 #include "base_element.h"
+#include "base_page.h"
 #include "models.h"
 #include "navigation_service.h"
 
@@ -29,8 +30,8 @@ public:
     QQuickItem* loadQmlFrame(QString fileName);
 
     void tryAuthenticate();
-    template <typename ElementType, typename ...Args> requires IsElement<ElementType>
-    BaseElement* createElement(Args... args);
+    template <typename ElementType, typename ...Args> requires IsPage<ElementType>
+    BasePage* createElement(Args... args);
 signals:
 public slots:
     void handleAuthentication(Models::ServerStatus serverStatus);

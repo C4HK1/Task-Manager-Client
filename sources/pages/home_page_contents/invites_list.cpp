@@ -4,7 +4,7 @@
 
 //Object part
 InvitesList::InvitesList(QQmlEngine *engine, HomePage *homePage) :
-        BaseElement(engine, "qml/Invites.qml"),
+        BasePage(engine, "qml/Invites.qml"),
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")),
         receivedItemComponent(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/ReceivedInviteListItem.qml"))),
         sendedItemComponent(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/SendedInviteListItem.qml"))),
@@ -26,6 +26,7 @@ InvitesList::~InvitesList(){
     receivedItemComponent->deleteLater();
 }
 
+void InvitesList::update() {}
 
 //Slots
 void InvitesList::sortBy(QString by, bool ascending) {

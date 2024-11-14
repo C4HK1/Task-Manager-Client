@@ -17,7 +17,6 @@ void ListRooms::createRoomItem(Models::Room &room) {
     item->setProperty("roomCreatorName", room.creatorName);
     item->setProperty("roomCreatorID", QString::number(room.creatorID));
 
-    room.roomItem = item;
     item->setParentItem(listContainer);
     roomsItems.append(item);
 }

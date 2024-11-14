@@ -7,7 +7,7 @@ NavigationService::~NavigationService() {
     clearMemory(elements.begin(), elements.end());
 }
 
-void NavigationService::switchTo(BaseElement *newElement) {
+void NavigationService::switchTo(BasePage *newPage) {
     if(elements.size()) {
         (*current)->getObject()->setParentItem(nullptr);
 
@@ -16,9 +16,10 @@ void NavigationService::switchTo(BaseElement *newElement) {
         }
     }
 
-    newElement->getObject()->setParentItem(container);
+    newPage->update();
+    newPage->getObject()->setParentItem(container);
 
-    elements.append(newElement);
+    elements.append(newPage);
     current = elements.end() - 1;
 
     for (auto &e : elements) {
@@ -31,6 +32,7 @@ void NavigationService::switchForward() {
     if(!isLast()) {
         (*current)->getObject()->setParentItem(nullptr);
         ++current;
+        (*current)->update();
         (*current)->getObject()->setParentItem(container);
     } else {
         qInfo("tried to switch forward while staying on last");
@@ -41,13 +43,14 @@ void NavigationService::switchBackward() {
     if(!isFirst()) {
         (*current)->getObject()->setParentItem(nullptr);
         --current;
+        (*current)->update();
         (*current)->getObject()->setParentItem(container);
     } else {
         qInfo("tried to switch backward while staying on first");
     }
 }
 
-void NavigationService::clear(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end) {
+void NavigationService::clear(QList<BasePage*>::iterator begin, QList<BasePage*>::iterator end) {
     if (begin >= end || !(begin < current && end <= current) || !(begin > current && end > current)) {
         qInfo() << "incorrect iterators on clear";
 
@@ -70,11 +73,11 @@ void NavigationService::clear(QList<BaseElement*>::iterator begin, QList<BaseEle
 
     clearMemory(begin, end);
 
-    elements.erase(QList<BaseElement*>::const_iterator(begin), QList<BaseElement*>::const_iterator(end));
+    elements.erase(QList<BasePage*>::const_iterator(begin), QList<BasePage*>::const_iterator(end));
     current = elements.begin() + dist;
 }
 
-void NavigationService::clearMemory(QList<BaseElement*>::iterator begin, QList<BaseElement*>::iterator end) {
+void NavigationService::clearMemory(QList<BasePage*>::iterator begin, QList<BasePage*>::iterator end) {
     for(auto it = begin; it != end; ++it) {
         (*it)->deleteLater();
     }

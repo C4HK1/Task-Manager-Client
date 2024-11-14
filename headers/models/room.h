@@ -11,8 +11,6 @@ namespace Models {
         u_int64_t creatorID;
         QString name, description, creatorName;
 
-        QQuickItem *roomItem = nullptr;
-
         Room() = default;
         Room(nlohmann::json room);
         ~Room();

@@ -1,11 +1,11 @@
 #ifndef INVITATION_FORM_H
 #define INVITATION_FORM_H
 
-#include "base_element.h"
+#include "base_form.h"
 
 class Room;
 
-class InvitationForm : public BaseElement {
+class InvitationForm : public BaseForm {
     Q_OBJECT
 public:
     Room *room;

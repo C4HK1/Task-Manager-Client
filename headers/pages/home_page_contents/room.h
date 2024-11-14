@@ -2,10 +2,11 @@
 #define ROOM_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 
 class HomePage;
 
-class Room : public BaseElement {
+class Room : public BasePage {
     Q_OBJECT
 public:
     //Fields
@@ -17,6 +18,7 @@ public:
 
     //Methods
     void addTask(Models::Task task);
+    void update() override;
 
     //Form part
     void setCurrentForm(BaseElement *form);

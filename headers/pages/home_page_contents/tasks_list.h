@@ -2,11 +2,12 @@
 #define TASKS_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 #include "models.h"
 
 class HomePage;
 
-class TasksList : public BaseElement
+class TasksList : public BasePage
 {
     Q_OBJECT
 public:
@@ -14,7 +15,7 @@ public:
 
     TasksList(QQmlEngine *engine, HomePage *homePage);
     virtual ~TasksList();
-
+    void update() override;
     void createTaskItem(Models::Task &task);
 signals:
 public slots:
