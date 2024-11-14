@@ -18,6 +18,7 @@ RegistrationPage::~RegistrationPage() {
 }
 
 void RegistrationPage::update() {};
+void RegistrationPage::leave() {};
 
 //Slots
 void RegistrationPage::createProfile(QString name, QString login, QString password, QString email, QString phone) {

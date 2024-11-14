@@ -10,6 +10,8 @@ class ReviewedTasks : public TasksList {
 public:
     ReviewedTasks(QQmlEngine *engine, HomePage *homePage);
     ~ReviewedTasks() override;
+    void update() override;
+    void leave() override;
 signals:
 public slots:
 protected:

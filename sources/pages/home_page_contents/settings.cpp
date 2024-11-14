@@ -11,3 +11,4 @@ Settings::~Settings() {
 
 
 void Settings::update() {}
+void Settings::leave() {}

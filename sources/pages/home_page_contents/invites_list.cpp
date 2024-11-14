@@ -17,30 +17,32 @@ InvitesList::InvitesList(QQmlEngine *engine, HomePage *homePage) :
 }
 
 InvitesList::~InvitesList(){
-    for(auto &invite : invites) {
-        invite.inviteItem->deleteLater();
-        invite.inviteItem = nullptr;
-    }
-
+    clearContents();
     sendedItemComponent->deleteLater();
     receivedItemComponent->deleteLater();
 }
 
-void InvitesList::update() {}
+void InvitesList::clearContents() {
+    for(auto &invite : invites) {
+        invitesItems[invite.localID]->deleteLater();
+    }
+
+    invitesItems.clear();
+}
 
 //Slots
 void InvitesList::sortBy(QString by, bool ascending) {
     for (auto &invite : invites) {
-        invite.inviteItem->setParentItem(nullptr);
+        invitesItems[invite.localID]->setParentItem(nullptr);
     }
 
     auto get_str = [&by](Models::Invite invite) { return (invite.property(by.toStdString().c_str())).toString().toLower().trimmed(); };
 
-    std::sort(invites.begin(), invites.end(),
-              [&ascending, &by, &get_str](Models::Invite t1, Models::Invite t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
+    std::stable_sort(invites.begin(), invites.end(),
+              [&ascending, &by, &get_str](const Models::Invite t1, const Models::Invite t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
 
     for(auto &invite : invites) {
-        invite.inviteItem->setParentItem(listContainer);
+        invitesItems[invite.localID]->setParentItem(listContainer);
     }
 }
 
@@ -53,8 +55,8 @@ void InvitesList::receivedInvitesInitialization(Models::ServerStatus serverStatu
                 continue;
 
             this->createInviteItem(invite);
-            connect(invite.inviteItem, SIGNAL(acceptInvite(int, QString)), this, SLOT(acceptInvite(int, QString)));
-            connect(invite.inviteItem, SIGNAL(deleteReceivedInvite(int, int, QString)), this, SLOT(deleteReceivedInvite(int, int, QString)));
+            connect(invitesItems[invite.localID], SIGNAL(acceptInvite(int, QString)), this, SLOT(acceptInvite(int, QString)));
+            connect(invitesItems[invite.localID], SIGNAL(deleteReceivedInvite(int, int, QString)), this, SLOT(deleteReceivedInvite(int, int, QString)));
         }
 
         this->sortBy("roomName", true);
@@ -72,7 +74,7 @@ void InvitesList::sendedInvitesInitialization(Models::ServerStatus serverStatus,
                 continue;
 
             this->createInviteItem(invite);
-            connect(invite.inviteItem, SIGNAL(deleteSendedInvite(int, int, QString)), this, SLOT(deleteSendedInvite(int, int, QString)));
+            connect(invitesItems[invite.localID], SIGNAL(deleteSendedInvite(int, int, QString)), this, SLOT(deleteSendedInvite(int, int, QString)));
         }
 
         this->sortBy("roomName", true);
@@ -142,6 +144,7 @@ void InvitesList::finishDeleteSendedInviteResponseHandling(Models::ServerStatus 
 }
 
 //Methods
+
 QQuickItem *InvitesList::getInviteItem(Models::Invite invite) {
     auto senderID = invite.senderID;
     auto receiverID = invite.receiverID;
@@ -153,7 +156,7 @@ QQuickItem *InvitesList::getInviteItem(Models::Invite invite) {
                 invite.receiverID == receiverID &&
                 invite.roomCreatorID == roomCreatorID &&
                 invite.roomName == roomName) {
-            return invite.inviteItem;
+            return invitesItems[invite.localID];
         }
     }
 

@@ -13,6 +13,7 @@ public:
 
     RoomCreation(QQmlEngine *engine, HomePage *homePage);
     void update() override;
+    void leave() override;
     ~RoomCreation();
 signals:
 public slots:

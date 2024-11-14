@@ -4,8 +4,8 @@
 #include "home_page.h"
 
 //Object part
-ProfileDeleteForm::ProfileDeleteForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-    BaseForm(engine, "qml/ProfileDelete.qml"), container(container),
+ProfileDeleteForm::ProfileDeleteForm(QQmlEngine *engine, QQuickItem *parent, HomePage *homePage) :
+    BaseForm(engine, parent, "qml/ProfileDelete.qml"),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(profileDelete()), this, SLOT(profileDelete()));
     connect(this->getObject(), SIGNAL(closeProfileDeleteForm()), this, SLOT(closeProfileDeleteForm()));

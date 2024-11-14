@@ -6,7 +6,7 @@
 class BaseForm : public BaseElement {
     Q_OBJECT
 public:
-    BaseForm(QQmlEngine *engine, QString moduleName);
+    BaseForm(QQmlEngine *engine, QQuickItem *parent, QString moduleName);
     virtual ~BaseForm();
 };
 

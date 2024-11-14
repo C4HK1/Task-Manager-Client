@@ -19,6 +19,9 @@ public:
     //Methods
     void addTask(Models::Task task);
     void update() override;
+    void leave() override;
+
+    void clearContents();
 
     //Form part
     void setCurrentForm(BaseElement *form);
@@ -41,6 +44,7 @@ private:
 
     Models::Room room;
     Models::Tasks tasks;
+    QHash<u_int64_t, QQuickItem*> tasksItems;
 };
 
 #endif // ROOM__PAGE_H

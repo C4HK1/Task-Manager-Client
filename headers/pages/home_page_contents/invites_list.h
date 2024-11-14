@@ -14,11 +14,13 @@ public:
     HomePage *homePage;
 
     InvitesList(QQmlEngine *engine, HomePage *homePage);
-    void update() override;
     virtual ~InvitesList();
+    virtual void update() override = 0;
+    virtual void leave() override = 0;
+
+    void clearContents();
 
     QQuickItem *getInviteItem(Models::Invite invite);
-
     int find(Models::Invite invite, Models::Invites invites);
 
     virtual void createInviteItem(Models::Invite &invite) = 0;
@@ -41,6 +43,7 @@ protected:
     QQmlComponent *receivedItemComponent;
 
     Models::Invites invites;
+    QHash<u_int64_t, QQuickItem*> invitesItems;
 private:
 };
 

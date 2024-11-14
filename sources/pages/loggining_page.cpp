@@ -21,6 +21,7 @@ LogginingPage::~LogginingPage() {
 }
 
 void LogginingPage::update() {}
+void LogginingPage::leave() {}
 
 //Slots
 void LogginingPage::loggin(QString login, QString password) {

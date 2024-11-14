@@ -17,6 +17,7 @@ public:
 
     HomePage(QQmlEngine *engine, MainApplication *mainApp);
     void update() override;
+    void leave() override;
     ~HomePage();
 
     void setCurrentForm(BaseForm *form);

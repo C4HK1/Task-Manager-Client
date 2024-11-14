@@ -10,6 +10,7 @@ NavigationService::~NavigationService() {
 void NavigationService::switchTo(BasePage *newPage) {
     if(elements.size()) {
         (*current)->getObject()->setParentItem(nullptr);
+        (*current)->leave();
 
         if(current != elements.end() - 1) {
             clear(current + 1, elements.end());
@@ -31,7 +32,9 @@ void NavigationService::switchTo(BasePage *newPage) {
 void NavigationService::switchForward() {
     if(!isLast()) {
         (*current)->getObject()->setParentItem(nullptr);
+        (*current)->leave();
         ++current;
+
         (*current)->update();
         (*current)->getObject()->setParentItem(container);
     } else {
@@ -42,7 +45,9 @@ void NavigationService::switchForward() {
 void NavigationService::switchBackward() {
     if(!isFirst()) {
         (*current)->getObject()->setParentItem(nullptr);
+        (*current)->leave();
         --current;
+
         (*current)->update();
         (*current)->getObject()->setParentItem(container);
     } else {

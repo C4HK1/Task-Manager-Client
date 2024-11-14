@@ -2,13 +2,19 @@
 
 //Object part
 SendedInvites::SendedInvites(QQmlEngine *engine, HomePage *homePage) :
-        InvitesList(engine, homePage) {
-    connect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
+        InvitesList(engine, homePage) {}
 
+SendedInvites::~SendedInvites() {}
+
+void SendedInvites::update() {
+    connect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
     netManager->sendGetProfileSendedInvitesRequest();
 }
 
-SendedInvites::~SendedInvites() {}
+void SendedInvites::leave() {
+    disconnect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
+    clearContents();
+}
 
 //Methods
 void SendedInvites::createInviteItem(Models::Invite &invite){
@@ -22,6 +28,6 @@ void SendedInvites::createInviteItem(Models::Invite &invite){
     item->setProperty("receiverID", QString::number(invite.receiverID));
     item->setProperty("roomCreatorID", QString::number(invite.roomCreatorID));
 
-    invite.inviteItem = item;
+    invitesItems[invite.localID] = item;
     item->setParentItem(listContainer);
 }

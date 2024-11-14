@@ -10,7 +10,7 @@ class TaskCreationForm : public BaseForm {
 public:
     Room *room;
 
-    TaskCreationForm(QQmlEngine *engine, QQuickItem *container, Room *room);
+    TaskCreationForm(QQmlEngine *engine, QQuickItem *parent, Room *room);
     ~TaskCreationForm();
 signals:
 public slots:
@@ -26,7 +26,6 @@ public slots:
     void finishCreateTask(Models::ServerStatus serverStatus, Models::Task task);
 protected:
 private:
-    QQuickItem *container;
 };
 
 #endif // TASK_CREATION_FORM_H

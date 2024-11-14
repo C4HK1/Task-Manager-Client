@@ -14,6 +14,7 @@ public:
 
     RegistrationPage(QQmlEngine *engine, MainApplication *mainApp);
     void update() override;
+    void leave() override;
     ~RegistrationPage();
 signals:
 public slots:

@@ -11,7 +11,7 @@ class ProfileDeleteForm : public BaseForm {
 public:
     HomePage *homePage;
 
-    ProfileDeleteForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    ProfileDeleteForm(QQmlEngine *engine, QQuickItem *parent, HomePage *homePage);
     ~ProfileDeleteForm();
 signals:
 public slots:
@@ -20,7 +20,6 @@ public slots:
     void finishProfileDelete(Models::ServerStatus serverStatus);
 protected:
 private:
-    QQuickItem *container;
 };
 
 #endif // PROFILE_DELETE_FORM_H

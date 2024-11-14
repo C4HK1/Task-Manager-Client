@@ -12,21 +12,15 @@ TasksList::TasksList(QQmlEngine *engine, HomePage *homePage) :
 }
 
 TasksList::~TasksList(){
-    for(auto &task : tasks) {
-        task.taskItem->deleteLater();
-        task.taskItem = nullptr;
-    }
-
+    clearContents();
     itemComponent->deleteLater();
 }
-
-void TasksList::update() {}
 
 
 //Slots
 void TasksList::sortBy(QString by, bool ascending) {
     for (auto &task : tasks) {
-        task.taskItem->setParentItem(nullptr);
+        tasksItems[task.localID]->setParentItem(nullptr);
     }
 
     auto get_str = [&by](Models::Task task) { return (task.property(by.toStdString().c_str())).toString().toLower().trimmed(); };
@@ -35,7 +29,7 @@ void TasksList::sortBy(QString by, bool ascending) {
               [&ascending, &by, &get_str](const Models::Task t1, const Models::Task t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
 
     for(auto &task : tasks) {
-        task.taskItem->setParentItem(listContainer);
+        tasksItems[task.localID]->setParentItem(listContainer);
     }
 }
 
@@ -45,13 +39,21 @@ void TasksList::tasksInitialization(Models::ServerStatus serverStatus, Models::T
 
         for(auto &task : this->tasks){
             this->createTaskItem(task);
-            connect(task.taskItem, SIGNAL(openRoom(int, QString)), this, SLOT(openRoom(int, QString)));
+            connect(tasksItems[task.localID], SIGNAL(openRoom(int,QString)), this, SLOT(openRoom(int,QString)));
         }
 
         this->sortBy("taskName", true);
     } else {
         qInfo() << "get profile room error status: " << serverStatus.status;
     }
+}
+
+void TasksList::clearContents() {
+    for(auto &task : tasks) {
+        tasksItems[task.localID]->deleteLater();
+    }
+
+    tasksItems.clear();
 }
 
 void TasksList::openRoom(int roomCreatorID, QString roomName) {
@@ -71,6 +73,6 @@ void TasksList::createTaskItem(Models::Task &task){
     item->setProperty("roomName", task.parent.name);
     item->setProperty("taskName", task.name);
 
-    task.taskItem = item;
     item->setParentItem(listContainer);
+    tasksItems[task.localID] = item;
 }

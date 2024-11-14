@@ -14,6 +14,7 @@ public:
 
     LogginingPage(QQmlEngine *engine, MainApplication *mainApp);
     void update() override;
+    void leave() override;
     ~LogginingPage();
 signals:
 public slots:

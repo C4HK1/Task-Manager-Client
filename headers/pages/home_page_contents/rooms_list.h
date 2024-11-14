@@ -16,6 +16,7 @@ public:
     RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, HomePage *homePage);
     virtual void createRoomItem(Models::Room &room) = 0;
     void update() override;
+    void leave() override;
     void clearContents();
     ~RoomsList();
 signals:
@@ -26,10 +27,10 @@ public slots:
     void switchToRoomCreation();
 signals:
 protected:
-    QList<QQuickItem*> roomsItems;
     QQmlComponent *itemComponent;
 
     Models::Rooms rooms;
+    QHash<u_int64_t, QQuickItem*> roomsItems;
 private:
 };
 

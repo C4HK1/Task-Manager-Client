@@ -30,6 +30,7 @@ HomePage::~HomePage() {
 }
 
 void HomePage::update() {}
+void HomePage::leave() {}
 
 //Elements management
 

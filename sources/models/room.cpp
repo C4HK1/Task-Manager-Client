@@ -1,6 +1,11 @@
 #include "models/room.h"
 
+u_int64_t Models::Room::ID_counter{};
+
 Models::Room::Room(nlohmann::json room) {
+    this->localID = ID_counter;
+    ++ID_counter;
+
     this->creatorID = room.at("creator ID");
     this->name = QString::fromStdString(room.at("name"));
     this->description = QString::fromStdString(room.at("description"));

@@ -10,6 +10,8 @@ class AllInvites : public InvitesList {
 public:
     AllInvites(QQmlEngine *engine, HomePage *homePage);
     ~AllInvites() override;
+    void update() override;
+    void leave() override;
 
     void createInviteItem(Models::Invite &invite) override;
 signals:

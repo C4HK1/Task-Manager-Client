@@ -10,6 +10,8 @@ class AllTasks : public TasksList {
 public:
     AllTasks(QQmlEngine *engine, HomePage *homePage);
     ~AllTasks() override;
+    void update() override;
+    void leave() override;
 signals:
 public slots:
 protected:

@@ -16,12 +16,11 @@ namespace Models {
         Q_PROPERTY(QString roomName READ getRoomName)
 
     public:
+        u_int64_t localID;
         u_int64_t senderID = 0;
         u_int64_t receiverID = 0;
         u_int64_t roomCreatorID = 0;
         QString roomName, senderName, receiverName;
-
-        QQuickItem *inviteItem;
 
         InviteTypes type;
 
@@ -37,6 +36,8 @@ namespace Models {
         // ~Task() { if(taskItem != nullptr) taskItem->deleteLater(); }
 
         QVariant property(const char *name) const;
+    private:
+        static u_int64_t ID_counter;
     };
 }
 

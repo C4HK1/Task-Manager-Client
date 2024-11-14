@@ -15,6 +15,7 @@ RoomCreation::~RoomCreation() {
 }
 
 void RoomCreation::update() {}
+void RoomCreation::leave() {}
 
 
 //Slots

@@ -14,6 +14,7 @@ public:
 
     explicit Profile(QQmlEngine *engine, HomePage *homePage);
     void update() override;
+    void leave() override;
     ~Profile();
 signals:
 public slots:

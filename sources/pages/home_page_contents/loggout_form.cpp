@@ -4,8 +4,8 @@
 #include "home_page.h"
 
 //Object part
-LoggoutForm::LoggoutForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-    BaseForm(engine, "qml/Loggout.qml"), container(container),
+LoggoutForm::LoggoutForm(QQmlEngine *engine, QQuickItem *parent, HomePage *homePage) :
+    BaseForm(engine, parent, "qml/Loggout.qml"),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(loggout()), this, SLOT(loggout()));
     connect(this->getObject(), SIGNAL(closeLoggoutForm()), this, SLOT(closeLoggoutForm()));

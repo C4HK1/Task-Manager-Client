@@ -9,19 +9,21 @@ RoomsList::RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, H
     connect(this->getObject(), SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));
 
     connect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
-    connect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
 }
 
 RoomsList::~RoomsList(){
-    for(auto &item : roomsItems) {
-        item->deleteLater();
-    }
-
+    clearContents();
     itemComponent->deleteLater();
 }
 
 void RoomsList::update() {
+    connect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
     netManager->sendGetProfileRoomsRequest();
+}
+
+void RoomsList::leave() {
+    disconnect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
+    clearContents();
 }
 
 //Slots
@@ -30,17 +32,13 @@ void RoomsList::initializeContents(Models::ServerStatus serverStatus, Models::Ro
 
     for(auto &room : this->rooms){
         this->createRoomItem(room);
-    }
-
-    for (auto &roomItem : roomsItems) {
-        connect(roomItem, SIGNAL(switchToRoom(int,QString)), this, SLOT(switchToRoom(int,QString)));
+        connect(roomsItems[room.localID], SIGNAL(switchToRoom(int,QString)), this, SLOT(switchToRoom(int,QString)));
     }
 }
 
 void RoomsList::clearContents() {
-    for (auto &roomItem : roomsItems) {
-        disconnect(roomItem, SIGNAL(switchToRoom(int,QString)), this, SLOT(switchToRoom(int,QString)));
-        roomItem->deleteLater();
+    for (auto &room : rooms) {
+        roomsItems[room.localID]->deleteLater();
     }
 
     roomsItems.clear();
@@ -56,7 +54,6 @@ void RoomsList::switchToRoom(int roomCreatorID, QString roomName) {
 
 void RoomsList::finishSwitchToRoom(Models::ServerStatus serverStatus, Models::Room room) {
     if (!serverStatus.status) {
-        clearContents();
         this->homePage->switchToRoom(room);
     } else {
         qInfo() << "error room entry with status: " << serverStatus.status;

@@ -11,7 +11,7 @@ class LoggoutForm : public BaseForm {
 public:
     HomePage *homePage;
 
-    LoggoutForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    LoggoutForm(QQmlEngine *engine, QQuickItem *parent, HomePage *homePage);
     ~LoggoutForm();
 signals:
 public slots:
@@ -19,7 +19,6 @@ public slots:
     void closeLoggoutForm();
 protected:
 private:
-    QQuickItem *container;
 };
 
 #endif // LOGGOUT_FORM_H

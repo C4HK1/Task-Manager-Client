@@ -19,5 +19,5 @@ void WidgetRooms::createRoomItem(Models::Room &room) {
     item->setProperty("roomCreatorID", QString::number(room.creatorID));
 
     item->setParentItem(widgetContainer);
-    roomsItems.append(item);
+    roomsItems[room.localID] = item;
 }

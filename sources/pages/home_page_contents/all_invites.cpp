@@ -3,7 +3,14 @@
 #include "sended_invites.h"
 
 AllInvites::AllInvites(QQmlEngine *engine, HomePage *homePage) :
-        InvitesList(engine, homePage) {
+        InvitesList(engine, homePage) {}
+
+AllInvites::~AllInvites() {
+    this->receivedItemComponent->deleteLater();
+    this->sendedItemComponent->deleteLater();
+}
+
+void AllInvites::update() {
     connect(netManager, &NetworkManager::finishGetProfileReceivedInvitesResponseHandling, this, &InvitesList::receivedInvitesInitialization);
     connect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
 
@@ -11,9 +18,11 @@ AllInvites::AllInvites(QQmlEngine *engine, HomePage *homePage) :
     netManager->sendGetProfileSendedInvitesRequest();
 }
 
-AllInvites::~AllInvites() {
-    this->receivedItemComponent->deleteLater();
-    this->sendedItemComponent->deleteLater();
+void AllInvites::leave() {
+    disconnect(netManager, &NetworkManager::finishGetProfileReceivedInvitesResponseHandling, this, &InvitesList::receivedInvitesInitialization);
+    disconnect(netManager, &NetworkManager::finishGetProfileSendedInvitesResponseHandling, this, &InvitesList::sendedInvitesInitialization);
+
+    clearContents();
 }
 
 void AllInvites::createInviteItem(Models::Invite &invite) {
@@ -25,7 +34,7 @@ void AllInvites::createInviteItem(Models::Invite &invite) {
         item->setProperty("senderID", QString::number(invite.senderID));
         item->setProperty("roomCreatorID", QString::number(invite.roomCreatorID));
 
-        invite.inviteItem = item;
+        invitesItems[invite.localID] = item;
         item->setParentItem(listContainer);
     } else {
         auto item = qobject_cast<QQuickItem*>(sendedItemComponent->create(engine->rootContext()));
@@ -35,7 +44,7 @@ void AllInvites::createInviteItem(Models::Invite &invite) {
         item->setProperty("receiverID", QString::number(invite.receiverID));
         item->setProperty("roomCreatorID", QString::number(invite.roomCreatorID));
 
-        invite.inviteItem = item;
+        invitesItems[invite.localID] = item;
         item->setParentItem(listContainer);
     }
 }

@@ -12,7 +12,7 @@ public:
     u_int64_t offset{0};
 
 
-    InvitationForm(QQmlEngine *engine, QQuickItem *container, Room *room);
+    InvitationForm(QQmlEngine *engine, QQuickItem *parent, Room *room);
     ~InvitationForm();
 signals:
 public slots:
@@ -31,7 +31,6 @@ protected:
     QQmlComponent *itemComponent;
     QQuickItem *profilesContainer;
 private:
-    QQuickItem *container;
 };
 
 #endif // INVITATION_FORM_H

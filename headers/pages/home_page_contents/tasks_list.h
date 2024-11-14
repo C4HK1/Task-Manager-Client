@@ -15,8 +15,11 @@ public:
 
     TasksList(QQmlEngine *engine, HomePage *homePage);
     virtual ~TasksList();
-    void update() override;
+    virtual void update() override = 0;
+    virtual void leave() override = 0;
+
     void createTaskItem(Models::Task &task);
+    void clearContents();
 signals:
 public slots:
     void sortBy(QString by, bool ascending = true);
@@ -27,6 +30,7 @@ protected:
     QQuickItem *listContainer;
 
     Models::Tasks tasks;
+    QHash<u_int64_t, QQuickItem*> tasksItems;
 private:
 };
 

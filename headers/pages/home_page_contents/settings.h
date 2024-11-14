@@ -12,6 +12,7 @@ public:
     HomePage *homePage;
 
     void update() override;
+    void leave() override;
     Settings(QQmlEngine *engine, HomePage *homePage);
     ~Settings();
 signals:

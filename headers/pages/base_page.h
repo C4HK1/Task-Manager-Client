@@ -9,6 +9,7 @@ class BasePage : public BaseElement {
 public:
     BasePage(QQmlEngine *engine, QString module_name);
     virtual void update() = 0;
+    virtual void leave() = 0;
     virtual ~BasePage() = 0;
 };
 

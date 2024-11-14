@@ -8,6 +8,7 @@ namespace Models {
     struct Room {
         Q_GADGET
     public:
+        u_int64_t localID;
         u_int64_t creatorID;
         QString name, description, creatorName;
 
@@ -16,6 +17,8 @@ namespace Models {
         ~Room();
 
         QVariant property(const char *name) const;
+    private:
+        static u_int64_t ID_counter;
     };
 }
 

@@ -11,3 +11,4 @@ Profile::~Profile() {
 }
 
 void Profile::update() {}
+void Profile::leave() {}
