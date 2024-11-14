@@ -15,8 +15,9 @@ public:
     QQuickItem* getObject();
 signals:
 public slots:
-protected:
+public:
     QQmlEngine *engine;
+protected:
     QQuickItem *object;
     NetworkManager *netManager;
 private:

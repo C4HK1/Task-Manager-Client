@@ -1,9 +1,13 @@
 #include "navigation_service.h"
 
-NavigationService::NavigationService(QQmlEngine *engine, QQuickItem *container)
-    : engine(engine), container(container), current(elements.begin()) {}
+NavigationService::NavigationService(QQuickItem *container, int bufferSize)
+    : container(container), current(elements.begin()), bufferSize(bufferSize) {}
 
 NavigationService::~NavigationService() {
+    for (auto &e : elements) {
+        e->leave();
+    }
+
     clearMemory(elements.begin(), elements.end());
 }
 
@@ -22,6 +26,10 @@ void NavigationService::switchTo(BasePage *newPage) {
 
     elements.append(newPage);
     current = elements.end() - 1;
+
+    if(elements.size() > bufferSize) {
+        clear(elements.begin(), elements.begin() + 1);
+    }
 
     /*
     for (auto &e : elements) {

@@ -3,9 +3,10 @@
 
 #include "base_page.h"
 
-class NavigationService final {
+class NavigationService final : public QObject {
+    Q_OBJECT
 public:
-    NavigationService(QQmlEngine *engine, QQuickItem *container);
+    NavigationService(QQuickItem *container, int bufferSize = 1);
     ~NavigationService();
     void switchTo(BasePage *newElement);
     void switchBackward();
@@ -16,13 +17,11 @@ public:
     bool isFirst();
     bool isLast();
 
-    static constexpr int BUFFER_SIZE = 20;
-
 private:
-    QQmlEngine *engine;
     QQuickItem *container;
     QList<BasePage*> elements;
     QList<BasePage*>::iterator current;
+    int bufferSize{};
 };
 
 #endif // NAVIGATION_SERVICE_H

@@ -5,7 +5,7 @@
 HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
         BasePage(engine, "qml/MainWorkspace.qml"),
         workspace(object->findChild<QQuickItem*>("workspace")),
-        nav_service(new NavigationService(engine, workspace)),
+        nav_service(new NavigationService(workspace, 20)),
         mainApp(mainApp) {
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
@@ -23,6 +23,7 @@ HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
 }
 
 HomePage::~HomePage() {
+    nav_service->deleteLater();
 }
 
 void HomePage::update() {}

@@ -14,7 +14,7 @@ MainApplication::MainApplication(int argc, char **argv) :
     mainWindow = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 
-    nav_service = new NavigationService(engine, mainWindow->contentItem());
+    nav_service = new NavigationService(mainWindow->contentItem());
 
     QFile file("data/authentication_key.organizer");
 
@@ -34,6 +34,7 @@ MainApplication::MainApplication(int argc, char **argv) :
 MainApplication::~MainApplication() {
     mainWindow->deleteLater();
     engine->deleteLater();
+    nav_service->deleteLater();
 }
 
 //Methods
