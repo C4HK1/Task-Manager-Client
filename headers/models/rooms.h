@@ -19,6 +19,7 @@ namespace Models {
         size_t size();
 
         void append(Room room);
+        void clear();
     private:
         QList<Room> rooms;
     };

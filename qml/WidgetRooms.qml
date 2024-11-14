@@ -1,12 +1,12 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import DefaultElements
-import MainWorkspaceElements
+import qml.DefaultElements
+import qml.MainWorkspaceElements
 
 DefaultFrame {
     signal switchToRoomCreation()
-    signal switchToRoom(int roomCreatorID, string roomName)
+    // signal switchToRoom(int roomCreatorID, string roomName)
 
     Flickable {
         objectName: qsTr("flickable")

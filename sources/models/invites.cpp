@@ -70,3 +70,7 @@ void Models::Invites::removeAcceptedInvites(Models::Invite invite) {
         i += 1;
     }
 }
+
+void Models::Invites::clear() {
+    this->invites.clear();
+}

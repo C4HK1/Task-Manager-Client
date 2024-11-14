@@ -4,8 +4,8 @@
 #include "room.h"
 
 //Object part
-TaskCreationForm::TaskCreationForm(QQmlEngine *engine, QQuickItem *container, Room *room) :
-        BaseElement(engine, container, "qml/TaskCreation.qml"),
+TaskCreationForm::TaskCreationForm(QQmlEngine *engine, QQuickItem *parent, Room *room) :
+    BaseForm(engine, parent, "qml/TaskCreation.qml"),
         room(room) {
     connect(this->getObject(), SIGNAL(createTask(int, QString, QString, QString, QString, int, int)), this, SLOT(createTask(int, QString, QString, QString, QString, int, int)));
     connect(this->getObject(), SIGNAL(closeTaskCreationForm()), this, SLOT(closeTaskCreationForm()));

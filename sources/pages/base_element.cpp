@@ -2,11 +2,9 @@
 #include <main_application.h>
 
 //Object part
-BaseElement::BaseElement(QQmlEngine *engine, QQuickItem *container, QString moduleName) :
+BaseElement::BaseElement(QQmlEngine *engine, QString moduleName) :
         engine(engine), object(qobject_cast<QQuickItem*>(loadQmlFrame(moduleName))),
-        netManager(NetworkManager::getInstance()) {
-    object->setParentItem(container);
-}
+        netManager(NetworkManager::getInstance()) {}
 
 BaseElement::~BaseElement() {
     object->deleteLater();

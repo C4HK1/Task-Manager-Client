@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import DefaultElements.Fonts
+import qml.DefaultElements.Fonts
 
 Button {
     font: DefaultFont.defaultFont

@@ -3,8 +3,8 @@
 #include "home_page.h"
 
 //Object part
-TasksList::TasksList(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/Tasks.qml"),
+TasksList::TasksList(QQmlEngine *engine, HomePage *homePage) :
+        BasePage(engine, "qml/Tasks.qml"),
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWorkspaceElements/TaskListItem.qml"))),
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")),
         homePage(homePage) {
@@ -12,11 +12,7 @@ TasksList::TasksList(QQmlEngine *engine, QQuickItem *container, HomePage *homePa
 }
 
 TasksList::~TasksList(){
-    for(auto &task : tasks) {
-        task.taskItem->deleteLater();
-        task.taskItem = nullptr;
-    }
-
+    clearContents();
     itemComponent->deleteLater();
 }
 
@@ -24,16 +20,16 @@ TasksList::~TasksList(){
 //Slots
 void TasksList::sortBy(QString by, bool ascending) {
     for (auto &task : tasks) {
-        task.taskItem->setParentItem(nullptr);
+        tasksItems[task.localID]->setParentItem(nullptr);
     }
 
     auto get_str = [&by](Models::Task task) { return (task.property(by.toStdString().c_str())).toString().toLower().trimmed(); };
 
-    std::sort(tasks.begin(), tasks.end(),
-              [&ascending, &by, &get_str](Models::Task t1, Models::Task t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
+    std::stable_sort(tasks.begin(), tasks.end(),
+              [&ascending, &by, &get_str](const Models::Task t1, const Models::Task t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
 
     for(auto &task : tasks) {
-        task.taskItem->setParentItem(listContainer);
+        tasksItems[task.localID]->setParentItem(listContainer);
     }
 }
 
@@ -43,13 +39,22 @@ void TasksList::tasksInitialization(Models::ServerStatus serverStatus, Models::T
 
         for(auto &task : this->tasks){
             this->createTaskItem(task);
-            connect(task.taskItem, SIGNAL(openRoom(int, QString)), this, SLOT(openRoom(int, QString)));
+            connect(tasksItems[task.localID], SIGNAL(openRoom(int,QString)), this, SLOT(openRoom(int,QString)));
         }
 
         this->sortBy("taskName", true);
     } else {
         qInfo() << "get profile room error status: " << serverStatus.status;
     }
+}
+
+void TasksList::clearContents() {
+    for(auto &task : tasks) {
+        tasksItems[task.localID]->deleteLater();
+    }
+
+    tasks.clear();
+    tasksItems.clear();
 }
 
 void TasksList::openRoom(int roomCreatorID, QString roomName) {
@@ -69,6 +74,6 @@ void TasksList::createTaskItem(Models::Task &task){
     item->setProperty("roomName", task.parent.name);
     item->setProperty("taskName", task.name);
 
-    task.taskItem = item;
     item->setParentItem(listContainer);
+    tasksItems[task.localID] = item;
 }

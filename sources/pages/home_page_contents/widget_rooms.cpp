@@ -1,8 +1,8 @@
 #include "widget_rooms.h"
 
 //Object part
-WidgetRooms::WidgetRooms(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-    RoomsList(engine, container, "qml/WidgetRooms.qml", "qml/MainWorkspaceElements/RoomWidget.qml", homePage),
+WidgetRooms::WidgetRooms(QQmlEngine *engine, HomePage *homePage) :
+    RoomsList(engine, "qml/WidgetRooms.qml", "qml/MainWorkspaceElements/RoomWidget.qml", homePage),
     widgetContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("widgetContainer")) {
 }
 
@@ -18,7 +18,6 @@ void WidgetRooms::createRoomItem(Models::Room &room) {
     item->setProperty("roomCreatorName", room.creatorName);
     item->setProperty("roomCreatorID", QString::number(room.creatorID));
 
-    room.roomItem = item;
     item->setParentItem(widgetContainer);
-    roomsItems.append(item);
+    roomsItems[room.localID] = item;
 }

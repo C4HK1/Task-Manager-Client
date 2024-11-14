@@ -6,8 +6,8 @@
 #include "invitation_form.h"
 
 //Object part
-Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models::Room room) :
-        BaseElement(engine, container, "qml/Room.qml"),
+Room::Room(QQmlEngine *engine, HomePage *homePage, Models::Room room) :
+        BasePage(engine, "qml/Room.qml"),
         taskComponent(new QQmlComponent(engine, "qml/Task.qml")),
         tasksContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("tasksContainer")),
         homePage(homePage),
@@ -16,17 +16,35 @@ Room::Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models
     object->setProperty("roomCreatorName", room.creatorName);
     object->setProperty("roomCreatorID", QString::number(room.creatorID));
 
-    connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::setTasks);
-    connect(netManager, &NetworkManager::finishLeaveFromRoomResponseHandling, this, &Room::finishLeaveFromRoom);
     connect(this->getObject(), SIGNAL(switchToTaskCreationForm()), this, SLOT(switchToTaskCreationForm()));
     connect(this->getObject(), SIGNAL(switchToInvitationForm()), this, SLOT(switchToInvitationForm()));
     connect(this->getObject(), SIGNAL(leaveFormRoom(int, QString)), this, SLOT(leaveFormRoom(int, QString)));
-
-    netManager->sendGetRoomTasksRequest(room.creatorID, room.name);
 }
 
 Room::~Room() {
+    clearContents();
     taskComponent->deleteLater();
+}
+
+void Room::update() {
+    connect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::setTasks);
+    connect(netManager, &NetworkManager::finishLeaveFromRoomResponseHandling, this, &Room::finishLeaveFromRoom);
+    netManager->sendGetRoomTasksRequest(room.creatorID, room.name);
+}
+
+void Room::leave() {
+    disconnect(netManager, &NetworkManager::finishGetRoomTasksResponseHandling, this, &Room::setTasks);
+    disconnect(netManager, &NetworkManager::finishLeaveFromRoomResponseHandling, this, &Room::finishLeaveFromRoom);
+    clearContents();
+}
+
+void Room::clearContents() {
+    for(auto &task : tasks) {
+        tasksItems[task.localID]->deleteLater();
+    }
+
+    tasks.clear();
+    tasksItems.clear();
 }
 
 
@@ -41,6 +59,9 @@ void Room::addTask(Models::Task task) {
     item->setProperty("taskCreatorID", QString::number(task.creatorID));
     item->setProperty("taskCreatorName", task.creatorName);
     item->setParentItem(tasksContainer);
+
+    item->setParentItem(tasksContainer);
+    tasksItems[task.localID] = item;
 }
 
 //Form part
@@ -62,7 +83,7 @@ void Room::setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks) {
     if (!serverStatus.status) {
         this->tasks = tasks;
 
-        for (auto task : this->tasks) {
+        for (auto &task : this->tasks) {
             auto item = qobject_cast<QQuickItem*>(taskComponent->create(engine->rootContext()));
             item->setProperty("roomCreatorID", QString::number(task.parent.creatorID));
             item->setProperty("roomName", task.parent.name);
@@ -71,6 +92,7 @@ void Room::setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks) {
             item->setProperty("taskCreatorName", task.creatorName);
 
             item->setParentItem(tasksContainer);
+            tasksItems[task.localID] = item;
         }
     } else {
         qInfo() << "error get room tasks status: " << serverStatus.status;

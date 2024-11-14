@@ -1,10 +1,16 @@
 #include "reviewed_tasks.h"
 
-ReviewedTasks::ReviewedTasks(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-    TasksList(engine, container, homePage) {
-    connect(netManager, &NetworkManager::finishGetProfileReviewedTasksResponseHandling, this, &TasksList::tasksInitialization);
+ReviewedTasks::ReviewedTasks(QQmlEngine *engine, HomePage *homePage) :
+    TasksList(engine, homePage) { }
 
+ReviewedTasks::~ReviewedTasks() {}
+
+void ReviewedTasks::update() {
+    connect(netManager, &NetworkManager::finishGetProfileReviewedTasksResponseHandling, this, &TasksList::tasksInitialization);
     netManager->sendGetProfileReviewedTasksRequest();
 }
 
-ReviewedTasks::~ReviewedTasks() {}
+void ReviewedTasks::leave() {
+    disconnect(netManager, &NetworkManager::finishGetProfileReviewedTasksResponseHandling, this, &TasksList::tasksInitialization);
+    clearContents();
+}

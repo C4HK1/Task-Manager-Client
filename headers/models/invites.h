@@ -23,6 +23,7 @@ namespace Models {
         void append(Invites invites);
         void remove(Invite invite);
         void removeAcceptedInvites(Models::Invite invite);
+        void clear();
     private:
         QList<Invite> invites;
     };

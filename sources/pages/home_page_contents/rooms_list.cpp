@@ -2,26 +2,29 @@
 #include "home_page.h"
 
 //Object part
-RoomsList::RoomsList(QQmlEngine *engine, QQuickItem *container, QString moduleName, QString itemName, HomePage *homePage) :
-        BaseElement(engine, container, moduleName),
+RoomsList::RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, HomePage *homePage) :
+        BasePage(engine, moduleName),
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile(itemName))),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));
-
-    connect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
-    connect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
-
-    netManager->sendGetProfileRoomsRequest();
 }
 
 RoomsList::~RoomsList(){
-    for(auto &item : roomsItems) {
-        item->deleteLater();
-    }
-
+    clearContents();
     itemComponent->deleteLater();
 }
 
+void RoomsList::update() {
+    connect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
+    connect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
+    netManager->sendGetProfileRoomsRequest();
+}
+
+void RoomsList::leave() {
+    disconnect(netManager, &NetworkManager::finishGetProfileRoomsResponseHandling, this, &RoomsList::initializeContents);
+    disconnect(netManager, &NetworkManager::finishGetRoomResponseHandling, this, &RoomsList::finishSwitchToRoom);
+    clearContents();
+}
 
 //Slots
 void RoomsList::initializeContents(Models::ServerStatus serverStatus, Models::Rooms rooms) {
@@ -29,8 +32,17 @@ void RoomsList::initializeContents(Models::ServerStatus serverStatus, Models::Ro
 
     for(auto &room : this->rooms){
         this->createRoomItem(room);
-        connect(room.roomItem, SIGNAL(switchToRoom(int, QString)), this, SLOT(switchToRoom(int, QString)));
+        connect(roomsItems[room.localID], SIGNAL(switchToRoom(int,QString)), this, SLOT(switchToRoom(int,QString)));
     }
+}
+
+void RoomsList::clearContents() {
+    for (auto &room : rooms) {
+        roomsItems[room.localID]->deleteLater();
+    }
+
+    rooms.clear();
+    roomsItems.clear();
 }
 
 void RoomsList::switchToRoomCreation() {

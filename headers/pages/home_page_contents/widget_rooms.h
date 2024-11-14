@@ -8,7 +8,7 @@ class HomePage;
 class WidgetRooms : public RoomsList {
     Q_OBJECT
 public:
-    WidgetRooms(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    WidgetRooms(QQmlEngine *engine, HomePage *homePage);
     ~WidgetRooms();
 signals:
 public slots:

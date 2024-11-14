@@ -8,8 +8,10 @@ class HomePage;
 class AllInvites : public InvitesList {
     Q_OBJECT
 public:
-    AllInvites(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    AllInvites(QQmlEngine *engine, HomePage *homePage);
     ~AllInvites() override;
+    void update() override;
+    void leave() override;
 
     void createInviteItem(Models::Invite &invite) override;
 signals:

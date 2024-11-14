@@ -2,15 +2,18 @@
 #define SETTINGS_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 
 class HomePage;
 
-class Settings : public BaseElement {
+class Settings : public BasePage {
     Q_OBJECT
 public:
     HomePage *homePage;
 
-    Settings(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    void update() override;
+    void leave() override;
+    Settings(QQmlEngine *engine, HomePage *homePage);
     ~Settings();
 signals:
 public slots:

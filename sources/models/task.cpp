@@ -1,6 +1,11 @@
 #include "models/task.h"
 
+u_int64_t Models::Task::ID_counter{};
+
 Models::Task::Task(nlohmann::json task) {
+    this->localID = ID_counter;
+    ++ID_counter;
+
     this->parent.creatorID = task.at("room creator ID");
     this->parent.name = QString::fromStdString(task.at("room name"));
     this->creatorID = task.at("creator ID");

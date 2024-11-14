@@ -2,16 +2,19 @@
 #define REGISTRATION_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 
 class MainApplication;
 
-class RegistrationPage : public BaseElement {
+class RegistrationPage : public BasePage {
     Q_OBJECT
     QML_ELEMENT
 public:
     MainApplication *mainApp;
 
-    RegistrationPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
+    RegistrationPage(QQmlEngine *engine, MainApplication *mainApp);
+    void update() override;
+    void leave() override;
     ~RegistrationPage();
 signals:
 public slots:

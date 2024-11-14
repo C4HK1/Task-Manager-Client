@@ -14,6 +14,8 @@ MainApplication::MainApplication(int argc, char **argv) :
     mainWindow = qobject_cast<QQuickWindow*>(component->create(engine->rootContext()));
     component->deleteLater();
 
+    nav_service = new NavigationService(mainWindow->contentItem());
+
     QFile file("data/authentication_key.organizer");
 
     if(!file.exists()){
@@ -30,9 +32,9 @@ MainApplication::MainApplication(int argc, char **argv) :
 }
 
 MainApplication::~MainApplication() {
-    curPage->deleteLater();
     mainWindow->deleteLater();
     engine->deleteLater();
+    nav_service->deleteLater();
 }
 
 //Methods
@@ -46,28 +48,22 @@ void MainApplication::handleAuthentication(Models::ServerStatus serverStatus) {
 }
 
 //Page part
-void MainApplication::SetCurrentPage(BaseElement *page) {
-    if(curPage != nullptr) {
-        curPage->deleteLater();
-    }
 
-    curPage = page;
+template <typename ElementType, typename ...Args> requires IsPage<ElementType>
+BasePage* MainApplication::createElement(Args... args) {
+    return new ElementType(engine, args...);
 }
 
-template <typename PageType, typename ...Args> requires IsElement<PageType>
-void MainApplication::switchPage(Args... args){
-    SetCurrentPage(new PageType(engine, mainWindow->contentItem(), this, args...));
-}
 
 //Switchers
 void MainApplication::switchToRegistrationPage() {
-    switchPage<RegistrationPage>();
+    nav_service->switchTo(createElement<RegistrationPage>(this));
 }
 
 void MainApplication::switchToLogginingPage() {
-    switchPage<LogginingPage>();
+    nav_service->switchTo(createElement<LogginingPage>(this));
 }
 
 void MainApplication::switchToHomePage() {
-    switchPage<HomePage>();
+    nav_service->switchTo(createElement<HomePage>(this));
 }

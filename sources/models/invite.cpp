@@ -1,6 +1,11 @@
 #include "models/invite.h"
 
+u_int64_t Models::Invite::ID_counter{};
+
 Models::Invite::Invite(nlohmann::json invite) {
+    this->localID = ID_counter;
+    ++ID_counter;
+
     this->senderID = invite.at("sender ID");
     this->receiverID = invite.at("receiver ID");
     this->roomCreatorID = invite.at("room creator ID");

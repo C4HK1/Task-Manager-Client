@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import DefaultElements
-import DefaultElements.Fonts
+import qml.DefaultElements
+import qml.DefaultElements.Fonts
 
 Window {
     id: mainWindow

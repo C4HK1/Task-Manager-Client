@@ -1,6 +1,6 @@
 qt_add_library(MainWorkspaceElements STATIC)
 qt_add_qml_module(MainWorkspaceElements
-    URI "MainWorkspaceElements"
+    URI "qml.MainWorkspaceElements"
     VERSION 1.0
     QML_FILES
         RoomWidget.qml
@@ -15,6 +15,6 @@ qt_add_qml_module(MainWorkspaceElements
         TaskTools.qml
         InviteTools.qml
         ProfileTools.qml
-
-    RESOURCE_PREFIX /MainWorkspaceElements
+        PageSwitchingButton.qml
+    RESOURCE_PREFIX /
 )

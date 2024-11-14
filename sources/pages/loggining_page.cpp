@@ -8,8 +8,8 @@
 
 
 //Object part
-LogginingPage::LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp) :
-        BaseElement(engine, container, "qml/Authorization.qml"),
+LogginingPage::LogginingPage(QQmlEngine *engine, MainApplication *mainApp) :
+        BasePage(engine, "qml/Authorization.qml"),
         mainApp(mainApp) {
     connect(this->getObject(), SIGNAL(loggin(QString, QString)), this, SLOT(loggin(QString, QString)));
     connect(this->getObject(), SIGNAL(switchToRegistration()), this, SLOT(switchToRegistration()));
@@ -20,6 +20,8 @@ LogginingPage::LogginingPage(QQmlEngine *engine, QQuickItem *container, MainAppl
 LogginingPage::~LogginingPage() {
 }
 
+void LogginingPage::update() {}
+void LogginingPage::leave() {}
 
 //Slots
 void LogginingPage::loggin(QString login, QString password) {

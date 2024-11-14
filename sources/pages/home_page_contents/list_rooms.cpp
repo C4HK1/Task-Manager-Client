@@ -1,8 +1,8 @@
 #include "list_rooms.h"
 
 //Object part
-ListRooms::ListRooms(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        RoomsList(engine, container, "qml/ListRooms.qml", "qml/MainWorkspaceElements/RoomListItem.qml", homePage),
+ListRooms::ListRooms(QQmlEngine *engine, HomePage *homePage) :
+        RoomsList(engine, "qml/ListRooms.qml", "qml/MainWorkspaceElements/RoomListItem.qml", homePage),
         listContainer(object->findChild<QQuickItem*>("flickable")->findChild<QQuickItem*>("listContainer")) {
 }
 
@@ -17,7 +17,6 @@ void ListRooms::createRoomItem(Models::Room &room) {
     item->setProperty("roomCreatorName", room.creatorName);
     item->setProperty("roomCreatorID", QString::number(room.creatorID));
 
-    room.roomItem = item;
     item->setParentItem(listContainer);
-    roomsItems.append(item);
+    roomsItems[room.localID] = item;
 }

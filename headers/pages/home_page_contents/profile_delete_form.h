@@ -1,17 +1,17 @@
 #ifndef PROFILE_DELETE_FORM_H
 #define PROFILE_DELETE_FORM_H
 
-#include "base_element.h"
+#include "base_form.h"
 #include "room.h"
 
 class HomePage;
 
-class ProfileDeleteForm : public BaseElement {
+class ProfileDeleteForm : public BaseForm {
     Q_OBJECT
 public:
     HomePage *homePage;
 
-    ProfileDeleteForm(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    ProfileDeleteForm(QQmlEngine *engine, QQuickItem *parent, HomePage *homePage);
     ~ProfileDeleteForm();
 signals:
 public slots:

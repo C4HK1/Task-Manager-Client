@@ -8,8 +8,10 @@ class HomePage;
 class ReviewedTasks : public TasksList {
     Q_OBJECT
 public:
-    ReviewedTasks(QQmlEngine *engine, QQuickItem *container, HomePage *homePage);
+    ReviewedTasks(QQmlEngine *engine, HomePage *homePage);
     ~ReviewedTasks() override;
+    void update() override;
+    void leave() override;
 signals:
 public slots:
 protected:

@@ -19,4 +19,6 @@ target_sources(Pages PRIVATE
     ${HEADER_DIR}/base_element.h base_element.cpp
     ${HEADER_DIR}/home_page.h home_page.cpp
     ${HEADER_DIR}/registration_page.h registration_page.cpp
+    ${HEADER_DIR}/base_form.h base_form.cpp
+    ${HEADER_DIR}/base_page.h base_page.cpp
 )

@@ -1,18 +1,18 @@
 #ifndef INVITATION_FORM_H
 #define INVITATION_FORM_H
 
-#include "base_element.h"
+#include "base_form.h"
 
 class Room;
 
-class InvitationForm : public BaseElement {
+class InvitationForm : public BaseForm {
     Q_OBJECT
 public:
     Room *room;
     u_int64_t offset{0};
 
 
-    InvitationForm(QQmlEngine *engine, QQuickItem *container, Room *room);
+    InvitationForm(QQmlEngine *engine, QQuickItem *parent, Room *room);
     ~InvitationForm();
 signals:
 public slots:

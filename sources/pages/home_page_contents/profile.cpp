@@ -2,10 +2,13 @@
 #include "home_page.h"
 
 //Object part
-Profile::Profile(QQmlEngine *engine, QQuickItem *container, HomePage *homePage) :
-        BaseElement(engine, container, "qml/Profile.qml"),
+Profile::Profile(QQmlEngine *engine, HomePage *homePage) :
+        BasePage(engine, "qml/Profile.qml"),
         homePage(homePage) {
 }
 
 Profile::~Profile() {
 }
+
+void Profile::update() {}
+void Profile::leave() {}

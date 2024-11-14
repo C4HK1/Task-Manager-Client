@@ -2,16 +2,19 @@
 #define AUTHORIZATION_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 #include "main_application.h"
 
 class MainApplication;
 
-class LogginingPage : public BaseElement {
+class LogginingPage : public BasePage {
     Q_OBJECT
 public:
     MainApplication *mainApp;
 
-    LogginingPage(QQmlEngine *engine, QQuickItem *container, MainApplication *mainApp);
+    LogginingPage(QQmlEngine *engine, MainApplication *mainApp);
+    void update() override;
+    void leave() override;
     ~LogginingPage();
 signals:
 public slots:

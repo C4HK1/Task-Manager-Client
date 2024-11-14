@@ -14,13 +14,12 @@ namespace Models {
         Q_PROPERTY(QString taskName MEMBER name)
 
     public:
+        u_int64_t localID;
         u_int64_t creatorID, status;
         QString name, creatorName, description, label;
         std::time_t creationTime, deadline;
 
         Room parent;
-
-        QQuickItem *taskItem;
 
         QString getRoomName() const { return parent.name; }
         u_int64_t getRoomCreatorID() const { return parent.creatorID; }
@@ -32,6 +31,8 @@ namespace Models {
         // ~Task() { if(taskItem != nullptr) taskItem->deleteLater(); }
 
         QVariant property(const char *name) const;
+    private:
+        static u_int64_t ID_counter;
     };
 }
 

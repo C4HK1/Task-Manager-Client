@@ -2,21 +2,26 @@
 #define ROOM_PAGE_H
 
 #include "base_element.h"
+#include "base_page.h"
 
 class HomePage;
 
-class Room : public BaseElement {
+class Room : public BasePage {
     Q_OBJECT
 public:
     //Fields
     HomePage *homePage;
 
     //Object part
-    Room(QQmlEngine *engine, QQuickItem *container, HomePage *homePage, Models::Room room);
+    Room(QQmlEngine *engine, HomePage *homePage, Models::Room room);
     ~Room();
 
     //Methods
     void addTask(Models::Task task);
+    void update() override;
+    void leave() override;
+
+    void clearContents();
 
     //Form part
     void setCurrentForm(BaseElement *form);
@@ -42,6 +47,7 @@ private:
 
     Models::Room room;
     Models::Tasks tasks;
+    QHash<u_int64_t, QQuickItem*> tasksItems;
 };
 
 #endif // ROOM__PAGE_H

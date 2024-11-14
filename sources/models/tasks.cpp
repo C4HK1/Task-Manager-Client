@@ -25,3 +25,7 @@ size_t Models::Tasks::size() {
 void Models::Tasks::append(Models::Task task) {
     this->tasks.append(task);
 }
+
+void Models::Tasks::clear() {
+    this->tasks.clear();
+}
