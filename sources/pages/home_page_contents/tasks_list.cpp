@@ -1,3 +1,4 @@
+#include <ctime>
 #include "tasks_list.h"
 #include "network_manager.h"
 #include "home_page.h"
@@ -126,9 +127,19 @@ void TasksList::createTaskItem(Models::Task &task){
     item->setProperty("label", task.label);
 
     Rgb rgb = stringToRgb(task.label);
-    qInfo() << rgbToHex(rgb);
     item->setProperty("labelColor", rgbToHex(rgb));
     item->setProperty("labelBorderColor", rgbToHex(rgbToDarkerRgb(rgb)));
+
+    std::ostringstream oss;
+    oss << std::put_time(localtime(&task.deadline), "%Y-%m-%d %H:%M:%S");
+    item->setProperty("deadline", oss.str().c_str());
+
+    auto left = difftime(task.deadline, time(0)) / 3600;
+    if (left < 0) {
+        item->setProperty("deadlineStatus", 2);
+    } else if (left < 1) {
+        item->setProperty("deadlineStatus", 1);
+    }
 
     item->setParentItem(listContainer);
     tasksItems[task.localID] = item;

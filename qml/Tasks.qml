@@ -36,7 +36,8 @@ DefaultFrame {
                     {name: qsTr("taskName"), text: qsTr("Task name"), width: 212},
                     {name: qsTr("roomName"), text: qsTr("Room name"), width: 200},
                     {name: qsTr("creatorName"), text: qsTr("Creator name"), width: 200},
-                    {name: qsTr("label"), text: qsTr("Label"), width: 200}
+                    {name: qsTr("label"), text: qsTr("Label"), width: 200},
+                    {name: qsTr("deadline"), text: qsTr("Deadline"), width: 200}
                 ]
 
                 Rectangle {

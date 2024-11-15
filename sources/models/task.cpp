@@ -20,6 +20,12 @@ Models::Task::Task(nlohmann::json task) {
 
 // Models::Task::~Task() { if(taskItem != nullptr) taskItem->deleteLater(); }
 
+QString Models::Task::getDeadlineStr() const {
+    std::ostringstream oss;
+    oss << std::put_time(localtime(&deadline), "%Y-%m-%d %H:%M:%S");
+    return oss.str().c_str();
+}
+
 QVariant Models::Task::property(const char *name) const{
     int index = staticMetaObject.indexOfProperty(name);
     if(index == -1){

@@ -18,6 +18,8 @@ Rectangle {
     property alias label: label.text
     property alias labelColor: labelRect.color
     property alias labelBorderColor: labelRect.border.color
+    property alias deadline: deadline.text
+    property int deadlineStatus: 0
     property int roomCreatorID
 
     signal openRoom(int roomCreatorID, string roomName)
@@ -88,7 +90,47 @@ Rectangle {
         anchors.left: labelRect.right
         anchors.verticalCenter: parent.verticalCenter
         color: "transparent"
-        width: 150 - labelRect.width
+        width: 190 - labelRect.width
+    }
+
+    Text {
+        id: deadline
+        objectName: qsTr("deadline")
+        anchors.left: labelSeparator.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 15
+
+        font.pixelSize: 14
+        elide: Text.ElideRight
+        text: "dasfasdf"
+
+        color: {
+            if (deadlineStatus === 1) {
+                "yellow"
+            } else if (deadlineStatus === 2) {
+                "red"
+            } else {
+                "white"
+            }
+        }
+    }
+
+    Image {
+        source: {
+            if(deadlineStatus === 1) {
+                "images/warning.png"
+            } else if (deadlineStatus === 2) {
+                "images/error.png"
+            } else {
+                ''
+            }
+        }
+
+        anchors.left: deadline.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 10
+        width: 20
+        height: 20
     }
 
     MouseArea {

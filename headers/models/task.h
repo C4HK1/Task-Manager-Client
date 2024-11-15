@@ -14,6 +14,7 @@ namespace Models {
         Q_PROPERTY(QString taskName MEMBER name)
         Q_PROPERTY(QString creatorName MEMBER creatorName)
         Q_PROPERTY(QString label MEMBER label)
+        Q_PROPERTY(QString deadline READ getDeadlineStr)
 
     public:
         u_int64_t localID;
@@ -25,6 +26,7 @@ namespace Models {
 
         QString getRoomName() const { return parent.name; }
         u_int64_t getRoomCreatorID() const { return parent.creatorID; }
+        QString getDeadlineStr() const;
 
         Task() = default;
 

@@ -6,7 +6,7 @@ import qml.DefaultElements.Fonts
 
 Window {
     id: mainWindow
-    width: 1080
+    width: 1280
     height: 720
     minimumWidth: 600
     minimumHeight: 400
