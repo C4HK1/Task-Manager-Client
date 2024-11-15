@@ -11,12 +11,10 @@ public:
     ListRooms(QQmlEngine *engine, HomePage *homePage);
     ~ListRooms();
 
-    void createRoomItem(Models::Room &room) override;
 signals:
 public slots:
 protected:
 private:
-    QQuickItem *listContainer;
 };
 
 #endif // LIST_ROOMS_PAGE_H

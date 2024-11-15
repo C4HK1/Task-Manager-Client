@@ -12,10 +12,8 @@ public:
     ~WidgetRooms();
 signals:
 public slots:
-    void createRoomItem(Models::Room &room) override;
 protected:
 private:
-    QQuickItem *widgetContainer;
 };
 
 #endif // WIDGET_ROOMS_PAGE_H

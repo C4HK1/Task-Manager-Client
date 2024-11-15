@@ -6,7 +6,8 @@ RoomsList::RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, H
         BasePage(engine, moduleName),
         itemComponent(new QQmlComponent(engine, QUrl::fromLocalFile(itemName))),
         homePage(homePage) {
-    connect(this->getObject(), SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));
+    connect(object, SIGNAL(switchToRoomCreation()), this, SLOT(switchToRoomCreation()));
+    connect(object, SIGNAL(sortBy(QString,bool)), this, SLOT(sortBy(QString,bool)));
 }
 
 RoomsList::~RoomsList(){
@@ -43,6 +44,35 @@ void RoomsList::clearContents() {
 
     rooms.clear();
     roomsItems.clear();
+}
+
+void RoomsList::createRoomItem(Models::Room &room) {
+    auto item = qobject_cast<QQuickItem*>(itemComponent->create(engine->rootContext()));
+
+    item->setProperty("roomName", room.name);
+    item->setProperty("roomCreatorName", room.creatorName);
+    item->setProperty("roomCreatorID", QString::number(room.creatorID));
+
+    item->setParentItem(roomContainer);
+    roomsItems[room.localID] = item;
+}
+
+void RoomsList::sortBy(QString by, bool ascending) {
+    for (auto &room : rooms) {
+        roomsItems[room.localID]->setParentItem(nullptr);
+    }
+
+    auto get_str = [&by](Models::Room room) { return (room.property(by.toStdString().c_str())).toString().toLower().trimmed(); };
+
+    std::stable_sort(rooms.begin(), rooms.end(),
+                     [&ascending, &by, &get_str](const Models::Room r1, const Models::Room r2) {
+        QString s1 = get_str(r1), s2 = get_str(r2);
+        return (ascending && s1 < s2) || (!ascending && s1 > s2);
+    });
+
+    for(auto &room : rooms) {
+        roomsItems[room.localID]->setParentItem(roomContainer);
+    }
 }
 
 void RoomsList::switchToRoomCreation() {

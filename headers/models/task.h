@@ -12,6 +12,8 @@ namespace Models {
         Q_PROPERTY(u_int64_t roomCreatorID READ getRoomCreatorID)
         Q_PROPERTY(QString roomName READ getRoomName)
         Q_PROPERTY(QString taskName MEMBER name)
+        Q_PROPERTY(QString creatorName MEMBER creatorName)
+        Q_PROPERTY(QString label MEMBER label)
 
     public:
         u_int64_t localID;

@@ -7,6 +7,8 @@
 namespace Models {
     struct Room {
         Q_GADGET
+        Q_PROPERTY(QString roomName MEMBER name)
+        Q_PROPERTY(QString roomName MEMBER creatorName)
     public:
         u_int64_t localID;
         u_int64_t creatorID;

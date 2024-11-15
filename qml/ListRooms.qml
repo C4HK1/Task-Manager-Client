@@ -2,10 +2,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qml.DefaultElements
-import qml.DefaultElements.Fonts
 import qml.MainWorkspaceElements
 
 DefaultFrame {
+    id: root
+
+    property string sortedBy: "roomName"
+    property bool ascending: true
+
+    signal sortBy(string by, bool ascending)
     signal switchToRoomCreation()
 
     Rectangle {
@@ -17,29 +22,75 @@ DefaultFrame {
         anchors.leftMargin: 3
         height: 30
 
-        color: "#303030"
+        color: "#202020"
 
-        Text {
-            id: roomName
+        GridLayout {
             anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 17
-            color: "white"
-            font.pixelSize: 16
-            font.bold: true
-            width: 200
-            text: qsTr("Room name")
-        }
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            columnSpacing: 3
+            flow: GridLayout.LeftToRight
 
-        Text {
-            anchors.left: roomName.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 13
-            color: "white"
-            font.pixelSize: 16
-            font.bold: true
-            width: 150
-            text: qsTr("Owner name")
+            Repeater {
+                id: paramRepeater
+                model: [
+                    {name: qsTr("roomName"), text: qsTr("Room name"), width: 212},
+                    {name: qsTr("roomCreatorName"), text: qsTr("Room creator name"), width: 200}
+                ]
+
+                Rectangle {
+                    color: "#303030"
+                    Layout.fillHeight: true
+                    width: modelData.width
+
+                    Text {
+                        objectName: modelData.name
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: 15
+                        id: parameterText
+                        color: "white"
+                        font.pixelSize: 16
+                        font.bold: true
+                        text: modelData.text
+                    }
+
+                    Image {
+                        visible: modelData.name === sortedBy
+                        id: arrowIcon
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        source: (ascending) ? "images/arrow_down.png" : "images/arrow_up.png"
+                        width: 15
+                        height: 15
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onClicked: {
+                            if (sortedBy === modelData.name) {
+                                ascending = !ascending
+                                sortBy(sortedBy, ascending)
+                            } else {
+                                sortedBy = modelData.name
+                                ascending = true
+                                sortBy(sortedBy, ascending)
+                            }
+                        }
+
+                        onEntered: {
+                            parent.color = "#404040"
+                        }
+
+                        onExited: {
+                            parent.color = "#303030"
+                        }
+                    }
+                }
+            }
         }
     }
 

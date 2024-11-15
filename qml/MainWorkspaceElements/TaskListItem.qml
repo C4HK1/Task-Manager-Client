@@ -14,6 +14,10 @@ Rectangle {
 
     property alias taskName: taskName.text
     property alias roomName: roomName.text
+    property alias creatorName: creatorName.text
+    property alias label: label.text
+    property alias labelColor: labelRect.color
+    property alias labelBorderColor: labelRect.border.color
     property int roomCreatorID
 
     signal openRoom(int roomCreatorID, string roomName)
@@ -23,11 +27,11 @@ Rectangle {
         objectName: qsTr("taskName")
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 20
+        anchors.leftMargin: 15
         color: "white"
         font.pixelSize: 14
         font.bold: true
-        width: 200
+        width: 195
         elide: Text.ElideRight
     }
 
@@ -39,8 +43,52 @@ Rectangle {
         anchors.leftMargin: 15
         color: "white"
         font.pixelSize: 14
-        width: 150
+        width: 190
         elide: Text.ElideRight
+    }
+
+    Text {
+        id: creatorName
+        objectName: qsTr("creatorName")
+        anchors.left: roomName.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 15
+        color: "white"
+        font.pixelSize: 14
+        width: 190
+        elide: Text.ElideRight
+    }
+
+    Rectangle {
+        id: labelRect
+        objectName: qsTr("labelRect")
+        anchors.left: creatorName.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 15
+
+        width: label.width + 18
+        height: label.height + 12
+        radius: 15
+        border.width: 2
+
+        Text {
+            id: label
+            objectName: qsTr("label")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 10
+            font.pixelSize: 14
+            elide: Text.ElideRight
+            color: "white"
+        }
+    }
+
+    Rectangle {
+        id: labelSeparator
+        anchors.left: labelRect.right
+        anchors.verticalCenter: parent.verticalCenter
+        color: "transparent"
+        width: 150 - labelRect.width
     }
 
     MouseArea {

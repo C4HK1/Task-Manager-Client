@@ -7,6 +7,7 @@ import qml.MainWorkspaceElements
 DefaultFrame {
     signal switchToRoomCreation()
     // signal switchToRoom(int roomCreatorID, string roomName)
+    signal sortBy(string by, bool ascending)
 
     Flickable {
         objectName: qsTr("flickable")

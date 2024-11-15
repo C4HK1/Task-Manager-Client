@@ -14,7 +14,7 @@ public:
     HomePage *homePage;
 
     RoomsList(QQmlEngine *engine, QString moduleName, QString itemName, HomePage *homePage);
-    virtual void createRoomItem(Models::Room &room) = 0;
+    void createRoomItem(Models::Room &room);
     void update() override;
     void leave() override;
     void clearContents();
@@ -23,12 +23,14 @@ signals:
 public slots:
     void finishSwitchToRoom(Models::ServerStatus serverStatus, Models::Room room);
     void initializeContents(Models::ServerStatus serverStatus, Models::Rooms rooms);
+    void sortBy(QString by, bool ascending = true);
     void switchToRoom(int roomCreatorID, QString roomName);
     void switchToRoomCreation();
 signals:
 protected:
     QQmlComponent *itemComponent;
 
+    QQuickItem *roomContainer;
     Models::Rooms rooms;
     QHash<u_int64_t, QQuickItem*> roomsItems;
 private:

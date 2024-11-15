@@ -40,7 +40,10 @@ void InvitesList::sortBy(QString by, bool ascending) {
     auto get_str = [&by](Models::Invite invite) { return (invite.property(by.toStdString().c_str())).toString().toLower().trimmed(); };
 
     std::stable_sort(invites.begin(), invites.end(),
-              [&ascending, &by, &get_str](const Models::Invite t1, const Models::Invite t2) { return (get_str(t1) < get_str(t2)) ^ !ascending; });
+              [&ascending, &by, &get_str](const Models::Invite i1, const Models::Invite i2) {
+        QString s1 = get_str(i1), s2 = get_str(i2);
+        return (ascending && s1 < s2) || (!ascending && s1 > s2);
+    });
 
     for(auto &invite : invites) {
         invitesItems[invite.localID]->setParentItem(listContainer);
