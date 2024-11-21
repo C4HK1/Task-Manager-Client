@@ -18,4 +18,6 @@ target_sources(RoomContents PRIVATE
     ${HEADER_RPC_DIR}/task_creation_form.h task_creation_form.cpp
     ${HEADER_RPC_DIR}/invitation_form.h invitation_form.cpp
     ${HEADER_RPC_DIR}/task_form.h task_form.cpp
+    ${HEADER_RPC_DIR}/task_edit_form_page.h task_edit_form_page.cpp
+    ${HEADER_RPC_DIR}/task_view_form_page.h task_view_form_page.cpp
 )

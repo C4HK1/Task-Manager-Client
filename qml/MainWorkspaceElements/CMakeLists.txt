@@ -16,6 +16,8 @@ qt_add_qml_module(MainWorkspaceElements
         InviteTools.qml
         ProfileTools.qml
         PageSwitchingButton.qml
-        TaskForm.qml
+
+        TaskViewFormPage.qml
+        TaskEditFormPage.qml
     RESOURCE_PREFIX /
 )

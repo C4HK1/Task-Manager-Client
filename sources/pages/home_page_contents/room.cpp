@@ -120,6 +120,11 @@ void Room::finishLeaveFromRoom(Models::ServerStatus serverStatus) {
     }
 }
 
+void Room::updateItem(Models::Task *task) {
+    auto item = tasksItems[task->localID];
+    item->setProperty("taskName", task->name);
+}
+
 //Switchers
 void Room::switchToTaskCreationForm() { switchForm<TaskCreationForm>(); }
 void Room::switchToInvitationForm() { switchForm<InvitationForm>(); }

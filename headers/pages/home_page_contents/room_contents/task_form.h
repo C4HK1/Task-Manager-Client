@@ -3,6 +3,7 @@
 
 #include "base_form.h"
 #include "room.h"
+#include "navigation_service.h"
 
 class TaskForm : public BaseForm {
     Q_OBJECT
@@ -14,8 +15,11 @@ public:
 
 public slots:
     void closeTaskForm();
+    void switchToEditMode();
+    void switchToViewMode();
 
 private:
+    NavigationService *nav_service;
     Models::Task *task;
 };
 

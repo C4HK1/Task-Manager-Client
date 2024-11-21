@@ -33,4 +33,12 @@ Frame {
             closeForm()
         }
     }
+
+    onChildrenChanged: {
+        for (var i = 1; i < children.length; ++i) {
+            if(children[i] !== container) {
+                children[i].parent = container
+            }
+        }
+    }
 }

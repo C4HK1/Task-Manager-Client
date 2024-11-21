@@ -28,6 +28,8 @@ public:
 
     template <typename FormType, typename ...Args> requires IsElement<FormType>
     void switchForm(Args... args);
+
+    void updateItem(Models::Task *task);
 signals:
 public slots:
     void setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks);
