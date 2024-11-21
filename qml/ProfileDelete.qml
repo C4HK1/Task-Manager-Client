@@ -4,51 +4,28 @@ import QtQuick.Layouts
 import qml.DefaultElements
 import qml.DefaultElements.Fonts
 
-Frame {
-    id: form
-    anchors.fill: parent
-    z: 2
-
+DefaultForm {
     property var option;
 
     signal profileDelete()
-    signal closeProfileDeleteForm()
 
-    Rectangle {
-        width: 500
-        height: 360
-        color: "#303030"
-        radius: 20
-        anchors.centerIn: parent
-        z: 3
+    GridLayout {
+        width: 200
+        parent: container
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
 
-        property bool focused: true
+        columns: 1
 
-        GridLayout {
-            width: 200
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+        DefaultButton {
+            id: button
+            Layout.fillWidth: true
+            Layout.preferredHeight: 33
+            text: "delete profile"
 
-            columns: 1
-
-            DefaultButton {
-                id: button
-                Layout.fillWidth: true
-                Layout.preferredHeight: 33
-                text: "delete profile"
-
-                onClicked: {
-                    profileDelete()
-                }
+            onClicked: {
+                profileDelete()
             }
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-
-        onClicked: {
-            closeProfileDeleteForm()
         }
     }
 }

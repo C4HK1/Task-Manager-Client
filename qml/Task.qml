@@ -12,6 +12,9 @@ Rectangle {
     property alias taskName: taskName.text;
     property alias taskCreatorName: taskCreatorName.text;
     property string taskCreatorID;
+    property int taskLocalID;
+
+    signal switchToTaskForm(int taskLocalID)
 
     Text {
         id: taskName
@@ -56,7 +59,7 @@ Rectangle {
         }
 
         onClicked: {
-            console.log("task editing..")
+            switchToTaskForm(taskLocalID)
         }
     }
 }

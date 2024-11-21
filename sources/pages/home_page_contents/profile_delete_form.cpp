@@ -8,7 +8,6 @@ ProfileDeleteForm::ProfileDeleteForm(QQmlEngine *engine, QQuickItem *parent, Hom
     BaseForm(engine, parent, "qml/ProfileDelete.qml"),
         homePage(homePage) {
     connect(this->getObject(), SIGNAL(profileDelete()), this, SLOT(profileDelete()));
-    connect(this->getObject(), SIGNAL(closeProfileDeleteForm()), this, SLOT(closeProfileDeleteForm()));
 
     connect(this->netManager, &NetworkManager::finishDeleteProfileResponseHandling, this, &ProfileDeleteForm::finishProfileDelete);
 }
@@ -20,10 +19,6 @@ ProfileDeleteForm::~ProfileDeleteForm() {
 //Slots
 void ProfileDeleteForm::profileDelete() {
     this->netManager->sendDeleteProfileRequest();
-}
-
-void ProfileDeleteForm::closeProfileDeleteForm() {
-    this->homePage->closeForm();
 }
 
 void ProfileDeleteForm::finishProfileDelete(Models::ServerStatus serverStatus) {

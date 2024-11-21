@@ -37,6 +37,7 @@ public slots:
     //Switches
     void switchToTaskCreationForm();
     void switchToInvitationForm();
+    void switchToTaskForm(int localID);
     void closeForm();
 protected:
 private:

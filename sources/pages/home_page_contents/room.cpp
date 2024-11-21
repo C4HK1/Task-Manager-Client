@@ -56,9 +56,11 @@ void Room::addTask(Models::Task task) {
     item->setProperty("roomCreatorID", QString::number(task.parent.creatorID));
     item->setProperty("roomName", task.parent.name);
     item->setProperty("taskName", task.name);
+    item->setProperty("taskLocalID", (int) task.localID);
     item->setProperty("taskCreatorID", QString::number(task.creatorID));
     item->setProperty("taskCreatorName", task.creatorName);
-    item->setParentItem(tasksContainer);
+
+    connect(item, SIGNAL(switchToTaskForm(int)), this, SLOT(switchToTaskForm(int)));
 
     item->setParentItem(tasksContainer);
     tasksItems[task.localID] = item;
@@ -71,6 +73,10 @@ void Room::setCurrentForm(BaseElement *form){
     }
 
     curForm = form;
+
+    if(curForm != nullptr) {
+        connect(curForm->getObject(), SIGNAL(closeForm()), this, SLOT(closeForm()));
+    }
 }
 
 template <typename FormType, typename ...Args> requires IsElement<FormType>
@@ -87,9 +93,12 @@ void Room::setTasks(Models::ServerStatus serverStatus, Models::Tasks tasks) {
             auto item = qobject_cast<QQuickItem*>(taskComponent->create(engine->rootContext()));
             item->setProperty("roomCreatorID", QString::number(task.parent.creatorID));
             item->setProperty("roomName", task.parent.name);
+            item->setProperty("taskLocalID", (int) task.localID);
             item->setProperty("taskName", task.name);
             item->setProperty("taskCreatorID", std::to_string(task.creatorID).c_str());
             item->setProperty("taskCreatorName", task.creatorName);
+
+            connect(item, SIGNAL(switchToTaskForm(int)), this, SLOT(switchToTaskForm(int)));
 
             item->setParentItem(tasksContainer);
             tasksItems[task.localID] = item;
@@ -114,6 +123,14 @@ void Room::finishLeaveFromRoom(Models::ServerStatus serverStatus) {
 //Switchers
 void Room::switchToTaskCreationForm() { switchForm<TaskCreationForm>(); }
 void Room::switchToInvitationForm() { switchForm<InvitationForm>(); }
+void Room::switchToTaskForm(int localID) {
+    for(auto &task : tasks) {
+        if (task.localID == localID) {
+            switchForm<TaskForm>(&task);
+            break;
+        }
+    }
+}
 
 void Room::closeForm() {
     setCurrentForm(nullptr);

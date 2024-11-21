@@ -5,47 +5,32 @@ import qml.DefaultElements
 import qml.DefaultElements.Fonts
 
 Frame {
-    id: form
+    id: taskCreationForm
     anchors.fill: parent
     z: 2
 
-    property alias buttonText: button.text
-    property var option;
+    property var room: parent
+    property alias container: container
+
+    signal closeForm()
 
     Rectangle {
+        id: container
         width: 500
-        height: 360
+        height: 500
         color: "#303030"
         radius: 20
         anchors.centerIn: parent
         z: 3
 
         property bool focused: true
-
-        GridLayout {
-            width: 200
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-
-            columns: 1
-
-            DefaultButton {
-                id: button
-                Layout.fillWidth: true
-                Layout.preferredHeight: 33
-
-                onClicked: {
-                    option()
-                }
-            }
-        }
     }
 
     MouseArea {
         anchors.fill: parent
 
         onClicked: {
-            form.destroy()
+            closeForm()
         }
     }
 }

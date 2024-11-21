@@ -10,7 +10,7 @@ HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
         "switchToProfile()", "switchToAllTasks()", "switchToReviewedTasks()", "switchToAssignedTasks()",
-        "switchToLoggoutForm()", "switchToProfileDeleteForm()",
+        "switchToLoggoutForm()", "switchToProfileDeleteForm()", "switchToTaskForm()",
         "switchToAllInvites()", "switchToReceivedInvites()", "switchToSendedInvites()",
         "switchBackward()", "switchForward()"
     };
@@ -38,6 +38,10 @@ void HomePage::setCurrentForm(BaseForm *form){
     }
 
     curForm = form;
+
+    if(curForm != nullptr) {
+        connect(curForm->getObject(), SIGNAL(closeForm()), this, SLOT(closeForm()));
+    }
 }
 
 template <typename FormType, typename ...Args> requires IsForm<FormType>

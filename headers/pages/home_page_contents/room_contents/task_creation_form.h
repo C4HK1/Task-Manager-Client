@@ -21,7 +21,6 @@ public slots:
                     QString label,
                     int status,
                     int timeToLive);
-    void closeTaskCreationForm();
 
     void finishCreateTask(Models::ServerStatus serverStatus, Models::Task task);
 protected:

@@ -12,7 +12,6 @@ InvitationForm::InvitationForm(QQmlEngine *engine, QQuickItem *parent, Room *roo
         room(room) {
     connect(this->getObject(), SIGNAL(findProfilesWithSuchName(QString)), this, SLOT(findProfilesWithSuchName(QString)));
     connect(this->getObject(), SIGNAL(invite(int, int, QString)), this, SLOT(invite(int, int, QString)));
-    connect(this->getObject(), SIGNAL(closeInvitationForm()), this, SLOT(closeInvitationForm()));
 
     connect(netManager, &NetworkManager::finishGetProfilesWithSubstrHandling, this, &InvitationForm::finishFindProfilesWithSuchName);
     connect(netManager, &NetworkManager::finishCreateInviteResponseHandling, this, &InvitationForm::finishInvite);
@@ -54,10 +53,6 @@ void InvitationForm::finishInvite(Models::ServerStatus serverStatus, Models::Inv
     } else {
         qInfo() << "error invite creation with status: " << serverStatus.status;
     }
-}
-
-void InvitationForm::closeInvitationForm() {
-    this->room->closeForm();
 }
 
 void InvitationForm::createItem(Models::Profile profile) {

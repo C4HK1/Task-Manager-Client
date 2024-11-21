@@ -15,7 +15,6 @@ public:
     ~ProfileDeleteForm();
 signals:
 public slots:
-    void closeProfileDeleteForm();
     void profileDelete();
     void finishProfileDelete(Models::ServerStatus serverStatus);
 protected:

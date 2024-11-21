@@ -20,5 +20,6 @@
 
 #include "loggout_form.h"
 #include "profile_delete_form.h"
+#include "task_form.h"
 
 #endif //HOME_PAGE_CONTENTS_H

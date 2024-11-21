@@ -22,8 +22,6 @@ public slots:
     void finishFindProfilesWithSuchName(Models::ServerStatus serverStatus, Models::Profiles profiles);
     void finishInvite(Models::ServerStatus serverStatus, Models::Invite invite);
 
-    void closeInvitationForm();
-
     void createItem(Models::Profile profile);
     void destroyItems();
 protected:

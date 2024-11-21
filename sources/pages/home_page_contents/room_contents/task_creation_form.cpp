@@ -6,9 +6,9 @@
 //Object part
 TaskCreationForm::TaskCreationForm(QQmlEngine *engine, QQuickItem *parent, Room *room) :
     BaseForm(engine, parent, "qml/TaskCreation.qml"),
-        room(room) {
+    room(room)
+{
     connect(this->getObject(), SIGNAL(createTask(int, QString, QString, QString, QString, int, int)), this, SLOT(createTask(int, QString, QString, QString, QString, int, int)));
-    connect(this->getObject(), SIGNAL(closeTaskCreationForm()), this, SLOT(closeTaskCreationForm()));
 
     connect(netManager, &NetworkManager::finishCreateTaskResponseHandling, this, &TaskCreationForm::finishCreateTask);
 }
@@ -32,10 +32,6 @@ void TaskCreationForm::createTask(int roomCreatorID,
                                             label,
                                             status,
                                             timeToLive);
-}
-
-void TaskCreationForm::closeTaskCreationForm() {
-    this->room->closeForm();
 }
 
 void TaskCreationForm::finishCreateTask(Models::ServerStatus serverStatus, Models::Task task) {

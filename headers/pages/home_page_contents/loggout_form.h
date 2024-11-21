@@ -16,7 +16,6 @@ public:
 signals:
 public slots:
     void loggout();
-    void closeLoggoutForm();
 protected:
 private:
 };
