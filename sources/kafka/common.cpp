@@ -5,7 +5,7 @@
 
 /* Wrapper to set config values and error out if needed.
  */
-void kafka::common::set_config(rd_kafka_conf_t *conf, char *key, char *value) {
+void Kafka::Common::setConfig(rd_kafka_conf_t *conf, char *key, char *value) {
     char errstr[512];
     rd_kafka_conf_res_t res;
 
@@ -16,7 +16,7 @@ void kafka::common::set_config(rd_kafka_conf_t *conf, char *key, char *value) {
     }
 }
 
-void kafka::common::dr_msg_cb(rd_kafka_t *kafka_handle,
+void Kafka::Common::drMsgCb(rd_kafka_t *kafkaHandle,
                        const rd_kafka_message_t *rkmessage,
                        void *opaque) {
     if (rkmessage->err) {

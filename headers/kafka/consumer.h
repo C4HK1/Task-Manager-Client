@@ -16,34 +16,36 @@ static volatile sig_atomic_t run = 1;
  */
 static void stop(int sig) { run = 0; }
 
-namespace kafka {
-    class consumer {
+namespace Kafka {
+    class Consumer {
         static volatile sig_atomic_t run;
-        rd_kafka_t *consumer_;
+        rd_kafka_t *consumer;
         rd_kafka_conf_t *conf;
         rd_kafka_resp_err_t err;
         char errstr[512];
         std::thread listener;
         std::set<const char *> topics;
 
-        int get_messages();
+        int getMessages();
     public:
         //Object part
-        consumer(const char *group_ID);
-        ~consumer();
+        Consumer(const char *group_ID);
+        ~Consumer();
+
+        static Consumer *getInstance(const char *groupID);
 
         static void stop(int sig);
 
         template<typename ...Args>
-        void add_topics(Args... args) {
+        void addTopics(Args... args) {
             ([&]
             {
                 this->topics.insert(args);
 
                 if (this->listener.joinable()) {
-                    this->stop_listen();
+                    this->stopListen();
                     this->run = 1;
-                    this->start_listen();
+                    this->startListen();
                 }
             } (), ...);
         }
@@ -56,15 +58,15 @@ namespace kafka {
                     this->topics.erase(args);
                     
                     if (this->listener.joinable()) {
-                        this->stop_listen();
+                        this->stopListen();
                         this->run = 1;
-                        this->start_listen();
+                        this->startListen();
                     }
                 }
             } (), ...);
         }
 
-        void start_listen();
-        void stop_listen();
+        void startListen();
+        void stopListen();
     };
 }

@@ -15,6 +15,12 @@ qt_add_executable(appFrontend
     sources/main.cpp
 )
 
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
+pkg_search_module(RDKAFKA++ REQUIRED IMPORTED_TARGET rdkafka++)
+pkg_search_module(RDKAFKA REQUIRED IMPORTED_TARGET rdkafka)
+
+
 add_subdirectory(sources)
 add_subdirectory(headers)
 add_subdirectory(qml)
@@ -22,6 +28,9 @@ add_subdirectory(qml)
 target_link_libraries(appFrontend
     PRIVATE Qt6::Quick
     MainApplication
+    PkgConfig::GLIB
+    PkgConfig::RDKAFKA++
+    PkgConfig::RDKAFKA
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

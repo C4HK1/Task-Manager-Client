@@ -10,6 +10,11 @@ add_subdirectory(pages)
 add_subdirectory(models)
 add_subdirectory(kafka)
 
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
+pkg_search_module(RDKAFKA++ REQUIRED IMPORTED_TARGET rdkafka++)
+pkg_search_module(RDKAFKA REQUIRED IMPORTED_TARGET rdkafka)
+
 target_include_directories(MainApplication PUBLIC
     ${HEADER_MAIN_DIR}
     ${HEADER_PAGE_DIR}
@@ -18,7 +23,7 @@ target_include_directories(MainApplication PUBLIC
     ${HEADER_MODELS_DIR}
     ${HEADER_KAFKA_DIR}
 )
-target_link_libraries(MainApplication Qt6::Quick Pages Models Kafka)
+target_link_libraries(MainApplication Qt6::Quick Pages Models Kafka PkgConfig::GLIB PkgConfig::RDKAFKA++ PkgConfig::RDKAFKA)
 target_sources(MainApplication PRIVATE
     ${HEADER_MAIN_DIR}/main_application.h main_application.cpp
     ${HEADER_MAIN_DIR}/navigation_service.h navigation_service.cpp

@@ -5,15 +5,15 @@
 #include <cstring>
 #include <string>
 
-namespace kafka {
+namespace Kafka {
     constexpr char *KAFKA_BROKERS{"localhost"};
 
-    class common {
+    class Common {
     public:
-        static void set_config(rd_kafka_conf_t *conf, 
+        static void setConfig(rd_kafka_conf_t *conf,
                                char *key, 
                                char *value);
-        static void dr_msg_cb(rd_kafka_t *kafka_handle,
+        static void drMsgCb(rd_kafka_t *kafka_handle,
                               const rd_kafka_message_t *rkmessage,
                               void *opaque);
     };

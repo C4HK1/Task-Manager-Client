@@ -8,7 +8,7 @@
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv),
     netManager(NetworkManager::getInstance()),
-    consumer(Kafka::Consumer::getInstance()),
+    consumer(Kafka::Consumer::getInstance("1")),
     engine(new QQmlEngine()) {
 
     connect(netManager, &NetworkManager::finishProfileAuthenticationResponseHandling, this, &MainApplication::handleAuthentication);

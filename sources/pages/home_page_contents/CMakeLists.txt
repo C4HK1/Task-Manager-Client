@@ -6,6 +6,13 @@ set(HEADER_MODELS_DIR ${PROJECT_SOURCE_DIR}/headers)
 
 qt_add_library(HomePageContents STATIC)
 
+
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
+pkg_search_module(RDKAFKA++ REQUIRED IMPORTED_TARGET rdkafka++)
+pkg_search_module(RDKAFKA REQUIRED IMPORTED_TARGET rdkafka)
+
+
 add_subdirectory(room_contents)
 target_include_directories(HomePageContents PUBLIC
     ${HEADER_MAIN_DIR}
@@ -14,7 +21,7 @@ target_include_directories(HomePageContents PUBLIC
     ${HEADER_RPC_DIR}
 )
 
-target_link_libraries(HomePageContents Qt6::Quick RoomContents)
+target_link_libraries(HomePageContents Qt6::Quick RoomContents PkgConfig::GLIB PkgConfig::RDKAFKA++ PkgConfig::RDKAFKA)
 target_sources(HomePageContents PRIVATE
     ${HEADER_MPC_DIR}/list_rooms.h list_rooms.cpp
     ${HEADER_MPC_DIR}/profile.h profile.cpp
