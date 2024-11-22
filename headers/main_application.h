@@ -18,6 +18,7 @@
 #include "base_page.h"
 #include "models.h"
 #include "navigation_service.h"
+#include "kafka/consumer.h"
 
 class NetworkManager;
 
@@ -44,6 +45,7 @@ private:
     QQmlEngine *engine;
     QQuickWindow *mainWindow = nullptr;
     NavigationService *nav_service = nullptr;
+    Kafka::Consumer *consumer;
 };
 
 #endif // MAIN_APPLICATION_H

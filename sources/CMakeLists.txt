@@ -8,14 +8,17 @@ qt_add_library(MainApplication STATIC)
 
 add_subdirectory(pages)
 add_subdirectory(models)
+add_subdirectory(kafka)
+
 target_include_directories(MainApplication PUBLIC
     ${HEADER_MAIN_DIR}
     ${HEADER_PAGE_DIR}
     ${HEADER_MPC_DIR}
     ${HEADER_RPC_DIR}
     ${HEADER_MODELS_DIR}
+    ${HEADER_KAFKA_DIR}
 )
-target_link_libraries(MainApplication Qt6::Quick Pages Models)
+target_link_libraries(MainApplication Qt6::Quick Pages Models Kafka)
 target_sources(MainApplication PRIVATE
     ${HEADER_MAIN_DIR}/main_application.h main_application.cpp
     ${HEADER_MAIN_DIR}/navigation_service.h navigation_service.cpp

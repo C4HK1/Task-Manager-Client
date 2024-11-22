@@ -6,8 +6,11 @@
 #include "home_page.h"
 
 MainApplication::MainApplication(int argc, char **argv) :
-    QGuiApplication(argc, argv), netManager(NetworkManager::getInstance()), engine(new QQmlEngine())
-{
+    QGuiApplication(argc, argv),
+    netManager(NetworkManager::getInstance()),
+    consumer(Kafka::Consumer::getInstance()),
+    engine(new QQmlEngine()) {
+
     connect(netManager, &NetworkManager::finishProfileAuthenticationResponseHandling, this, &MainApplication::handleAuthentication);
 
     QQmlComponent *component = new QQmlComponent(engine, QUrl::fromLocalFile("qml/MainWindow.qml"));
