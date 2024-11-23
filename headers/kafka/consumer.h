@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdio>
 #include <future>
 #include <thread>
@@ -6,6 +8,7 @@
 #include <librdkafka/rdkafka.h>
 #include <iostream>
 #include <set>
+#include <QQuickItem>
 
 #include "common.h"
 
@@ -17,7 +20,9 @@ static volatile sig_atomic_t run = 1;
 static void stop(int sig) { run = 0; }
 
 namespace Kafka {
-    class Consumer {
+    class Consumer : public QObject {
+        Q_OBJECT
+    private:
         static volatile sig_atomic_t run;
         rd_kafka_t *consumer;
         rd_kafka_conf_t *conf;
@@ -29,7 +34,7 @@ namespace Kafka {
         int getMessages();
     public:
         //Object part
-        Consumer(const char *group_ID);
+        Consumer(const char *groupID);
         ~Consumer();
 
         static Consumer *getInstance(const char *groupID);

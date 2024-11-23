@@ -136,7 +136,7 @@ signals:
 //GET
     //Logginning
     void finishLogginResponseHandling(Models::ServerStatus serverStatus, QByteArray jwt);
-    void finishProfileAuthenticationResponseHandling(Models::ServerStatus serverStatus);
+    void finishProfileAuthenticationResponseHandling(Models::ServerStatus serverStatus, std::string topic);
 
     //Profile
     void finishGetProfileResponseHandling(Models::ServerStatus serverStatus, Models::Profile profile);

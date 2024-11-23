@@ -38,7 +38,7 @@ void RegistrationPage::finishCreateProfile(Models::ServerStatus serverStatus, QB
         file.write(netManager->jwt);
         file.close();
 
-        this->mainApp->switchToHomePage();
+        netManager->sendProfileAuthenticationRequest();
     } else {
         qInfo() << "Profile creating error status: " << serverStatus.status;
     }

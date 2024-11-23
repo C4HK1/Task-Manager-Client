@@ -26,19 +26,22 @@ Kafka::Consumer::Consumer(const char *groupID) {
         RD_KAFKA_CONF_OK) {
         fprintf(stderr, "%s\n", errstr);
         rd_kafka_conf_destroy(conf);
+        Kafka::Consumer::run = 0;
         return;
     }
 
-    res = rd_kafka_conf_set(conf, "bootstrap.servers", KAFKA_BROKERS, errstr,
+    res = rd_kafka_conf_set(conf, "bootstrap.servers", KAFKA_BROKERS.c_str(), errstr,
                             sizeof(errstr));
     if (res != RD_KAFKA_CONF_OK) {
         g_error("Unable to set config: %s", errstr);
-        exit(1);
+        Kafka::Consumer::run = 0;
+        return;
     }
     // Create the Consumer instance.
     consumer = rd_kafka_new(RD_KAFKA_CONSUMER, conf, errstr, sizeof(errstr));
     if (!consumer) {
         g_error("Failed to create new consumer: %s", errstr);
+        Kafka::Consumer::run = 0;
         return;
     }
     rd_kafka_poll_set_consumer(consumer);
@@ -63,60 +66,62 @@ Kafka::Consumer *Kafka::Consumer::getInstance(const char *groupID) {
     return &consumer;
 }
 
-void Kafka::Consumer::stop(int sig) { run = 0; }
+void Kafka::Consumer::stop(int sig) { Kafka::Consumer::run = 0; }
 
 int Kafka::Consumer::getMessages() {
     // Install a signal handler for clean shutdown.
     signal(SIGINT, stop);
 
+    while (Kafka::Consumer::run) {
         // Convert the list of topics to a format suitable for librdkafka.
-    rd_kafka_topic_partition_list_t *subscription =
-        rd_kafka_topic_partition_list_new(1);
+        rd_kafka_topic_partition_list_t *subscription =
+            rd_kafka_topic_partition_list_new(1);
 
-    for (auto topic : this->topics) {
-        rd_kafka_topic_partition_list_add(subscription, topic, RD_KAFKA_PARTITION_UA);
-    }
+        for (auto topic : this->topics) {
+            rd_kafka_topic_partition_list_add(subscription, topic, RD_KAFKA_PARTITION_UA);
+        }
 
-    // Subscribe to the list of topics.
-    err = rd_kafka_subscribe(consumer, subscription);
+        // Subscribe to the list of topics.
+        err = rd_kafka_subscribe(consumer, subscription);
 
-    if (err) {
-        printf("Subscription to: %d topics failed\n", subscription->cnt);
-        rd_kafka_topic_partition_list_destroy(subscription);
-        return 1;
-    }
-
-    rd_kafka_topic_partition_list_destroy(subscription);
-
-    // Start polling for messages.
-    while (run) {
-        rd_kafka_message_t *consumerMessage;
-
-        consumerMessage = rd_kafka_consumer_poll(consumer, 500);
-        if (!consumerMessage) {
-            g_message(("Waiting for..."));
+        if (err) {
+            printf("Subscription to: %d topics failed\n", subscription->cnt);
+            rd_kafka_topic_partition_list_destroy(subscription);
             continue;
         }
 
-        if (consumerMessage->err) {
-            if (consumerMessage->err == RD_KAFKA_RESP_ERR__PARTITION_EOF) {
-                /* We can ignore this error - it just means we've read
-                * everything and are waiting for more data.
-                */
-            } else {
-                g_message("Consumer error: %s",
-                            rd_kafka_message_errstr(consumerMessage));
-                return 1;
-            }
-        } else {
-            g_message("Consumed event from topic %s: key = %.*s value = %s",
-                    rd_kafka_topic_name(consumerMessage->rkt),
-                    (int)consumerMessage->key_len, (char *)consumerMessage->key,
-                    (char *)consumerMessage->payload);
-        }
+        rd_kafka_topic_partition_list_destroy(subscription);
 
-        // Free the message when we're done.
-        rd_kafka_message_destroy(consumerMessage);
+        // Start polling for messages.
+        while (run) {
+            rd_kafka_message_t *consumerMessage;
+
+            consumerMessage = rd_kafka_consumer_poll(consumer, 500);
+            if (!consumerMessage) {
+                g_message(("Waiting for..."));
+                continue;
+            }
+
+            if (consumerMessage->err) {
+                if (consumerMessage->err == RD_KAFKA_RESP_ERR__PARTITION_EOF) {
+                    /* We can ignore this error - it just means we've read
+                    * everything and are waiting for more data.
+                    */
+                } else {
+                    g_message("Consumer error: %s",
+                                rd_kafka_message_errstr(consumerMessage));
+                    break;
+                }
+            } else {
+                g_message("Consumed event from topic %s: key = %.*s value = %s",
+                        rd_kafka_topic_name(consumerMessage->rkt),
+                        (int)consumerMessage->key_len, (char *)consumerMessage->key,
+                        (char *)consumerMessage->payload);
+            }
+
+            // Free the message when we're done.
+            rd_kafka_message_destroy(consumerMessage);
+        }
     }
 
     return 0;

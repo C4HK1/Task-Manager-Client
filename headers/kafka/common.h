@@ -4,11 +4,13 @@
 #include <librdkafka/rdkafka.h>
 #include <cstring>
 #include <string>
+#include <QQuickItem>
 
 namespace Kafka {
-    constexpr char *KAFKA_BROKERS{"localhost"};
+    constexpr std::string KAFKA_BROKERS{"localhost"};
 
-    class Common {
+    class Common : public QObject {
+        Q_OBJECT
     public:
         static void setConfig(rd_kafka_conf_t *conf,
                                char *key, 

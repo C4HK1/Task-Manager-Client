@@ -25,6 +25,8 @@ class NetworkManager;
 class MainApplication : public QGuiApplication {
     Q_OBJECT
 public:
+    Kafka::Consumer *consumer;
+
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
 
@@ -35,7 +37,7 @@ public:
     BasePage* createElement(Args... args);
 signals:
 public slots:
-    void handleAuthentication(Models::ServerStatus serverStatus);
+    void handleAuthentication(Models::ServerStatus serverStatus, std::string topic);
     void switchToLogginingPage();
     void switchToRegistrationPage();
     void switchToHomePage();
@@ -45,7 +47,6 @@ private:
     QQmlEngine *engine;
     QQuickWindow *mainWindow = nullptr;
     NavigationService *nav_service = nullptr;
-    Kafka::Consumer *consumer;
 };
 
 #endif // MAIN_APPLICATION_H

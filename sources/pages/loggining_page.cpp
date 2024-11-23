@@ -45,7 +45,7 @@ void LogginingPage::finishLoggining(Models::ServerStatus serverStatus, QByteArra
         file.write(netManager->jwt);
         file.close();
 
-        this->mainApp->switchToHomePage();
+        netManager->sendProfileAuthenticationRequest();
     } else {
         qInfo() << "Profile loggining error status: " << serverStatus.status;
     }

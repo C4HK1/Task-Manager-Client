@@ -704,8 +704,9 @@ void NetworkManager::handleProfileAuthenticationResponse() {
         qInfo() << response.dump().c_str();
 
         int serverStatus = response.at("status");
+        std::string topic = response.at("topic");
 
-        emit NetworkManager::finishProfileAuthenticationResponseHandling(serverStatus);
+        emit NetworkManager::finishProfileAuthenticationResponseHandling(serverStatus, topic);
     } catch (nlohmann::json::exception &exception) {
         qInfo() << exception.what();
         return;

@@ -18,6 +18,7 @@ LoggoutForm::~LoggoutForm() {
 //Slots
 void LoggoutForm::loggout() {
     std::remove("data/authentication_key.organizer");
+    this->homePage->mainApp->consumer->stopListen();
     this->homePage->closePage();
     this->homePage->mainApp->switchToLogginingPage();
 }

@@ -28,6 +28,7 @@ void ProfileDeleteForm::closeProfileDeleteForm() {
 
 void ProfileDeleteForm::finishProfileDelete(Models::ServerStatus serverStatus) {
     if (!serverStatus.status) {
+        this->homePage->mainApp->consumer->stopListen();
         this->homePage->mainApp->switchToLogginingPage();
     } else {
         qInfo() << "error profile deleting with status: " << serverStatus.status;

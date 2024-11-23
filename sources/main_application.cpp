@@ -42,8 +42,11 @@ MainApplication::~MainApplication() {
 
 //Methods
 
-void MainApplication::handleAuthentication(Models::ServerStatus serverStatus) {
+void MainApplication::handleAuthentication(Models::ServerStatus serverStatus, std::string topic) {
     if(!serverStatus.status) {
+        this->consumer->addTopics(topic.c_str());
+        this->consumer->startListen();
+
         this->switchToHomePage();
     } else {
         this->switchToLogginingPage();
@@ -51,7 +54,6 @@ void MainApplication::handleAuthentication(Models::ServerStatus serverStatus) {
 }
 
 //Page part
-
 template <typename ElementType, typename ...Args> requires IsPage<ElementType>
 BasePage* MainApplication::createElement(Args... args) {
     return new ElementType(engine, args...);
