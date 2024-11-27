@@ -19,6 +19,7 @@ DefaultFrame {
 
         contentHeight: roomContainer.height
         boundsBehavior: Flickable.StopAtBounds
+        clip: true
 
         ScrollBar.vertical: ScrollBar {
             anchors.right: parent.right

@@ -10,7 +10,7 @@ HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
         "switchToProfile()", "switchToAllTasks()", "switchToReviewedTasks()", "switchToAssignedTasks()",
-        "switchToLoggoutForm()", "switchToProfileDeleteForm()", "switchToTaskForm()",
+        "switchToLoggoutForm()", "switchToProfileDeleteForm()",
         "switchToAllInvites()", "switchToReceivedInvites()", "switchToSendedInvites()",
         "switchBackward()", "switchForward()"
     };
