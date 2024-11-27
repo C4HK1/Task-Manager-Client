@@ -8,72 +8,87 @@ DefaultFrame {
 
     signal switchToEditPage()
 
-    Text {
-        id: taskName
-        objectName: qsTr("taskName")
+    Flickable {
+        id: flickable
+        objectName: qsTr("flickable")
+        anchors.fill: parent
 
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.margins: 20
+        contentHeight: parent.height
+        boundsBehavior: Flickable.StopAtBounds
 
-        font.pixelSize: 30
-        color: "white"
-        width: parent.width - 40
-        elide: Text.ElideLeft
-    }
-
-    Text {
-        id: taskDescription
-        objectName: qsTr("taskDescription")
-
-        anchors.top: taskName.bottom
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.margins: 20
-
-        font.pixelSize: 16
-        color: "white"
-        width: parent.width - 40
-        elide: Text.ElideRight
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        textFormat: TextEdit.MarkdownText
-    }
-
-    Rectangle {
-        id: editButton
-
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 20
-
-        width: 40
-        height: 40
-        radius: 10
-
-        color: "#404040"
-
-        Image {
-            source: "images/write.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 25
-            height: 25
+        ScrollBar.vertical: ScrollBar {
+            anchors.right: parent.right
         }
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
+        Text {
+            id: taskName
+            objectName: qsTr("taskName")
 
-            onEntered: {
-                parent.color = "#505050"
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 20
+
+            font.pixelSize: 30
+            color: "white"
+            width: parent.width - 40
+            elide: Text.ElideLeft
+        }
+
+        Text {
+            id: taskDescription
+            objectName: qsTr("taskDescription")
+
+            anchors.top: taskName.bottom
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.margins: 20
+
+            width: parent.width - 40
+            font.pixelSize: 16
+            color: "white"
+            elide: Text.ElideRight
+            wrapMode: Text.Wrap
+            textFormat: TextEdit.MarkdownText
+        }
+
+        Rectangle {
+            id: editButton
+
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 20
+
+            width: 40
+            height: 40
+            radius: 10
+
+            color: "#404040"
+
+            Image {
+                source: "images/write.png"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: 25
+                height: 25
+                mipmap: true
             }
 
-            onExited: {
-                parent.color = "#404040"
-            }
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
 
-            onClicked: {
-                switchToEditPage()
+                onEntered: {
+                    parent.color = "#505050"
+                }
+
+                onExited: {
+                    parent.color = "#404040"
+                }
+
+                onClicked: {
+                    console.log(taskDescription.width)
+                    switchToEditPage()
+                }
             }
         }
     }

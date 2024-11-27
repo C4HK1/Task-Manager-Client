@@ -8,6 +8,7 @@ DefaultFrame {
 
     signal switchToViewPage()
 
+
     TextField {
         id: taskName
         objectName: qsTr("taskName")
@@ -51,11 +52,12 @@ DefaultFrame {
         color: "#404040"
 
         Image {
-            source: "images/write.png"
+            source: "images/visible.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 25
-            height: 25
+            width: 30
+            height: 30
+            mipmap: true
         }
 
         MouseArea {
