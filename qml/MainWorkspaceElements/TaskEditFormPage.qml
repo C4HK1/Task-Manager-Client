@@ -7,6 +7,12 @@ DefaultFrame {
     property alias taskName: taskName.text
     property alias taskDescription: taskDescription.text
 
+    property alias year: year.text
+    property alias month: month.text
+    property alias day: day.text
+    property alias hour: hour.text
+    property alias minute: minute.text
+
     signal switchToViewPage()
 
     Flickable {
@@ -25,7 +31,7 @@ DefaultFrame {
         ColumnLayout {
             id: contentHolder
             width: parent.width
-            spacing: 10
+            spacing: 15
 
             RowLayout {
                 Layout.leftMargin: 20
@@ -38,7 +44,7 @@ DefaultFrame {
                     objectName: qsTr("taskName")
 
                     font.pixelSize: 30
-                    width: 300 // why doesn't affect???
+                    Layout.preferredWidth: 350
                     color: "white"
                 }
 
@@ -79,6 +85,64 @@ DefaultFrame {
                 }
             }
 
+            RowLayout {
+                Layout.leftMargin: 20
+                Layout.rightMargin: 20
+
+                TextField {
+                    id: year
+                    Layout.preferredWidth: 45
+                    font.pixelSize: 16
+                    color: "white"
+                    maximumLength: 4
+                }
+                Text {
+                    text: "/"
+                    color: "white"
+                    font.pixelSize: 16
+                }
+                TextField {
+                    id: month
+                    Layout.preferredWidth: 27
+                    font.pixelSize: 16
+                    color: "white"
+                    maximumLength: 2
+                }
+                Text {
+                    text: "/"
+                    color: "white"
+                    font.pixelSize: 16
+                }
+                TextField {
+                    id: day
+                    Layout.preferredWidth: 27
+                    font.pixelSize: 16
+                    color: "white"
+                    maximumLength: 2
+                }
+
+                TextField {
+                    id: hour
+                    Layout.leftMargin: 10
+                    Layout.preferredWidth: 27
+                    font.pixelSize: 16
+                    color: "white"
+                    maximumLength: 2
+                }
+                Text {
+                    text: ":"
+                    color: "white"
+                    font.pixelSize: 16
+                }
+                TextField {
+                    id: minute
+                    Layout.preferredWidth: 27
+                    font.pixelSize: 16
+                    color: "white"
+                    maximumLength: 2
+                }
+            }
+
             Rectangle {
                 id: descrHolder
                 Layout.leftMargin: 20
@@ -90,9 +154,10 @@ DefaultFrame {
                 border.width: 1
 
                 width: parent.width - 40
-                height: 200
+                height: 300
 
                 Flickable {
+                    id: descrFlickable
                     anchors.fill: parent
 
                     contentHeight: taskDescription.height
@@ -101,6 +166,19 @@ DefaultFrame {
 
                     ScrollBar.vertical: ScrollBar {
                         anchors.right: parent.right
+                    }
+
+                    property int lastContentHeight: contentHeight
+
+                    function ensureVisible(r) {
+                        if (contentX >= r.x)
+                            contentX = r.x;
+                        else if (contentX+width <= r.x+r.width)
+                            contentX = r.x+r.width-width;
+                        if (contentY >= r.y)
+                            contentY = r.y;
+                        else if (contentY+height <= r.y+r.height)
+                            contentY = r.y+r.height-height;
                     }
 
                     TextEdit {
@@ -113,7 +191,8 @@ DefaultFrame {
                         color: "white"
 
                         wrapMode: TextEdit.Wrap
-                        verticalAlignment: TextInput.AlignTop
+
+                        onCursorRectangleChanged: { descrFlickable.ensureVisible(cursorRectangle) }
 
                         onActiveFocusChanged: {
                             if (activeFocus) {

@@ -6,6 +6,8 @@ import qml.DefaultElements
 DefaultFrame {
     property alias taskName: taskName.text
     property alias taskDescription: taskDescription.text
+    property alias deadline: deadline.text
+    property int deadlineStatus: 0
 
     signal switchToEditPage()
 
@@ -25,7 +27,7 @@ DefaultFrame {
         ColumnLayout {
             id: contentHolder
             width: parent.width
-            spacing: 10
+            spacing: 15
 
             RowLayout {
                 Layout.leftMargin: 20
@@ -37,17 +39,18 @@ DefaultFrame {
                     id: taskName
                     objectName: qsTr("taskName")
 
-                    Layout.alignment: Qt.AlignTop
+                    Layout.maximumWidth: 400
 
                     font.pixelSize: 30
                     color: "white"
                     elide: Text.ElideLeft
+                    wrapMode: Text.Wrap
                 }
 
                 Rectangle {
                     id: editButton
 
-                    Layout.alignment: Qt.AlignRight
+                    Layout.alignment: Qt.AlignTop
 
                     width: 40
                     height: 40
@@ -83,6 +86,47 @@ DefaultFrame {
                 }
             }
 
+            RowLayout {
+                Layout.leftMargin: 20
+                Layout.rightMargin: 20
+                spacing: 10
+
+                Text {
+                    id: deadline
+                    objectName: qsTr("deadline")
+
+                    font.pixelSize: 20
+                    elide: Text.ElideRight
+
+                    color: {
+                        if (deadlineStatus === 1) {
+                            "yellow"
+                        } else if (deadlineStatus === 2) {
+                            "red"
+                        } else {
+                            "white"
+                        }
+                    }
+                }
+
+                Image {
+                    Layout.preferredWidth: 25
+                    Layout.preferredHeight: 25
+
+                    source: {
+                        if(deadlineStatus === 1) {
+                            "images/warning.png"
+                        } else if (deadlineStatus === 2) {
+                            "images/error.png"
+                        } else {
+                            ''
+                        }
+                    }
+
+                    mipmap: true
+                }
+            }
+
             Text {
                 id: taskDescription
                 objectName: qsTr("taskDescription")
@@ -93,10 +137,11 @@ DefaultFrame {
                 Layout.fillWidth: true
 
                 font.pixelSize: 16
-                color: "white"
                 elide: Text.ElideRight
                 wrapMode: Text.Wrap
                 textFormat: TextEdit.MarkdownText
+
+                color: "white"
             }
         }
     }

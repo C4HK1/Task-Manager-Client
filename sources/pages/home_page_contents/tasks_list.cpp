@@ -133,13 +133,7 @@ void TasksList::createTaskItem(Models::Task &task){
     std::ostringstream oss;
     oss << std::put_time(localtime(&task.deadline), "%Y-%m-%d %H:%M:%S");
     item->setProperty("deadline", oss.str().c_str());
-
-    auto left = difftime(task.deadline, time(0)) / 3600;
-    if (left < 0) {
-        item->setProperty("deadlineStatus", 2);
-    } else if (left < 1) {
-        item->setProperty("deadlineStatus", 1);
-    }
+    item->setProperty("deadlineStatus", task.getDeadlineStatus());
 
     item->setParentItem(listContainer);
     tasksItems[task.localID] = item;

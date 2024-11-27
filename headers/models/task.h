@@ -7,6 +7,12 @@
 #include "room.h"
 
 namespace Models {
+    enum DeadlineStatus {
+        DEADLINE_OK = 0,
+        DEADLINE_1H_LEFT = 1,
+        DEADLINE_FAILED = 2
+    };
+
     struct Task {
         Q_GADGET
         Q_PROPERTY(u_int64_t roomCreatorID READ getRoomCreatorID)
@@ -27,6 +33,7 @@ namespace Models {
         QString getRoomName() const { return parent.name; }
         u_int64_t getRoomCreatorID() const { return parent.creatorID; }
         QString getDeadlineStr() const;
+        DeadlineStatus getDeadlineStatus() const;
 
         Task() = default;
 

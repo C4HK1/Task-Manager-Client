@@ -14,6 +14,8 @@ TaskViewFormPage::~TaskViewFormPage() {
 void TaskViewFormPage::update() {
     object->setProperty("taskName", task->name);
     object->setProperty("taskDescription", task->description);
+    object->setProperty("deadline", "Deadline: " + task->getDeadlineStr());
+    object->setProperty("deadlineStatus", task->getDeadlineStatus());
 }
 
 void TaskViewFormPage::leave() {}

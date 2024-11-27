@@ -26,6 +26,18 @@ QString Models::Task::getDeadlineStr() const {
     return oss.str().c_str();
 }
 
+Models::DeadlineStatus Models::Task::getDeadlineStatus() const {
+    auto left = difftime(deadline, time(0)) / 3600;
+
+    if (left < 0) {
+        return DEADLINE_FAILED;
+    } else if (left < 1) {
+        return DEADLINE_1H_LEFT;
+    } else {
+        return DEADLINE_OK;
+    }
+}
+
 QVariant Models::Task::property(const char *name) const{
     int index = staticMetaObject.indexOfProperty(name);
     if(index == -1){
