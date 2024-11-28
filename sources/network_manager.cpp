@@ -276,6 +276,45 @@ void NetworkManager::sendGetRoomProfilesRequest(u_int64_t roomCreatorID, QString
 
 //Task
 
+void NetworkManager::sendGetTaskAssignees(u_int64_t roomCreatorID, QString roomName, QString taskName) {
+    QNetworkRequest request(host + "GetTaskAssignees/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetTaskAssigneesResponse);
+
+    qInfo() << "\nsend task assignees getting request on "
+            << request.url()
+            << " with header: "
+            << this->jwt;
+}
+
+void NetworkManager::sendGetTaskReviewers(u_int64_t roomCreatorID, QString roomName, QString taskName) {
+    QNetworkRequest request(host + "GetTaskReviewers/");
+
+    request.setRawHeader(QByteArray("Authorization"), this->jwt);
+
+    nlohmann::json requestBody;
+    requestBody.push_back(nlohmann::json::object_t::value_type("room creator ID", roomCreatorID));
+    requestBody.push_back(nlohmann::json::object_t::value_type("room name", roomName.toStdString()));
+    requestBody.push_back(nlohmann::json::object_t::value_type("task name", taskName.toStdString()));
+
+    QNetworkReply *reply = networkManager.get(request, requestBody.dump().c_str());
+
+    connect(reply, &QNetworkReply::finished, this, &NetworkManager::handleGetTaskReviewersResponse);
+
+    qInfo() << "\nsend task assignees getting request on "
+            << request.url()
+            << " with header: "
+            << this->jwt;
+}
 
 //POST
 
@@ -981,6 +1020,45 @@ void NetworkManager::handleGetRoomProfilesResponse() {
 }
 
 //Task
+void NetworkManager::handleGetTaskAssigneesResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get task assignees server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Models::Profiles profiles = response.at("profiles");
+
+        emit finishGetTaskAssigneesResponseHandling(serverStatus, profiles);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkManager::handleGetTaskReviewersResponse() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(QObject::sender());
+    qInfo() << "get task reviewers server response: ";
+
+    try {
+        nlohmann::json response = nlohmann::json::parse(reply->readAll());
+        qInfo() << response.dump().c_str();
+
+        int serverStatus = response.at("status");
+        Models::Profiles profiles = response.at("profiles");
+
+        emit finishGetTaskReviewersResponseHandling(serverStatus, profiles);
+    } catch (nlohmann::json::exception &exception) {
+        qInfo() << exception.what();
+        return;
+    }
+
+    reply->deleteLater();
+}
 
 
 //POST

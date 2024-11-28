@@ -44,6 +44,8 @@ public:
     Q_INVOKABLE void sendGetRoomProfilesRequest(u_int64_t roomCreatorID, QString roomName);
 
     //Task
+    Q_INVOKABLE void sendGetTaskAssignees(u_int64_t roomCreatorID, QString roomName, QString taskName);
+    Q_INVOKABLE void sendGetTaskReviewers(u_int64_t roomCreatorID, QString roomName, QString taskName);
 
     //Invite
 
@@ -156,6 +158,8 @@ signals:
     void finishGetRoomProfilesResponseHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
 
     //Task
+    void finishGetTaskAssigneesResponseHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
+    void finishGetTaskReviewersResponseHandling(Models::ServerStatus serverStatus, Models::Profiles profiles);
 
     //Invite
 
@@ -227,6 +231,8 @@ public slots:
     void handleGetRoomProfilesResponse();
 
     //Task
+    void handleGetTaskAssigneesResponse();
+    void handleGetTaskReviewersResponse();
 
     //Invite
 
