@@ -16,7 +16,7 @@ DefaultFrame {
 
     Rectangle {
         id: container
-        width: 500
+        width: 600
         height: 500
         color: "#303030"
         radius: 20

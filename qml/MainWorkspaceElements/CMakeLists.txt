@@ -16,8 +16,9 @@ qt_add_qml_module(MainWorkspaceElements
         InviteTools.qml
         ProfileTools.qml
         PageSwitchingButton.qml
-
         TaskViewFormPage.qml
         TaskEditFormPage.qml
+        ProfileStrip.qml
+        images/midas.jpg
     RESOURCE_PREFIX /
 )

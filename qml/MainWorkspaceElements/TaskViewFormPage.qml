@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qml.DefaultElements
+import qml.MainWorkspaceElements
 
 DefaultFrame {
     property alias taskName: taskName.text
@@ -24,22 +25,22 @@ DefaultFrame {
             anchors.right: parent.right
         }
 
-        ColumnLayout {
+        RowLayout {
             id: contentHolder
             width: parent.width
-            spacing: 15
 
-            RowLayout {
-                Layout.leftMargin: 20
+            ColumnLayout {
                 Layout.rightMargin: 20
-                Layout.topMargin: 20
-                spacing: parent.width - editButton.width - taskName.width - 40
+                Layout.leftMargin: 20
+                Layout.preferredWidth: parent.width - sidemenu.width - 40
+                spacing: 15
 
                 Text {
                     id: taskName
                     objectName: qsTr("taskName")
 
                     Layout.maximumWidth: 400
+                    Layout.topMargin: 20
 
                     font.pixelSize: 30
                     color: "white"
@@ -47,10 +48,72 @@ DefaultFrame {
                     wrapMode: Text.Wrap
                 }
 
+                RowLayout {
+                    spacing: 10
+
+                    Text {
+                        id: deadline
+                        objectName: qsTr("deadline")
+
+                        font.pixelSize: 20
+                        elide: Text.ElideRight
+
+                        color: {
+                            if (deadlineStatus === 1) {
+                                "yellow"
+                            } else if (deadlineStatus === 2) {
+                                "red"
+                            } else {
+                                "white"
+                            }
+                        }
+                    }
+
+                    Image {
+                        Layout.preferredWidth: 25
+                        Layout.preferredHeight: 25
+
+                        source: {
+                            if(deadlineStatus === 1) {
+                                "images/warning.png"
+                            } else if (deadlineStatus === 2) {
+                                "images/error.png"
+                            } else {
+                                ''
+                            }
+                        }
+
+                        mipmap: true
+                    }
+                }
+
+                Text {
+                    id: taskDescription
+                    objectName: qsTr("taskDescription")
+
+                    Layout.bottomMargin: 20
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: parent.width
+
+                    font.pixelSize: 16
+                    elide: Text.ElideRight
+                    wrapMode: Text.Wrap
+                    textFormat: TextEdit.MarkdownText
+
+                    color: "white"
+                }
+            }
+
+            ColumnLayout {
+                id: sidemenu
+                Layout.rightMargin: 20
+                Layout.preferredHeight: contentHolder.height
+
                 Rectangle {
                     id: editButton
 
-                    Layout.alignment: Qt.AlignTop
+                    Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                    Layout.topMargin: 20
 
                     width: 40
                     height: 40
@@ -84,64 +147,124 @@ DefaultFrame {
                         }
                     }
                 }
-            }
-
-            RowLayout {
-                Layout.leftMargin: 20
-                Layout.rightMargin: 20
-                spacing: 10
 
                 Text {
-                    id: deadline
-                    objectName: qsTr("deadline")
+                    Layout.topMargin: 20
 
-                    font.pixelSize: 20
-                    elide: Text.ElideRight
+                    font.bold: true
+                    font.pixelSize: 16
+                    color: "white"
 
-                    color: {
-                        if (deadlineStatus === 1) {
-                            "yellow"
-                        } else if (deadlineStatus === 2) {
-                            "red"
-                        } else {
-                            "white"
+                    text: "Assignees"
+                }
+
+                ColumnLayout {
+                    id: assigneesHolder
+
+                    Layout.maximumWidth: 200
+                    Layout.preferredWidth: {
+                        var w = children[0].width
+                        for(var i = 1; i < children.length; ++i) {
+                            w = Math.max(w, children[i].width)
+                        }
+                        w
+                    }
+
+                    ProfileStrip{}
+                    ProfileStrip{}
+                }
+
+                Rectangle {
+                    id: addAssigneeButton
+
+                    Layout.topMargin: (assigneesHolder.children.length > 0) ? 5 : 0
+
+                    width: 30
+                    height: 30
+                    radius: 15
+
+                    color: "#404040"
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        color: "white"
+                        font.pixelSize: 18
+
+                        text: "+"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onEntered: {
+                            parent.color = "#505050"
+                        }
+
+                        onExited: {
+                            parent.color = "#404040"
+                        }
+
+                        onClicked: {
+
                         }
                     }
                 }
 
-                Image {
-                    Layout.preferredWidth: 25
-                    Layout.preferredHeight: 25
+                Text {
+                    Layout.topMargin: 20
+                    font.bold: true
+                    font.pixelSize: 16
+                    color: "white"
 
-                    source: {
-                        if(deadlineStatus === 1) {
-                            "images/warning.png"
-                        } else if (deadlineStatus === 2) {
-                            "images/error.png"
-                        } else {
-                            ''
-                        }
+                    text: "Reviewers"
+                }
+
+                ColumnLayout {
+                    id: reviewersHolder
+                    ProfileStrip{}
+                }
+
+                Rectangle {
+                    id: addReviewerButton
+
+                    Layout.topMargin: (reviewersHolder.children.length > 0) ? 5 : 0
+
+                    width: 30
+                    height: 30
+                    radius: 15
+
+                    color: "#404040"
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        color: "white"
+                        font.pixelSize: 18
+
+                        text: "+"
                     }
 
-                    mipmap: true
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onEntered: {
+                            parent.color = "#505050"
+                        }
+
+                        onExited: {
+                            parent.color = "#404040"
+                        }
+
+                        onClicked: {
+
+                        }
+                    }
                 }
-            }
-
-            Text {
-                id: taskDescription
-                objectName: qsTr("taskDescription")
-
-                Layout.leftMargin: 20
-                Layout.rightMargin: 20
-                Layout.bottomMargin: 20
-                Layout.fillWidth: true
-
-                font.pixelSize: 16
-                elide: Text.ElideRight
-                wrapMode: Text.Wrap
-                textFormat: TextEdit.MarkdownText
-
-                color: "white"
             }
         }
     }
