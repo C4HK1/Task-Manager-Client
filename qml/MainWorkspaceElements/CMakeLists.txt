@@ -9,6 +9,7 @@ qt_add_qml_module(MainWorkspaceElements
         TopbarRoomsViewButton.qml
         RoomCreationButton.qml
         InviteForm.qml
+        InviteMessage.qml
         TaskListItem.qml
         ReceivedInviteListItem.qml
         SendedInviteListItem.qml

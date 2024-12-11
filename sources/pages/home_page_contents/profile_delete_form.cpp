@@ -6,7 +6,7 @@
 //Object part
 ProfileDeleteForm::ProfileDeleteForm(QQmlEngine *engine, QQuickItem *parent, HomePage *homePage) :
     BaseForm(engine, parent, "qml/ProfileDelete.qml"),
-        homePage(homePage) {
+    homePage(homePage) {
     connect(this->getObject(), SIGNAL(profileDelete()), this, SLOT(profileDelete()));
     connect(this->getObject(), SIGNAL(closeProfileDeleteForm()), this, SLOT(closeProfileDeleteForm()));
 
@@ -28,7 +28,6 @@ void ProfileDeleteForm::closeProfileDeleteForm() {
 
 void ProfileDeleteForm::finishProfileDelete(Models::ServerStatus serverStatus) {
     if (!serverStatus.status) {
-        this->homePage->mainApp->consumer->stopListen();
         this->homePage->mainApp->switchToLogginingPage();
     } else {
         qInfo() << "error profile deleting with status: " << serverStatus.status;

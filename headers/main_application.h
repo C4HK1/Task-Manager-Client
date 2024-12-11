@@ -25,8 +25,6 @@ class NetworkManager;
 class MainApplication : public QGuiApplication {
     Q_OBJECT
 public:
-    Kafka::Consumer *consumer;
-
     explicit MainApplication(int argc = 0, char **argv = nullptr);
     virtual ~MainApplication();
 
@@ -40,7 +38,7 @@ public slots:
     void handleAuthentication(Models::ServerStatus serverStatus, std::string topic);
     void switchToLogginingPage();
     void switchToRegistrationPage();
-    void switchToHomePage();
+    void switchToHomePage(std::string &topic);
 protected:
 private:
     NetworkManager *netManager;

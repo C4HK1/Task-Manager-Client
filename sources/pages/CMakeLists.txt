@@ -6,7 +6,9 @@ set(HEADER_MODELS_DIR ${PROJECT_SOURCE_DIR}/headers)
 
 qt_add_library(Pages STATIC)
 
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(PkgConfig REQUIRED)
+
 pkg_search_module(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
 pkg_search_module(RDKAFKA++ REQUIRED IMPORTED_TARGET rdkafka++)
 pkg_search_module(RDKAFKA REQUIRED IMPORTED_TARGET rdkafka)
@@ -17,13 +19,15 @@ target_include_directories(Pages PUBLIC
     ${HEADER_DIR}
     ${HEADER_MPC_DIR}
     ${HEADER_RPC_DIR}
+    ${Python3_INCLUDE_DIRS}
 )
-target_link_libraries(Pages Qt6::Quick HomePageContents PkgConfig::GLIB PkgConfig::RDKAFKA++ PkgConfig::RDKAFKA)
+target_link_libraries(Pages Qt6::Quick HomePageContents PkgConfig::GLIB PkgConfig::RDKAFKA++ PkgConfig::RDKAFKA ${Python3_LIBRARIES})
 target_sources(Pages PRIVATE
     ${HEADER_DIR}/loggining_page.h loggining_page.cpp
     ${HEADER_DIR}/base_element.h base_element.cpp
     ${HEADER_DIR}/home_page.h home_page.cpp
     ${HEADER_DIR}/registration_page.h registration_page.cpp
+    ${HEADER_DIR}/base_message.h base_message.cpp
     ${HEADER_DIR}/base_form.h base_form.cpp
     ${HEADER_DIR}/base_page.h base_page.cpp
 )

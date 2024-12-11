@@ -8,7 +8,6 @@
 MainApplication::MainApplication(int argc, char **argv) :
     QGuiApplication(argc, argv),
     netManager(NetworkManager::getInstance()),
-    consumer(Kafka::Consumer::getInstance("1")),
     engine(new QQmlEngine()) {
 
     connect(netManager, &NetworkManager::finishProfileAuthenticationResponseHandling, this, &MainApplication::handleAuthentication);
@@ -44,10 +43,7 @@ MainApplication::~MainApplication() {
 
 void MainApplication::handleAuthentication(Models::ServerStatus serverStatus, std::string topic) {
     if(!serverStatus.status) {
-        this->consumer->addTopics(topic.c_str());
-        this->consumer->startListen();
-
-        this->switchToHomePage();
+        this->switchToHomePage(topic);
     } else {
         this->switchToLogginingPage();
     }
@@ -69,6 +65,6 @@ void MainApplication::switchToLogginingPage() {
     nav_service->switchTo(createElement<LogginingPage>(this));
 }
 
-void MainApplication::switchToHomePage() {
-    nav_service->switchTo(createElement<HomePage>(this));
+void MainApplication::switchToHomePage(std::string &topic) {
+    nav_service->switchTo(createElement<HomePage>(this, topic));
 }

@@ -1,11 +1,13 @@
 #include "home_page.h"
 #include "main_application.h"
+#include "invite_message.h"
 
 //Object part
-HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
+HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp, const std::string &topic) :
         BasePage(engine, "qml/MainWorkspace.qml"),
         workspace(object->findChild<QQuickItem*>("workspace")),
         nav_service(new NavigationService(workspace, 20)),
+        consumer(new Kafka::Consumer("localhost:9092", topic)),
         mainApp(mainApp) {
     static QList<std::string> switch_slots {
         "switchToWidgetRooms()", "switchToListRooms()", "switchToSettings()",
@@ -18,18 +20,34 @@ HomePage::HomePage(QQmlEngine *engine, MainApplication *mainApp) :
     for (std::string &switch_slot : switch_slots) {
         connect(object, ("2" + switch_slot).c_str(), this, ("1" + switch_slot).c_str());
     }
+    connect(this->consumer, &Kafka::Consumer::inviteGetted, this, &HomePage::switchToInviteMessage);
 
     switchToWidgetRooms();
 }
 
 HomePage::~HomePage() {
-    nav_service->deleteLater();
+    this->nav_service->deleteLater();
+    this->consumer->deleteLater();
 }
 
 void HomePage::update() {}
 void HomePage::leave() {}
 
 //Elements management
+
+//Message part
+void HomePage::setCurrentMessage(BaseMessage *message){
+    if (curMessage != nullptr) {
+        curMessage->deleteLater();
+    }
+
+    curMessage = message;
+}
+
+template <typename MessageType, typename ...Args> requires IsMessage<MessageType>
+void HomePage::switchMessage(Args... args) {
+    setCurrentMessage(new MessageType(engine, this->getObject(), this, args...));
+}
 
 //Form part
 void HomePage::setCurrentForm(BaseForm *form){
@@ -46,7 +64,6 @@ void HomePage::switchForm(Args... args) {
 }
 
 //Page part
-
 template <typename ElementType, typename ...Args> requires IsPage<ElementType>
 BasePage* HomePage::createElement(Args... args) {
     return new ElementType(engine, args...);
@@ -55,11 +72,15 @@ BasePage* HomePage::createElement(Args... args) {
 //Slots
 
 //Form
+void HomePage::closeMessage() { setCurrentMessage(nullptr); this->consumer->startMessageHandling(); }
 void HomePage::closeForm() { setCurrentForm(nullptr); }
-void HomePage::closePage() { /* setCurrentPage(nullptr); */ }
+void HomePage::closePage() {  /*setCurrentPage(nullptr);*/  }
 
 void HomePage::switchToLoggoutForm() { switchForm<LoggoutForm>(); }
 void HomePage::switchToProfileDeleteForm() { switchForm<ProfileDeleteForm>(); }
+
+//Messages
+void HomePage::switchToInviteMessage(nlohmann::json messageValue) { switchMessage<InviteMessage>(messageValue); }
 
 //Page
 void HomePage::switchToRoom(Models::Room room) { nav_service->switchTo(createElement<Room>(this, room)); }

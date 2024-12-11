@@ -4,6 +4,7 @@
 #include <QSignalMapper>
 #include "base_page.h"
 #include "base_form.h"
+#include "base_message.h"
 #include "models.h"
 #include "network_manager.h"
 #include "home_page_contents.h"
@@ -14,12 +15,21 @@ class HomePage : public BasePage {
     Q_OBJECT
 public:
     MainApplication *mainApp;
+    Kafka::Consumer *consumer;
 
-    HomePage(QQmlEngine *engine, MainApplication *mainApp);
-    void update() override;
-    void leave() override;
+    HomePage(QQmlEngine *engine, MainApplication *mainApp, const std::string &topic);
     ~HomePage();
 
+    void update() override;
+    void leave() override;
+
+    //Message part
+    void setCurrentMessage(BaseMessage *message);
+
+    template <typename MessageType, typename ...Args> requires IsMessage<MessageType>
+    void switchMessage(Args... args);
+
+    //Form part
     void setCurrentForm(BaseForm *form);
 
     template <typename FormType, typename ...Args> requires IsForm<FormType>
@@ -40,6 +50,8 @@ public slots:
     void switchToLoggoutForm();
     void switchToProfileDeleteForm();
 
+    void switchToInviteMessage(nlohmann::json message);
+
     void switchToAllTasks();
     void switchToReviewedTasks();
     void switchToAssignedTasks();
@@ -51,6 +63,7 @@ public slots:
     void switchBackward();
     void switchForward();
 
+    void closeMessage();
     void closeForm();
     void closePage();
 protected:
@@ -58,6 +71,7 @@ private:
     QQuickItem *workspace = nullptr;
     NavigationService *nav_service = nullptr;
     BaseForm *curForm = nullptr;
+    BaseMessage *curMessage = nullptr;
     Models::Rooms rooms;
 };
 

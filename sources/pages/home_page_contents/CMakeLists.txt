@@ -7,7 +7,9 @@ set(HEADER_MODELS_DIR ${PROJECT_SOURCE_DIR}/headers)
 qt_add_library(HomePageContents STATIC)
 
 
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(PkgConfig REQUIRED)
+
 pkg_search_module(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
 pkg_search_module(RDKAFKA++ REQUIRED IMPORTED_TARGET rdkafka++)
 pkg_search_module(RDKAFKA REQUIRED IMPORTED_TARGET rdkafka)
@@ -19,9 +21,10 @@ target_include_directories(HomePageContents PUBLIC
     ${HEADER_DIR}
     ${HEADER_MPC_DIR}
     ${HEADER_RPC_DIR}
+    ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(HomePageContents Qt6::Quick RoomContents PkgConfig::GLIB PkgConfig::RDKAFKA++ PkgConfig::RDKAFKA)
+target_link_libraries(HomePageContents Qt6::Quick RoomContents PkgConfig::GLIB PkgConfig::RDKAFKA++ PkgConfig::RDKAFKA ${Python3_LIBRARIES})
 target_sources(HomePageContents PRIVATE
     ${HEADER_MPC_DIR}/list_rooms.h list_rooms.cpp
     ${HEADER_MPC_DIR}/profile.h profile.cpp
@@ -40,4 +43,5 @@ target_sources(HomePageContents PRIVATE
     ${HEADER_MPC_DIR}/received_invites.h received_invites.cpp
     ${HEADER_MPC_DIR}/loggout_form.h loggout_form.cpp
     ${HEADER_MPC_DIR}/profile_delete_form.h profile_delete_form.cpp
+    ${HEADER_MPC_DIR}/invite_message.h invite_message.cpp
 )

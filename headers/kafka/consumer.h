@@ -1,77 +1,43 @@
 #pragma once
 
-#include <cstdio>
-#include <future>
-#include <thread>
-#include <vector>
-#include <glib.h>
-#include <librdkafka/rdkafka.h>
-#include <iostream>
-#include <set>
 #include <QQuickItem>
-
-#include "common.h"
-
-static volatile sig_atomic_t run = 1;
-
-/**
- * @brief Signal termination of program
- */
-static void stop(int sig) { run = 0; }
+#include <nlohmann/json.hpp>
+#include <librdkafka/rdkafkacpp.h>
+#include <iostream>
+#include <string>
+#include <librdkafka/rdkafkacpp.h>
+#include <iostream>
+#include <string>
+#include <iostream>
+#include <string>
+#include <QFile>
+#include <QDir>
+#include <librdkafka/rdkafkacpp.h>
+#include <thread>
 
 namespace Kafka {
     class Consumer : public QObject {
         Q_OBJECT
-    private:
-        static volatile sig_atomic_t run;
-        rd_kafka_t *consumer;
-        rd_kafka_conf_t *conf;
-        rd_kafka_resp_err_t err;
-        char errstr[512];
-        std::thread listener;
-        std::set<const char *> topics;
-
-        int getMessages();
     public:
-        //Object part
-        Consumer(const char *groupID);
+        Consumer(const std::string& brokers, const std::string& topicName);
         ~Consumer();
 
-        static Consumer *getInstance(const char *groupID);
+        void stopMessageHandling();
 
-        static void stop(int sig);
+        void startMessageHandling();
 
-        template<typename ...Args>
-        void addTopics(Args... args) {
-            ([&]
-            {
-                this->topics.insert(args);
+        void listen();
 
-                if (this->listener.joinable()) {
-                    this->stopListen();
-                    this->run = 1;
-                    this->startListen();
-                }
-            } (), ...);
-        }
-
-        template<typename ...Args>
-        void remove_topics(Args... args) {
-            ([&]
-            {
-                if (topics.find(args) != topics.end()) { 
-                    this->topics.erase(args);
-                    
-                    if (this->listener.joinable()) {
-                        this->stopListen();
-                        this->run = 1;
-                        this->startListen();
-                    }
-                }
-            } (), ...);
-        }
-
-        void startListen();
-        void stopListen();
+    private:
+        RdKafka::Conf* conf;
+        RdKafka::Consumer* consumer;
+        RdKafka::Topic* topic;
+        std::string errstr;
+        std::thread listener;
+        bool messageHandling = false;
+        int run = 1;
+        std::string topicName;
+    signals:
+        void inviteGetted(nlohmann::json message);
     };
 }

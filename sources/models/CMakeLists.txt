@@ -2,10 +2,13 @@ set(HEADER_MODELS_DIR ${PROJECT_SOURCE_DIR}/headers)
 
 qt_add_library(Models STATIC)
 
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+
 target_include_directories(Models PUBLIC
     ${HEADER_MODELS_DIR}
+    ${Python3_INCLUDE_DIRS}
 )
-target_link_libraries(Models Qt6::Quick)
+target_link_libraries(Models Qt6::Quick ${Python3_LIBRARIES})
 target_sources(Models PRIVATE
     ${HEADER_MODELS_DIR}/models/profile.h profile.cpp
     ${HEADER_MODELS_DIR}/models/profiles.h profiles.cpp

@@ -1,147 +1,125 @@
-#include <cstdio>
-#include <future>
-#include <glib.h>
-#include <librdkafka/rdkafka.h>
-#include <iostream>
-#include <thread>
-#include <unistd.h>
-
 #include "kafka/consumer.h"
-#include "kafka/common.h"
 
-volatile sig_atomic_t Kafka::Consumer::run{1};
+Kafka::Consumer::Consumer(const std::string& brokers, const std::string& topicName) : topicName(topicName) {
+    this->conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
+    this->conf->set("metadata.broker.list", brokers, errstr);
 
-/**
- * @brief Signal termination of program
- */
+    this->consumer = RdKafka::Consumer::create(conf, errstr);
+    this->topic = RdKafka::Topic::create(consumer, topicName, nullptr, errstr);
 
-Kafka::Consumer::Consumer(const char *groupID) {
-    // Create client configuration
-    conf = rd_kafka_conf_new();
+    qInfo() << "topic:" << this->topicName << "subscribed";
 
-    // User-specific properties that you must set
-    rd_kafka_conf_res_t res;
-
-    if (rd_kafka_conf_set(conf, "group.id", groupID, errstr, sizeof(errstr)) !=
-        RD_KAFKA_CONF_OK) {
-        fprintf(stderr, "%s\n", errstr);
-        rd_kafka_conf_destroy(conf);
-        Kafka::Consumer::run = 0;
-        return;
-    }
-
-    res = rd_kafka_conf_set(conf, "bootstrap.servers", KAFKA_BROKERS.c_str(), errstr,
-                            sizeof(errstr));
-    if (res != RD_KAFKA_CONF_OK) {
-        g_error("Unable to set config: %s", errstr);
-        Kafka::Consumer::run = 0;
-        return;
-    }
-    // Create the Consumer instance.
-    consumer = rd_kafka_new(RD_KAFKA_CONSUMER, conf, errstr, sizeof(errstr));
-    if (!consumer) {
-        g_error("Failed to create new consumer: %s", errstr);
-        Kafka::Consumer::run = 0;
-        return;
-    }
-    rd_kafka_poll_set_consumer(consumer);
-
-    // Configuration object is now owned, and freed, by the rd_kafka_t instance.
-    conf = NULL;
+    this->listener = std::thread([this](){ this->listen(); });
 }
 
 Kafka::Consumer::~Consumer() {
-    this->stopListen();
+    this->run = 0;
+    this->listener.join();
 
-    // Close the consumer: commit final offsets and leave the group.
-    g_message("Closing consumer");
-    rd_kafka_consumer_close(consumer);
-
-    // Destroy the consumer.
-    rd_kafka_destroy(consumer);
+    delete topic;
+    delete consumer;
+    delete conf;
 }
 
-Kafka::Consumer *Kafka::Consumer::getInstance(const char *groupID) {
-    static Kafka::Consumer consumer(groupID);
-    return &consumer;
+void Kafka::Consumer::startMessageHandling() {
+    this->messageHandling = false;
 }
 
-void Kafka::Consumer::stop(int sig) { Kafka::Consumer::run = 0; }
+void Kafka::Consumer::stopMessageHandling() {
+    this->messageHandling = true;
+}
 
-int Kafka::Consumer::getMessages() {
-    // Install a signal handler for clean shutdown.
-    signal(SIGINT, stop);
 
-    while (Kafka::Consumer::run) {
-        // Convert the list of topics to a format suitable for librdkafka.
-        rd_kafka_topic_partition_list_t *subscription =
-            rd_kafka_topic_partition_list_new(1);
+void Kafka::Consumer::listen() {
+    if(!QDir("data").exists()){
+        QDir().mkdir("data");
+    }
 
-        for (auto topic : this->topics) {
-            rd_kafka_topic_partition_list_add(subscription, topic, RD_KAFKA_PARTITION_UA);
-        }
+    QFile file("data/messages.json");
+    QByteArray buffer;
 
-        // Subscribe to the list of topics.
-        err = rd_kafka_subscribe(consumer, subscription);
+    file.open(QIODevice::ReadOnly);
+    buffer = file.readAll();
+    file.close();
 
-        if (err) {
-            printf("Subscription to: %d topics failed\n", subscription->cnt);
-            rd_kafka_topic_partition_list_destroy(subscription);
-            continue;
-        }
+    u_int64_t messagesCount;
+    nlohmann::json messages;
+    nlohmann::json topic;
+    nlohmann::json topics;
 
-        rd_kafka_topic_partition_list_destroy(subscription);
+    try {
+        topics = nlohmann::json::parse(buffer.toStdString());
+        topic = topics.at(this->topicName);
+        messagesCount = topic.at("messagesCount");
+        consumer->start(this->topic, 0, messagesCount);
+    } catch(nlohmann::json::exception &exception) {
+        messagesCount = 0;
+        consumer->start(this->topic, 0, RdKafka::Topic::OFFSET_END - 1);
+    }
 
-        // Start polling for messages.
-        while (run) {
-            rd_kafka_message_t *consumerMessage;
+    while (this->run) {
+        if (!this->messageHandling) {
+            file.open(QIODevice::ReadOnly);
+            buffer = file.readAll();
+            file.close();
 
-            consumerMessage = rd_kafka_consumer_poll(consumer, 500);
-            if (!consumerMessage) {
-                g_message(("Waiting for..."));
-                continue;
-            }
+            try {
+                topics = nlohmann::json::parse(buffer.toStdString());
+                topic = topics.at(this->topicName);
+                messagesCount = topic.at("messagesCount");
+                messages = topic.at("messages");
 
-            if (consumerMessage->err) {
-                if (consumerMessage->err == RD_KAFKA_RESP_ERR__PARTITION_EOF) {
-                    /* We can ignore this error - it just means we've read
-                    * everything and are waiting for more data.
-                    */
-                } else {
-                    g_message("Consumer error: %s",
-                                rd_kafka_message_errstr(consumerMessage));
-                    break;
+                nlohmann::json message = messages.at("message-" + std::to_string(messagesCount - messages.size()));
+
+                messages.erase("message-" + std::to_string(messagesCount - messages.size()));
+
+                topic.clear();
+                topic.push_back(nlohmann::json::object_t::value_type("messagesCount", messagesCount));
+                topic.push_back(nlohmann::json::object_t::value_type("messages", messages));
+
+                topics.erase(this->topicName);
+                topics.push_back(nlohmann::json::object_t::value_type(this->topicName, topic));
+
+                file.open(QIODevice::WriteOnly);
+                file.write(topics.dump().c_str());
+                file.close();
+
+                if (message.at("key") == "getting invite") {
+                    this->stopMessageHandling();
+                    emit this->inviteGetted(message.at("value"));
                 }
-            } else {
-                g_message("Consumed event from topic %s: key = %.*s value = %s",
-                        rd_kafka_topic_name(consumerMessage->rkt),
-                        (int)consumerMessage->key_len, (char *)consumerMessage->key,
-                        (char *)consumerMessage->payload);
-            }
-
-            // Free the message when we're done.
-            rd_kafka_message_destroy(consumerMessage);
+            } catch(nlohmann::json::exception &exception) {}
         }
+
+        RdKafka::Message* msg = consumer->consume(this->topic, 0, 1000);
+        std::string key;
+        nlohmann::json value;
+        u_int64_t offset;
+
+        if (msg->err() == RdKafka::ERR_NO_ERROR) {
+            key = *msg->key();
+            value = nlohmann::json::parse(std::string(static_cast<char*>(msg->payload()), msg->len()));
+            offset = msg->offset();
+
+            qInfo() << "message getted" << key << value.dump() << offset;
+
+            nlohmann::json topic;
+            topic.push_back(nlohmann::json::object_t::value_type("messagesCount", offset + 1));
+            nlohmann::json message;
+            message.push_back(nlohmann::json::object_t::value_type("key", key));
+            message.push_back(nlohmann::json::object_t::value_type("value", value));
+
+            messages.push_back(nlohmann::json::object_t::value_type("message-" + std::to_string(offset), message));
+            topic.push_back(nlohmann::json::object_t::value_type("messages", messages));
+            topics.push_back(nlohmann::json::object_t::value_type(this->topicName, topic));
+
+            file.open(QIODevice::WriteOnly);
+            file.write(topics.dump().c_str());
+            file.close();
+        } else {
+            std::cerr << "Error while consuming: " << msg->errstr() << std::endl;
+        }
+
+        delete msg;
     }
-
-    return 0;
-}
-
-void Kafka::Consumer::startListen() {
-    if (this->listener.joinable()) {
-        std::cout << "Listener is alredy started\n";
-    } else {
-        std::cout << "Start listening\n";
-        
-        this->listener = std::thread([this](){this->getMessages();});
-    }
-}
-
-void Kafka::Consumer::stopListen() {
-    Kafka::Consumer::run = 0;
-
-    std::cout << "Stop listening\n";
-
-    if (this->listener.joinable()) 
-        this->listener.join();
 }

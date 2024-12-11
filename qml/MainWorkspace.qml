@@ -185,7 +185,7 @@ DefaultFrame {
                     inviteTools.width = parent.width
                     inviteTools.height = parent.height - toolBarTask.height - toolBarInvite.height - toolBarProfile.height - toolBarHome.height
 
-                    switchToAllInvites()
+                    // switchToAllInvites()
                 }
             }
         }
